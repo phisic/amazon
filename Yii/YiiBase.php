@@ -305,7 +305,7 @@ class YiiBase
 			return self::$_imports[$alias]=$className;
 
 		if(($path=self::getPathOfAlias($alias))!==false)
-		{
+        {
 			if($isClass)
 			{
 				if($forceInclude)

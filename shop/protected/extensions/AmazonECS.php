@@ -18,11 +18,11 @@
  * @link         http://github.com/Exeu/Amazon-ECS-PHP-Library/wiki Wiki
  * @link         http://github.com/Exeu/Amazon-ECS-PHP-Library Source
  */
-class AmazonECS
+class AmazonECS extends CApplicationComponent
 {
   const RETURN_TYPE_ARRAY  = 1;
   const RETURN_TYPE_OBJECT = 2;
-
+  public $accessKey,$secretKey, $country, $associateTag;
   /**
    * Baseconfigurationstorage
    *
@@ -70,17 +70,17 @@ class AmazonECS
    * @param string $country
    * @param string $associateTag
    */
-  public function __construct($accessKey, $secretKey, $country, $associateTag)
+  public function init()
   {
-    if (empty($accessKey) || empty($secretKey))
+    if (empty($this->accessKey) || empty($this->secretKey))
     {
       throw new Exception('No Access Key or Secret Key has been set');
     }
 
-    $this->requestConfig['accessKey']     = $accessKey;
-    $this->requestConfig['secretKey']     = $secretKey;
-    $this->associateTag($associateTag);
-    $this->country($country);
+    $this->requestConfig['accessKey']     = $this->accessKey;
+    $this->requestConfig['secretKey']     = $this->secretKey;
+    $this->associateTag($this->associateTag);
+    $this->country($this->country);
   }
 
   /**
