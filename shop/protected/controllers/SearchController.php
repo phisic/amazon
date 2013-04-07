@@ -36,12 +36,12 @@ class SearchController extends Controller
                 ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
                 ->search(Yii::app()->request->getParam('search',''), 2956501011);
-        
+        //print_r($r);exit;
         if(!empty($r['Items']['TotalResults']))
         {
             $pages=new CPagination($r['Items']['TotalResults']);
             $pages->pageSize = floor($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
-            $this->render('index', array('pages' => $pages));
+            $this->render('index', array('items' => $r['Items']['Item'],'pages' => $pages));
         }  else {
             $this->render('empty_list');
         }
