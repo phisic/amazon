@@ -10,22 +10,43 @@
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     </head>
-
     <body>
-       
-        <?php
-        $this->widget('bootstrap.widgets.TbNavbar', array(
-            'items' => array(
-                '<form class="navbar-form form-search" action="'.Yii::app()->createUrl('search/index').'">
-                    <div class="input-append">
-                        <input type="text" class="input-xxlarge" placeholder="search...">
-                        <button type="submit" class="btn">GO</button>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
+                        <div class="span8">
+                            <form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
+                                <div class="input-append input-block-level">
+                                    <input type="text" placeholder="search..." class="input-block-level">
+                                        <button class="btn" type="submit">GO</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>'
-            ),
-        ));
-        ?>
-
+                    <div class="row">
+                        <div class="span2">
+                            <?php
+                            $this->widget('bootstrap.widgets.TbButtonGroup', array(
+                                'htmlOptions'=>array('class'=>'btn-block'),
+                                'type' => 'warning', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+                                'buttons' => array(
+                                    array('label' => 'All categories', 'htmlOptions'=>array('class'=>''),'items' => array(
+                                            array('label' => 'Action', 'url' => '#'),
+                                            array('label' => 'Another action', 'url' => '#'),
+                                            array('label' => 'Something else', 'url' => '#'),
+                                            '---',
+                                            array('label' => 'Separate link', 'url' => '#'),
+                                        )),
+                                ),
+                            ));
+                            ?></div>
+                        <div class="span8"><h4><a href="">Laptops</a> <a href="">Tablets</a> <a href="">Ultrabooks</a></h4></div>
+                    </div>   
+                </div>
+            </div>
+        </div>
         <div class="container" id="page">
 
             <?php if (isset($this->breadcrumbs)): ?>
@@ -34,16 +55,16 @@
                     'links' => $this->breadcrumbs,
                 ));
                 ?><!-- breadcrumbs -->
-<?php endif ?>
+            <?php endif ?>
 
-<?php echo $content; ?>
+            <?php echo $content; ?>
 
             <div class="clear"></div>
 
             <div id="footer">
                 Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
                 All Rights Reserved.<br/>
-<?php echo Yii::powered(); ?>
+                <?php echo Yii::powered(); ?>
             </div><!-- footer -->
 
         </div><!-- page -->
