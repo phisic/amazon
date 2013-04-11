@@ -1,25 +1,17 @@
-<?php
-/* @var $this SiteController */
-
-$this->pageTitle=Yii::app()->name;
-?>
-
-<?php $this->beginWidget('bootstrap.widgets.TbHeroUnit',array(
-    'heading'=>'Welcome to '.CHtml::encode(Yii::app()->name),
-)); ?>
-
-<p>Congratulations! You have successfully created your Yii application.</p>
-
-<?php $this->endWidget(); ?>
-
-<p>You may change the content of this page by modifying the following two files:</p>
-
-<ul>
-    <li>View file: <code><?php echo __FILE__; ?></code></li>
-    <li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
-
-<p>For more details on how to further develop this application, please read
-    the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-    Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-    should you have any questions.</p>
+<h3>Hot New Releases</h3>
+<?php foreach ($items as $item){ ?>
+<div class="row">
+  <div class="span2"><img src="<?=isset($item['MediumImage']['URL']) ?str_replace("._SL160_.","._AA160_.",$item['MediumImage']['URL']) :  Yii::app()->createUrl('images') . '/none.jpg';?>" alt="product 2"></div>
+  <div class="span8">
+      <h4><a href=''><?=$item['ItemAttributes']['Title']?></a> <span class='text-warning'style='font-size:12px;'>by <?=$item['ItemAttributes']['Brand']?></span></h4>
+      <h6><ul>
+      <?php foreach($item['ItemAttributes']['Feature'] as $attr){
+          echo '<li>'.$attr.'</li>';
+      }?>
+              </ul>
+      </h6>
+  </div>
+  <div class="span2"><a href="#" class="btn btn-success">Buy</a></div>
+  </div>
+<?php } ?>
+<? if(isset($pages)) $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions'=>array('class'=>'pager'),'pages' => $pages)); ?>

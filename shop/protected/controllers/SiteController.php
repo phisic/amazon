@@ -27,9 +27,21 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+        $t1 = microtime(true);
+		$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(565108);
+        if(!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])){
+            $asin = array();
+            foreach ($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'] as $i){
+                $asin[] = $i['ASIN'];
+            }
+            if(!empty($asin)){
+                $asin = join(',',$asin);
+                $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup($asin);
+                $this->render('index', array('items' => $r['Items']['Item']));
+            }
+        }else        
+            $this->render('index2');
+        echo 't='.(microtime(true) - $t1);
 	}
 
 	/**

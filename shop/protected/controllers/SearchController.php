@@ -29,7 +29,12 @@ class SearchController extends Controller
 
 	public function actionIndex()
 	{
-        
+        //ASIN, PriceNew, PriceUsed, Date, Delta - price table
+        //ASIN, Title, PriceNew, PriceUsed,Image, Attributes, Delta - details table 
+                
+        //$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->optionalParameters(array('ItemPage' => 2))->responseGroup('NewReleases')->browseNodeLookup(565108);
+        //$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Small,Images')->lookup('B0074703CM,B005CWJB5G');
+        //print_r($r);exit;
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')

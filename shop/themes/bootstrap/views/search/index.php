@@ -14,4 +14,4 @@
   <div class="span2"><a href="#" class="btn btn-success">Buy</a></div>
   </div>
 <?php } ?>
-<? $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions'=>array('class'=>'pager'),'pages' => $pages)); ?>
+<? if(isset($pages)) $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions'=>array('class'=>'pager'),'pages' => $pages)); ?>
