@@ -19,7 +19,7 @@
                         <div class="span8">
                             <form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
-                                    <input type="text" placeholder="search..." class="input-block-level">
+                                    <input name="search" type="text" placeholder="search..." class="input-block-level">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>
@@ -33,16 +33,16 @@
                                 'type' => 'warning', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
                                 'buttons' => array(
                                     array('label' => 'All categories', 'htmlOptions'=>array('class'=>''),'items' => array(
-                                            array('label' => 'Action', 'url' => '#'),
-                                            array('label' => 'Another action', 'url' => '#'),
-                                            array('label' => 'Something else', 'url' => '#'),
+                                            array('label' => 'Laptops', 'url' => '#'),
+                                            array('label' => 'Tablets', 'url' => '#'),
+                                            array('label' => 'Ultrabooks', 'url' => '#'),
                                             '---',
-                                            array('label' => 'Separate link', 'url' => '#'),
+                                            array('label' => 'All categories', 'url' => '#'),
                                         )),
                                 ),
                             ));
                             ?></div>
-                        <div class="span8"><h4><a href="">Laptops</a> <a href="">Tablets</a> <a href="">Ultrabooks</a></h4></div>
+                        <div class="span8"><h4><a href="">Top price drops</a> <a href="">Bestsellers</a> <a href="">New releases</a></h4></div>
                     </div>   
                 </div>
             </div>

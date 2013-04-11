@@ -35,7 +35,7 @@ class SearchController extends Controller
                 ->category('Electronics')
                 ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
-                ->search(Yii::app()->request->getParam('search',''), 2956501011);
+                ->search(Yii::app()->request->getParam('search',''), 565108);
         //print_r($r);exit;
         if(!empty($r['Items']['TotalResults']))
         {
