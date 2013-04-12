@@ -93,5 +93,8 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+        //Laptops node Id
+        'node'=>565108,
 	),
+    
 );

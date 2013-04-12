@@ -11,19 +11,21 @@ return array(
 
 	// application components
 	'components'=>array(
+		'amazon' => array(
+            'class'=>'ext.AmazonECS',
+            'accessKey'=>'AKIAIDT5J2U4KPAIAARA',
+            'secretKey'=>'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', 
+            'country'=>'COM', 
+            'associateTag'=>'3445-3149-2207',
+        ),
 		'db'=>array(
-			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
-		),
-		// uncomment the following to use a MySQL database
-		/*
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=testdrive',
+			'connectionString' => 'mysql:host=localhost;dbname=test',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => '1',
 			'charset' => 'utf8',
 		),
-		*/
+		
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
@@ -33,5 +35,12 @@ return array(
 				),
 			),
 		),
+	),
+    
+    'params'=>array(
+		// this is used in contact page
+		'adminEmail'=>'webmaster@example.com',
+        //Laptops node Id
+        'node'=>565108,
 	),
 );

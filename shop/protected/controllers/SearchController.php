@@ -38,10 +38,10 @@ class SearchController extends Controller
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
-                ->responseGroup('Medium')
+                ->responseGroup('Medium,OfferFull')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
-                ->search(Yii::app()->request->getParam('search',''), 565108);
-        //print_r($r);exit;
+                ->search(Yii::app()->request->getParam('search',''), Yii::app()->params['node']);
+        print_r($r);exit;
         if(!empty($r['Items']['TotalResults']))
         {
             $pages=new CPagination($r['Items']['TotalResults']);

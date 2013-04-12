@@ -28,7 +28,7 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
         $t1 = microtime(true);
-		$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(565108);
+		$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
         if(!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])){
             $asin = array();
             foreach ($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'] as $i){
