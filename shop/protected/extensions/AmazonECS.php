@@ -589,4 +589,8 @@ class AmazonECS extends CApplicationComponent
         return 0;
     }
     
+    public function formatUSD($price){
+        return '$'.number_format($price/100,2);
+    }
+    
 }

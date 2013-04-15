@@ -11,7 +11,13 @@
       }?>
               </ul>
       </h6>
-      </div><div class="span6"><h6>$<?=(number_format($item['ItemAttributes']['ListPrice']['Amount']/100,2) . ' / $' . number_format(Yii::app()->amazon->getNewPrice($item)/100))?></h6></div>
+      </div><div class="span6">
+          <h6>
+          <?php
+            if(isset($item['ItemAttributes']['ListPrice']['Amount']))
+                echo '<s class="">'.Yii::app()->amazon->formatUSD($item['ItemAttributes']['ListPrice']['Amount']).'</s>' . ' / ' . Yii::app()->amazon->formatUSD(Yii::app()->amazon->getNewPrice($item))
+          ?>
+          </h6></div>
   </div>
   <div class="span2"><a href="#" class="btn btn-success">Buy</a></div>
   </div>
