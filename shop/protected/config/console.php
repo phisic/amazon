@@ -19,10 +19,10 @@ return array(
             'associateTag'=>'3445-3149-2207',
         ),
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=test',
+			'connectionString' => 'mysql:host=localhost;dbname=amazon',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '1',
+			'password' => '',
 			'charset' => 'utf8',
 		),
 		

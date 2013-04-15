@@ -568,4 +568,25 @@ class AmazonECS extends CApplicationComponent
 
     return $this->requestConfig['requestDelay'];
   }
+  
+  public function getNewPrice($i){
+        if(empty($i['OfferSummary']['LowestNewPrice']['Amount'])){
+            if(!empty($i['Offers']['Offer']['OfferAttributes']['Condition']) && $i['Offers']['Offer']['OfferAttributes']['Condition'] == 'New' && !empty($i['Offers']['Offer']['OfferListing']['Price']['Amount']))
+                return $i['Offers']['Offer']['OfferListing']['Price']['Amount'];
+        }else    
+            return $i['OfferSummary']['LowestNewPrice']['Amount']; 
+        
+        return 0;
+    }
+    
+    public function getUsedPrice($i){
+        if(empty($i['OfferSummary']['LowestUsedPrice']['Amount'])){
+            if(!empty($i['Offers']['Offer']['OfferAttributes']['Condition']) && $i['Offers']['Offer']['OfferAttributes']['Condition'] == 'Used' && !empty($i['Offers']['Offer']['OfferListing']['Price']['Amount']))
+                return $i['Offers']['Offer']['OfferListing']['Price']['Amount'];
+        }else    
+            return $i['OfferSummary']['LowestUsedPrice']['Amount']; 
+        
+        return 0;
+    }
+    
 }

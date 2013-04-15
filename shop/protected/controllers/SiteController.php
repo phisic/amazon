@@ -27,8 +27,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-        $t1 = microtime(true);
-		$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
+		/*$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
         if(!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])){
             $asin = array();
             foreach ($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'] as $i){
@@ -41,7 +40,10 @@ class SiteController extends Controller
             }
         }else        
             $this->render('index2');
-        echo 't='.(microtime(true) - $t1);
+         * 
+         */
+        $s = new Statistics();
+        $this->render('index', array('items' => $s->getTopPriceDrops()));
 	}
 
 	/**

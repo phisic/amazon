@@ -1,14 +1,13 @@
 CREATE TABLE `listing` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ASIN` varchar(15) DEFAULT NULL,
-  `Title` varchar(350) DEFAULT NULL,
-  `Image` varchar(255) DEFAULT NULL,
   `PriceNew` float DEFAULT NULL,
   `PriceUsed` float DEFAULT NULL,
   `Delta` float DEFAULT NULL,
   `Attr` text,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE `listing2` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
