@@ -33,15 +33,15 @@ class SearchController extends Controller
         //ASIN, Title, PriceNew, PriceUsed,Image, Attributes, Delta - details table 
                 
         //$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->optionalParameters(array('ItemPage' => 2))->responseGroup('NewReleases')->browseNodeLookup(565108);
-        $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Offers,ItemAttributes,SalesRank')->lookup('B0074703CM,B005CWJB5G');
-        print_r($r);exit;
+        //$r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Offers,ItemAttributes,SalesRank')->lookup('B0074703CM,B005CWJB5G');
+        //print_r($r);exit;
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
-                ->responseGroup('Offers,ItemAttributes,Reviews')
+                ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
                 ->search(Yii::app()->request->getParam('search',''), Yii::app()->params['node']);
-        print_r($r);exit;
+       // print_r($r);exit;
         if(!empty($r['Items']['TotalResults']))
         {
             $pages=new CPagination($r['Items']['TotalResults']);
