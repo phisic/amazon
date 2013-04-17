@@ -1,6 +1,9 @@
 <h3>Hot New Releases</h3>
-<?php foreach ($items as $item) { ?>
-    <div class="row" style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;">
+<?php 
+$count = count($items)-1;
+foreach ($items as $n=>$item) { 
+?>
+    <div class="row" <?=($n==$count) ? '' : 'style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;"';?>>
         <div class="span2"><img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->createUrl('images') . '/none.jpg'; ?>" alt="product 2"></div>
         <div class="span10">
             <h4><a href=''><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'>by <?= $item['ItemAttributes']['Brand'] ?></span></h4>

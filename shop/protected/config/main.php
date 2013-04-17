@@ -66,6 +66,9 @@ return array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
+        'cache'=>array(
+            'class'=>  'CFileCache',
+        ),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
