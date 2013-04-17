@@ -36,14 +36,15 @@ class SiteController extends Controller
             if(!empty($asin)){
                 $asin = join(',',$asin);
                 $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup($asin);
-                $this->render('index', array('items' => $r['Items']['Item']));
+                $s = new Statistics();
+                $pricedrop = $this->renderPartial('pricedrop', array('items' => $s->getTopPriceDrops(10)), true); 
+                $this->render('index', array('items' => $r['Items']['Item'],'pricedrop'=>$pricedrop));
             }
         }else        
             $this->render('index2');
          
-        /*$s = new Statistics();
-        $this->render('index', array('items' => $s->getTopPriceDrops())); 
-         */
+        
+        
 	}
 
 	/**
