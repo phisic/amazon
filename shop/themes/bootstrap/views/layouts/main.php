@@ -14,15 +14,19 @@
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <div class="row">
+                    <div class="row-fluid">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
-                        <div class="span8">
+                        <div class="span7">
                             <form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
                                     <input name="search" type="text" placeholder="search..." class="input-block-level">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>
+                        </div>
+                        <div class="span3 text-right">
+                                    <a class="btn btn-primary" type="submit">Login</a>
+                                    <a class="btn btn-primary" type="submit">Register</a>
                         </div>
                     </div>
                     <div class="row">

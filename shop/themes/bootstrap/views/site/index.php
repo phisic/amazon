@@ -5,7 +5,7 @@
     <p style="font-size:20px;">
         We can help you to find best price laptop, search laptops and watch prices. 
         When price dropped we will email to you, just add laptop to watch! 
-        Also, we provide price history for every laptop, so you can decide is this best price.
+        Also, we provide price history for every laptop, so you can easily decide is this best price.
     </p>
 </div>
 <?php
