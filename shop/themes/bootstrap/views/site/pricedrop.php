@@ -6,7 +6,7 @@ foreach ($items as $n=>$item) {
     <div class="row" <?=($n==$count) ? '' : 'style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;"';?>>
         <div class="span2"><img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->createUrl('images') . '/none.jpg'; ?>" alt="product 2"></div>
         <div class="span10">
-            <h4><a href=''><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'>by <?= $item['ItemAttributes']['Brand'] ?></span></h4>
+            <h4><a href="<?=Yii::app()->createUrl('search/detail/'.$item['ASIN']);?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'>by <?= $item['ItemAttributes']['Brand'] ?></span></h4>
             <h5>
                         <?php
                         $newPrice = Yii::app()->amazon->getNewPrice($item);
@@ -14,11 +14,11 @@ foreach ($items as $n=>$item) {
                         if (isset($item['ItemAttributes']['ListPrice']['Amount']))
                             echo '<s class="muted" style="font-size:12px;">' . Yii::app()->amazon->formatUSD($item['ItemAttributes']['ListPrice']['Amount']) . '</s>';
                         if($newPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
+                            echo ' <a href="'.Yii::app()->createUrl('search/detail/'.$item['ASIN']).'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
                         if($newPrice && $usedPrice)
                             echo ' <span style="font-size:16px;"> & </span> ';
                         if($usedPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
+                            echo ' <a href="'.Yii::app()->createUrl('search/detail/'.$item['ASIN']).'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
                         ?>
                </h5>
                <h5>

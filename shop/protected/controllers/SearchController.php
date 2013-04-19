@@ -50,7 +50,16 @@ class SearchController extends Controller
         }  else {
             $this->render('empty_list');
         }
-        
-		
 	}
+    
+    public function actionDetail($id)
+    {
+        if (!($r = Yii::app()->cache->get($id))) {
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($id);
+            Yii::app()->cache->add($id, $r);
+        }
+        
+        
+        $this->render('detail', array('i'=>$r['Items']['Item']));
+    }
 }
