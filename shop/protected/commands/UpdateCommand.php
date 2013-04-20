@@ -11,7 +11,6 @@ class UpdateCommand extends CConsoleCommand {
                 ->responseGroup('ItemIds')
                 ->optionalParameters(array('ItemPage' => $page, 'Sort' => 'price','MinimumPrice' => $minPrice+1,'Availability' => 'Available'))
                 ->search('', Yii::app()->params['node']);
-            
             if(!isset($r['Items']['Item']))
                 return $asin;
             
@@ -33,7 +32,7 @@ class UpdateCommand extends CConsoleCommand {
         $t1= microtime(true);
         Yii::app()->db->createCommand('truncate `price`;')->execute();
         $page = 1;
-        $minPrice = 5000;
+        $minPrice = 14795;
         do{
             echo 'MinPrice = '.$minPrice."\n";
             $asinList = $this->getLowestPriceAsin($minPrice);
@@ -72,9 +71,11 @@ class UpdateCommand extends CConsoleCommand {
                         $data['Delta'] = $deltaNew;
                         Yii::app()->db->getCommandBuilder()->createInsertCommand('price', $data)->execute();
                     }
-                    
-                    $minPrice2 = empty($newPrice) ? $usedPrice : $newPrice;
-                    if($minPrice < $minPrice2)
+                    echo $i["ASIN"].'='.$newPrice." min=".$minPrice."\n";
+                    $minPrice2 = $newPrice ? $newPrice : $usedPrice;
+                    if(empty($minPrice2))
+                        $minPrice++;
+                    else
                         $minPrice = $minPrice2;
                 }
             }

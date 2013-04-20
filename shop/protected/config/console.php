@@ -59,7 +59,9 @@ return array(
 			'password' => '',
 			'charset' => 'utf8',
 		),
-		
+		'cache'=>array(
+            'class'=>  'CFileCache',
+        ),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
