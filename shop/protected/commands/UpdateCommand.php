@@ -9,7 +9,7 @@ class UpdateCommand extends CConsoleCommand {
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
                 ->responseGroup('ItemIds')
-                ->optionalParameters(array('ItemPage' => $page, 'Sort' => '-price','MaximumPrice' => $maxPrice+1,'Availability' => 'Available'))
+                ->optionalParameters(array('ItemPage' => $page, 'MaximumPrice' => $maxPrice,'MinimumPrice'=>($maxPrice - 1000),'Availability' => 'Available'))
                 ->search('', Yii::app()->params['node']);
             if(!isset($r['Items']['Item']))
                 return $asin;
@@ -41,11 +41,11 @@ class UpdateCommand extends CConsoleCommand {
         $lastLog = $this->getLastLog();
         if(empty($lastLog))
             $maxPrice = $highPrice;
-        elseif($lastLog['Price'] > $lowPrice)
+        elseif(empty($lastLog['DateEnd']))
             $maxPrice = $lastLog['Price'];
         else
            $maxPrice = $highPrice;
-        
+
         Yii::app()->db->getCommandBuilder()->createInsertCommand('price_log', array(
             'Price' => $maxPrice,
             'ItemsRead'=>0,
@@ -59,9 +59,16 @@ class UpdateCommand extends CConsoleCommand {
         $page = 1;
         $itemsRead = 0;
         do{
+            $startPrice = $maxPrice;
             echo 'MaxPrice = '.$maxPrice."\n";
             $asinList = $this->getHighPriceAsin($maxPrice);
-            if(empty($asinList))
+            //jump empty price ranges
+            if(empty($asinList)){
+                $maxPrice -= ceil($maxPrice/10);
+                continue;
+            }
+                
+            if(($maxPrice <= $lowPrice))
                 break;
             foreach ($asinList as $page => $asins){
                 $items = $this->getItemsByAsin($asins);
@@ -76,7 +83,7 @@ class UpdateCommand extends CConsoleCommand {
                             'ASIN' => $i['ASIN'],
                             'PriceNew' => $i['ItemAttributes']['ListPrice']['Amount'],
                             'PriceUsed' => 0,
-                            'Date' => time()-(24*3600),// 1 day old
+                            'Date' => date('Y-m-d H:i:s',time()-(24*3600)),// 1 day old
                         ))->execute();
                         $priceRow['PriceNew']=$i['ItemAttributes']['ListPrice']['Amount'];
                     }
@@ -96,20 +103,23 @@ class UpdateCommand extends CConsoleCommand {
                         $data['Delta'] = $deltaNew;
                         Yii::app()->db->getCommandBuilder()->createInsertCommand('price', $data)->execute();
                     }
-                    echo $i["ASIN"].'='.$newPrice." max=".$maxPrice."\n";
+                    
                     $maxPrice2 = $newPrice ? $newPrice : $usedPrice;
-                    if(empty($maxPrice2))
-                        $maxPrice++;
-                    else
+                    if(!empty($maxPrice2) && ($maxPrice2 < $maxPrice))
                         $maxPrice = $maxPrice2;
+                        
+                    echo $i["ASIN"].'='.$newPrice." max=".$maxPrice."\n";
                     $itemsRead++;
                 }
-                Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('ItemsRead'=>$itemsRead), $c)->execute();
+                Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('ItemsRead'=>$itemsRead,'Price'=>$maxPrice), $c)->execute();
+                //prevent infinite loop
+                if($maxPrice == $startPrice)
+                    $maxPrice -= 10000;
             }
             
         } while(true);
         
-        Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('ItemsRead'=>$itemsRead,'DateEnd'=>date('Y-m-d H:i:s')), $c)->execute();
+        Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('DateEnd'=>date('Y-m-d H:i:s')), $c)->execute();
     }
     
     protected function getLastPrice($ASIN)

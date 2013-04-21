@@ -51,16 +51,21 @@ class SearchController extends Controller {
     }
 
     public function actionDetail($id) {
-        $c = Yii::app()->clientScript;
+        $cs = Yii::app()->clientScript;
         $tp = Yii::app()->getTheme()->getBaseUrl();
-        $c->registerScript('excanvas', '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->', CClientScript::POS_HEAD);
-        $c->registerScriptFile($tp . '/js/plot/jquery.jqplot.min.js', CClientScript::POS_HEAD);
-        $c->registerScriptFile($tp . '/js/plot/plugins/jqplot.highlighter.min.js', CClientScript::POS_HEAD);
-        $c->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasTextRenderer.min.js', CClientScript::POS_HEAD);
-        $c->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasAxisLabelRenderer.min.js', CClientScript::POS_HEAD);
-        $c->registerScriptFile($tp . '/js/plot/plugins/jqplot.dateAxisRenderer.min.js', CClientScript::POS_HEAD);
+        $cs->registerScript('excanvas', '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->', CClientScript::POS_END);
+        $cs->registerScriptFile($tp . '/js/plot/jquery.jqplot.min.js', CClientScript::POS_END);
+        $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.highlighter.min.js', CClientScript::POS_END);
+        $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasTextRenderer.min.js', CClientScript::POS_END);
+        $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasAxisLabelRenderer.min.js', CClientScript::POS_END);
+        $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.dateAxisRenderer.min.js', CClientScript::POS_END);
         
-        $c->registerCssFile($tp . '/js/plot/jquery.jqplot.min.css');
+        $cs->registerCssFile($tp . '/js/plot/jquery.jqplot.min.css');
+        $cs->registerCssFile($tp . '/css/details.css');
+        
+        $c = new CDbCriteria();
+        $c->compare('ASIN', $id);
+        $history = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
         
         if (!($r = Yii::app()->cache->get($id))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($id);
@@ -76,7 +81,7 @@ class SearchController extends Controller {
             }
         }
         $r['Items']['Item']['EditorialReviews']['EditorialReview'] = $description;
-        $this->render('detail', array('i' => $r['Items']['Item']));
+        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history));
     }
 
 }

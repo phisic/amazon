@@ -28,7 +28,7 @@ class SiteController extends Controller {
 
         if (!($r = Yii::app()->cache->get('new-releases'))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
-            Yii::app()->cache->add('new-releases', $r);
+            Yii::app()->cache->add('new-releases', $r, 3600);
         }
 
         if (!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])) {
