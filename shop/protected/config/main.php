@@ -93,7 +93,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=amazon',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '1',
+			'password' => '',
 			'charset' => 'utf8',
             'tablePrefix' => 'tbl_',
 		),
