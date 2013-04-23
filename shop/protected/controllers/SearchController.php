@@ -40,8 +40,10 @@ class SearchController extends Controller {
                 ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
                 ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-         print_r($r);exit;
+        
         if (!empty($r['Items']['TotalResults'])) {
+            if($r['Items']['TotalPages'] > 10)
+                $r['Items']['TotalPages'] = 10;
             $pages = new CPagination($r['Items']['TotalResults']);
             $pages->pageSize = floor($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('items' => $r['Items']['Item'], 'pages' => $pages));
