@@ -11,14 +11,14 @@
                         <?php
                         $newPrice = Yii::app()->amazon->getNewPrice($i);
                         $usedPrice = Yii::app()->amazon->getUsedPrice($i);
-                        if (isset($i['ItemAttributes']['ListPrice']['Amount']))
+                        if (isset($i['ItemAttributes']['ListPrice']['Amount']) && $i['ItemAttributes']['ListPrice']['Amount'] != $newPrice)
                             echo '<s class="muted" style="font-size:12px;">' . Yii::app()->amazon->formatUSD($i['ItemAttributes']['ListPrice']['Amount']) . '</s>';
                         if($newPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
+                            echo ' <a title="'.$i['ItemLinks']['ItemLink'][6]['Description'].'" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
                         if($newPrice && $usedPrice)
                             echo ' <span style="font-size:16px;"> & </span> ';
                         if($usedPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
+                            echo ' <a title="'.$i['ItemLinks']['ItemLink'][6]['Description'].'" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
                         ?>
                </h5>
                <h5>
@@ -37,7 +37,7 @@
                             ?>
                         </ul>
                     </h6>
-            <h6><a href="#" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
+            <h6><a target="_blank" href="<?=$i['DetailPageURL']?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
         </div>
     </div>
 </div>

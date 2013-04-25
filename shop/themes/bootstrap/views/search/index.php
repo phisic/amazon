@@ -3,19 +3,19 @@
     <div class="row" style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;">
         <div class="span2"><img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->createUrl('images') . '/none.jpg'; ?>" alt="product 2"></div>
         <div class="span10">
-            <h4><a href="<?=Yii::app()->createUrl('search/detail/'.$item['ASIN'])?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'>by <?= $item['ItemAttributes']['Brand'] ?></span></h4>
+            <h4><a title="View details of <?= $item['ItemAttributes']['Title'] ?>" href="<?=Yii::app()->createUrl('search/detail/'.$item['ASIN'])?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'>by <?= $item['ItemAttributes']['Brand'] ?></span></h4>
             <h5>
                         <?php
                         $newPrice = Yii::app()->amazon->getNewPrice($item);
                         $usedPrice = Yii::app()->amazon->getUsedPrice($item);
-                        if (isset($item['ItemAttributes']['ListPrice']['Amount']))
+                        if (isset($item['ItemAttributes']['ListPrice']['Amount']) && $item['ItemAttributes']['ListPrice']['Amount'] != $newPrice)
                             echo '<s class="muted" style="font-size:12px;">' . Yii::app()->amazon->formatUSD($item['ItemAttributes']['ListPrice']['Amount']) . '</s>';
                         if($newPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
+                            echo ' <a title="'.$item['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$item['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
                         if($newPrice && $usedPrice)
                             echo ' <span style="font-size:16px;"> & </span> ';
                         if($usedPrice) 
-                            echo ' <a href="" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
+                            echo ' <a title="'.$item['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$item['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
                         ?>
                </h5>
                <h5>
@@ -34,7 +34,6 @@
                             ?>
                         </ul>
                     </h6>
-            <h6><a href="#" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
         </div>
     </div>
 <?php } ?>
