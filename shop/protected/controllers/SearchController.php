@@ -52,7 +52,7 @@ class SearchController extends Controller {
         }
     }
 
-    public function actionDetail($id) {
+    public function actionDetail($asin) {
         $cs = Yii::app()->clientScript;
         $tp = Yii::app()->getTheme()->getBaseUrl();
         $cs->registerScript('excanvas', '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->', CClientScript::POS_END);
@@ -66,12 +66,12 @@ class SearchController extends Controller {
         $cs->registerCssFile($tp . '/css/details.css');
         
         $c = new CDbCriteria();
-        $c->compare('ASIN', $id);
+        $c->compare('ASIN', $asin);
         $history = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
         
-        if (!($r = Yii::app()->cache->get($id))) {
-            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($id);
-            Yii::app()->cache->add($id, $r);
+        if (!($r = Yii::app()->cache->get($asin))) {
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
+            Yii::app()->cache->add($asin, $r);
         }
 
         $description = array();
