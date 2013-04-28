@@ -88,11 +88,41 @@ class SiteController extends Controller {
         $this->render('contact', array('model' => $model));
     }
 
+	public function actionAjaxLogin()
+	{
+		$model = new LoginForm;
+		$result = array('success' => false);
+		// collect user input data
+		if (isset($_POST['LoginForm'])) {
+			$model->attributes = $_POST['LoginForm'];
+			if ($model->validate() && $model->login())
+				$result = array('success' => true, 'url' => Yii::app()->user->returnUrl);
+		}
+
+		echo CJSON::encode($result);
+	}
+
     /**
      * Displays the login page
      */
     public function actionLogin() {
+
         $model = new LoginForm;
+
+	    $service = Yii::app()->request->getQuery('service');
+	    if (isset($service))
+	    {
+		    $authIdentity = Yii::app()->eauth->getIdentity($service);
+
+		    if ($authIdentity->authenticate())
+		    {
+			    $model->username = $authIdentity->getAttribute('email');
+			    if ($model->login(true))
+				    $this->redirect('/');
+		    }
+		    // Something went wrong, redirect to login page
+		    $this->redirect(array('site/login'));
+	    }
 
         // if it is ajax validation request
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
