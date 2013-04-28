@@ -46,7 +46,7 @@
                                 ),
                             ));
                             ?></div>
-                        <div class="span8"><h4><a href="">Top price drops</a> <a href="">Bestsellers</a> <a href="">New releases</a></h4></div>
+                        <div class="span8"><h4><a href="<?=Yii::app()->createUrl('search/toppricedrops')?>">Top Price Drops Today</a> / <a href="<?=Yii::app()->createUrl('search/bestsellers')?>">Best Sellers</a> / <a href="<?=Yii::app()->createUrl('search/topreviewed')?>">Top Reviewed</a> / <a href="<?=Yii::app()->createUrl('search/newreleases')?>">New Releases</a></h4></div>
                     </div>   
                 </div>
             </div>

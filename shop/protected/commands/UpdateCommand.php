@@ -4,6 +4,7 @@ class UpdateCommand extends CConsoleCommand {
 
     public function getHighPriceAsin($maxPrice, $minPrice) {
         $asin = array();
+                
         for ($page = 1; $page <= 10; $page++) {
             $r = Yii::app()->amazon
                     ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
@@ -20,6 +21,8 @@ class UpdateCommand extends CConsoleCommand {
                 else
                     $asin[$page][] = $i;
             }
+            if(count($r['Items']['Item'])<10)
+                return $asin;
         }
         return $asin;
     }
@@ -57,12 +60,17 @@ class UpdateCommand extends CConsoleCommand {
 
         $page = 1;
         $itemsRead = 0;
-        $delta = 6000;
         
         do {
             $startPrice = $maxPrice;
-            echo 'MaxPrice = ' . $maxPrice . "\n";
-            $asinList = $this->getHighPriceAsin($maxPrice, $maxPrice-$delta);
+            
+            $minPrice = Yii::app()->db->createCommand('select min(pricenew) as minprice from (select pricenew from price where pricenew < '.$maxPrice.' group by ASIN order by pricenew desc limit 90) s;')->queryScalar();
+            if(empty($minPrice))
+                $minPrice = $maxPrice - 1000;
+            echo 'MaxPrice = ' . $maxPrice . " MinPrice = ".$minPrice. " delta = ".($maxPrice-$minPrice)."\n";
+            $delta = $maxPrice - $minPrice;
+
+            $asinList = $this->getHighPriceAsin($maxPrice, $minPrice);
             //jump empty price ranges
             if (empty($asinList)) {
                 $maxPrice -= ceil($maxPrice / 10);

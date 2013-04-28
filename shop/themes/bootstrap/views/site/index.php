@@ -43,4 +43,9 @@ $this->widget('bootstrap.widgets.TbCarousel', array(
 ));
 
 echo $pricedrop;
+echo '<br></br>';
+echo $bestseller;
+echo '<br></br>';
+echo $review;
+
 ?>

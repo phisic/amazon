@@ -25,32 +25,19 @@ class SiteController extends Controller {
      * when an action is not explicitly requested by users.
      */
     public function actionIndex() {
+        $s = new Statistics();
+        
+        //Top price drops
+        $priceDrops = $s->getTopPriceDrops(7);
+        $pricedrop = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Price Drops Today <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/toppricedrops').'">View All</a>', 'items' => $priceDrops['items'],'priceDrops'=>$priceDrops['priceDrops']), true);
 
-        if (!($r = Yii::app()->cache->get('new-releases'))) {
-            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
-            Yii::app()->cache->add('new-releases', $r, 3600);
-        }
+        //BestSellers
+        $bestSellers = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Bestsellers <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/bestsellers').'">View All</a>', 'items' => $s->getTopBestSellers(7)), true);
+        
+        //Reviews
+        $reviews = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Reviewed <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/topreviewed').'">View All</a>', 'items' => $s->getTopReviewed(7)), true);
 
-        if (!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])) {
-            $asin = array();
-            foreach ($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'] as $i) {
-                $asin[] = $i['ASIN'];
-            }
-            if (!empty($asin)) {
-                
-                if (!($r = Yii::app()->cache->get('new-releases-body'))) {
-                    $asin = join(',', $asin);
-                    $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup($asin);
-                    Yii::app()->cache->add('new-releases-body', $r);
-                }
-                
-                $s = new Statistics();
-                $pricedrop = $this->renderPartial('pricedrop', array('items' => $s->getTopPriceDrops(10)), true);
-                $this->render('index', array('items' => $r['Items']['Item'], 'pricedrop' => $pricedrop));
-            }
-        }
-        else
-            $this->render('index2');
+        $this->render('index', array('items' => $s->getNewReleases(), 'pricedrop' => $pricedrop, 'bestseller' => $bestSellers, 'review'=>$reviews));
     }
 
     /**
