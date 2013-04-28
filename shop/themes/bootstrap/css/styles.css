@@ -1,3 +1,9 @@
 #page {
     padding-top: 70px;
 }
+
+
+.editable-click, a.editable-click, a.editable-click:hover {
+    border-bottom: 1px dashed #0088CC;
+    text-decoration: none;
+}
