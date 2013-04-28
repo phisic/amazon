@@ -84,8 +84,9 @@ return array(
             'showScriptName' => 0,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\w+>'=>'<controller>/<action>',
+				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+                '<controller:search>/<action:detail>/<asin:\w+>'=>'<controller>/<action>',
 			),
 		),
 		
@@ -93,7 +94,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=amazon',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '1',
+			'password' => '',
 			'charset' => 'utf8',
             'tablePrefix' => 'tbl_',
 		),

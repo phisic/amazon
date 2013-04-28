@@ -28,6 +28,11 @@ CREATE TABLE `price` (
   `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB;
-ALTER TABLE `price` RENAME TO  `price_tmp` ;
-ALTER TABLE `price2` RENAME TO  `price` ;
-ALTER TABLE `price_tmp` RENAME TO  `price2` ;
+
+CREATE  TABLE `amazon`.`price_log` (
+  `Id` INT NOT NULL AUTO_INCREMENT ,
+  `Price` INT NULL ,
+  `DateStart` TIMESTAMP NULL ,
+  `ItemsRead` INT NULL ,
+  `DateEnd` TIMESTAMP NULL ,
+  PRIMARY KEY (`Id`) );
