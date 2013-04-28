@@ -43,7 +43,7 @@
 </div>
 <?php 
 if(!empty($history))
-    echo '<h3>Price history from amazon.com</h3><div id="chart1" style=""></div>';
+    echo '<a name="history"></a><h3>Price history from amazon.com</h3><div id="chart1" style=""></div>';
 ?>
 
 <div id="productDescription">
@@ -77,7 +77,7 @@ if(!empty($history)) {
 <script type="text/javascript">
 $(document).ready(function(){
    var plot1 = $.jqplot('chart1', [<?php echo $line;?>], {
-      title:'Data Point Highlighting',
+      title:'<strong><span class="text-info">New price</span>, <span class="text-warning">Used price</span></strong>',
       axes:{
         xaxis:{
           renderer:$.jqplot.DateAxisRenderer,

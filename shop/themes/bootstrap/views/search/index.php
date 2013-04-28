@@ -26,7 +26,7 @@
                         ?>
                </h5>
                <h5>
-                   <a href="">See price history</a> 
+                   <a href="<?=Yii::app()->createUrl('search/detail/'.$item['ASIN'])?>#history">See price history</a> 
                         <?php
                         if($newPrice) echo ' / <a href="">Watch new price</a>';
                         if($usedPrice) echo ' / <a href="">Watch used price</a>';
