@@ -24,7 +24,7 @@ class UpdateCommand extends CConsoleCommand {
             
             if(count($r['Items']['Item'])<10)
                 return $asin;
-            usleep(20000);
+            usleep(100000);
         }
         return $asin;
     }
