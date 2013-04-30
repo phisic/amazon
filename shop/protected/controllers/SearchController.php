@@ -48,7 +48,7 @@ class SearchController extends Controller {
             $pages->pageSize = floor($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Search result', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list');
+            $this->render('empty_list', array('keyword'=>Yii::app()->request->getParam('search', '')));
         }
     }
 
@@ -105,7 +105,7 @@ class SearchController extends Controller {
             $pages->pageSize = ceil($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Best Sellers', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list');
+            $this->render('empty_list', array('keyword'=>'Bestsellers'));
         }
     }
 
@@ -150,7 +150,7 @@ class SearchController extends Controller {
             $pages->pageSize = ceil($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Top Reviewed', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list');
+            $this->render('empty_list', array('keyword'=>'Bestsellers'));
         }
     }
     
