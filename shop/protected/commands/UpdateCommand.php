@@ -83,7 +83,7 @@ class UpdateCommand extends CConsoleCommand {
                 break;
             foreach ($asinList as $page => $asins) {
                 $items = $this->getItemsByAsin($asins);
-                usleep(20000);
+                usleep(100000);
                 echo '  Page=' . $page . ' Asin:' . join(',', $asins) . "\n";
                 if (count($asins) == 1)
                     $items['Items']['Item'] = array('0' => $items['Items']['Item']);
