@@ -30,9 +30,9 @@ foreach ($items as $n => $item) {
                 <a href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>#history">See price history</a> 
                 <?php
                 if ($newPrice)
-                    echo ' / <a class="editable-click watch-new" href="#" title="Watch amazon price drop">Watch new price</a>';
+                    echo ' / <a id="'.$item['ASIN'].'-new" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>';
                 if ($usedPrice)
-                    echo ' / <a class="editable-click watch-used" href="#" title="Watch amazon price drop">Watch used price</a>';
+                    echo ' / <a id="'.$item['ASIN'].'-used" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>';
                 ?>
             </h5> 
             <h6><ul>
@@ -51,19 +51,3 @@ foreach ($items as $n => $item) {
 if (isset($pages))
     $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions' => array('class' => 'pager'), 'pages' => $pages));
 ?>
-<div id ="watch-form" class="hide">
-    <form class='form-horizontal'>
-        <div><span>First Name</span><input type="text" name="firstname"></div>
-        <div><span>Email</span><input type="text" name="email"></div>
-        <p></p>
-        <button type="button" class="btn btn-primary" data-loading-text="Loading...">Watch</button>
-    </form>
-</div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        var data = $('#watch-form').html();
-        $('.editable-click').click(function(){return false;});
-        $('.editable-click').popover({"html": true, "content": data,"placement":"bottom"});
-    })
-
-</script>
