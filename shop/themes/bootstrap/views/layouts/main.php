@@ -62,7 +62,13 @@
             <?php endif ?>
 
             <?php echo $content; ?>
-
+                <div class="hide watch-form-body">
+            <?php    
+                $model = new WatchForm();
+                $form = new CForm('application.views.site.watch', $model);
+                echo $form->render();
+            ?>
+                    </div>
             <div class="clear"></div>
 
             <div id="footer">
@@ -72,7 +78,7 @@
             </div><!-- footer -->
 
         </div><!-- page -->
-        <div class="hide watch-form-body">
+        <div class="hide watch-form-body2">
             <form class='form-horizontal' tag="">
                 <div><span>First Name</span><input type="text" name="firstname"></div>
                 <div><span>Email</span><input type="text" name="email"></div>
