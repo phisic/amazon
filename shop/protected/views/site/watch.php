@@ -1,24 +1,20 @@
 <?php
+
 return array(
-    'title'=>'Watch price',
- 
-    'elements'=>array(
-        'firstname'=>array(
-            'type'=>'text',
-            'maxlength'=>32,
-        ),
-        'email'=>array(
-            'type'=>'text',
-            'maxlength'=>64,
-        ),
-       
+    'title' => 'Watch price',
+    'activeForm' => array(
+        'class' => 'CActiveForm',
+        'enableClientValidation' => true,
     ),
- 
-    'buttons'=>array(
-        'login'=>array(
-            'type'=>'button',
-            'label'=>'Watch',
-            'class'=>'btn-primary'
+    'elements' => array(
+        'firstname' => array(
+            'type' => 'text',
+            'maxlength' => 32,
+        ),
+        'email' => array(
+            'type' => 'text',
+            'maxlength' => 64,
         ),
     ),
+    
 );
