@@ -25,19 +25,20 @@ class SiteController extends Controller {
      * when an action is not explicitly requested by users.
      */
     public function actionIndex() {
-        $s = new Statistics();
-        
-        //Top price drops
-        $priceDrops = $s->getTopPriceDrops(7);
-        $pricedrop = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Price Drops Today <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/toppricedrops').'">View All</a>', 'items' => $priceDrops['items'],'priceDrops'=>$priceDrops['priceDrops']), true);
-
-        //BestSellers
-        $bestSellers = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Bestsellers <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/bestsellers').'">View All</a>', 'items' => $s->getTopBestSellers(7)), true);
-        
-        //Reviews
-        $reviews = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Reviewed <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/topreviewed').'">View All</a>', 'items' => $s->getTopReviewed(7)), true);
-
-        $this->render('index', array('items' => $s->getNewReleases(), 'pricedrop' => $pricedrop, 'bestseller' => $bestSellers, 'review'=>$reviews));
+//        $s = new Statistics();
+//
+//        //Top price drops
+//        $priceDrops = $s->getTopPriceDrops(7);
+//        $pricedrop = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Price Drops Today <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/toppricedrops').'">View All</a>', 'items' => $priceDrops['items'],'priceDrops'=>$priceDrops['priceDrops']), true);
+//
+//        //BestSellers
+//        $bestSellers = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Bestsellers <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/bestsellers').'">View All</a>', 'items' => $s->getTopBestSellers(7)), true);
+//
+//        //Reviews
+//        $reviews = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Reviewed <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/topreviewed').'">View All</a>', 'items' => $s->getTopReviewed(7)), true);
+//
+//        $this->render('index', array('items' => $s->getNewReleases(), 'pricedrop' => $pricedrop, 'bestseller' => $bestSellers, 'review'=>$reviews));
+	    $this->render('index');
     }
 
     /**
@@ -89,14 +90,27 @@ class SiteController extends Controller {
 		echo CJSON::encode($result);
 	}
 
+	public function actionAjaxRegister()
+	{
+		$model = new RegistrationForm;
+		$result = array('success' => false);
+		// collect user input data
+		if (isset($_POST['RegistrationForm'])) {
+			$model->attributes = $_POST['RegistrationForm'];
+			if ($model->validate() && $model->register())
+				$result = array('success' => true, 'url' => Yii::app()->user->returnUrl);
+		}
+
+		echo CJSON::encode($result);
+	}
+
     /**
      * Displays the login page
      */
-    public function actionLogin() {
+    public function actionLogin($service) {
 
         $model = new LoginForm;
 
-	    $service = Yii::app()->request->getQuery('service');
 	    if (isset($service))
 	    {
 		    $authIdentity = Yii::app()->eauth->getIdentity($service);
@@ -108,24 +122,8 @@ class SiteController extends Controller {
 				    $this->redirect('/');
 		    }
 		    // Something went wrong, redirect to login page
-		    $this->redirect(array('site/login'));
+		    $this->redirect(array('/'));
 	    }
-
-        // if it is ajax validation request
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-
-        // collect user input data
-        if (isset($_POST['LoginForm'])) {
-            $model->attributes = $_POST['LoginForm'];
-            // validate user input and redirect to the previous page if valid
-            if ($model->validate() && $model->login())
-                $this->redirect(Yii::app()->user->returnUrl);
-        }
-        // display the login form
-        $this->render('login', array('model' => $model));
     }
 
     /**

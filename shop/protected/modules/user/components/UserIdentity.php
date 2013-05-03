@@ -19,7 +19,7 @@ class UserIdentity extends CUserIdentity
 	 * against some persistent user identity storage (e.g. database).
 	 * @return boolean whether authentication succeeds.
 	 */
-	public function authenticate()
+	public function authenticate($oAuth = false)
 	{
 		if (strpos($this->username,"@")) {
 			$user=User::model()->notsafe()->findByAttributes(array('email'=>$this->username));
@@ -32,7 +32,7 @@ class UserIdentity extends CUserIdentity
 			} else {
 				$this->errorCode=self::ERROR_USERNAME_INVALID;
 			}
-		else if(Yii::app()->getModule('user')->encrypting($this->password)!==$user->password)
+		else if(!$oAuth && Yii::app()->getModule('user')->encrypting($this->password)!==$user->password)
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
 		else if($user->status==0&&Yii::app()->getModule('user')->loginNotActiv==false)
 			$this->errorCode=self::ERROR_STATUS_NOTACTIV;

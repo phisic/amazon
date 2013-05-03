@@ -1,0 +1,19 @@
+.services {
+	float: right;
+}
+.services li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+.modal-header {
+	overflow: hidden;
+}
+
+.modal-header h4 {
+	float: left;
+}
+#login-form {
+	clear: both;
+}

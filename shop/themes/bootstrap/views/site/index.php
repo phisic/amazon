@@ -1,10 +1,11 @@
+<? return ?>
 <div class="hero-unit">
     <h1>Hello, currently 15 000 laptops is here</h1>
     <h1>Are you looking for best price laptop?</h1>
     <h1></h1>
     <p style="font-size:20px;">
-        We can help you to find best price laptop, search laptops and watch prices. 
-        When price dropped we will email to you, just add laptop to watch! 
+        We can help you to find best price laptop, search laptops and watch prices.
+        When price dropped we will email to you, just add laptop to watch!
         Also, we provide price history for every laptop, so you can easily decide is this best price.
     </p>
 </div>
@@ -28,7 +29,7 @@ foreach ($items as $i) {
             <div class="row">
                 <div class="span6"><img src="' . $img . '"></div>
                 <div class="span6">
-                 <h3><a title="View details of '.$i['ItemAttributes']['Title'].'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning"style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>  
+                 <h3><a title="View details of '.$i['ItemAttributes']['Title'].'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning"style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>
                  <h4>
                     <ul>
                         <li>' . join('</li><li>', $i['ItemAttributes']['Feature']) . '</li>

@@ -12,6 +12,10 @@ return array(
 		'application.components.*',
         'application.modules.user.models.*',
         'application.modules.user.components.*',
+		'ext.eoauth.*',
+		'ext.eoauth.lib.*',
+		'ext.lightopenid.*',
+		'ext.eauth.services.*',
 	),
 
 	'modules'=>array(
@@ -94,7 +98,7 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=amazon',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => '1',
 			'charset' => 'utf8',
             'tablePrefix' => 'tbl_',
 		),
@@ -128,40 +132,19 @@ return array(
 			'popup' => false, // Use the popup window instead of redirecting.
 			'services' => array(// You can change the providers and their classes.
 				'google' => array(
-					'class' => 'ext.eauth.services.GoogleOpenIDService',
+					'class' => 'GoogleOpenIDService',
 				),
 				'facebook' => array(
-					'class' => 'ext.eauth.services.FacebookOAuthService',
-					'client_id' => '247350752070065',
-					'client_secret' => '73412365506eb197c202f48846cc9e7a'
-				)
+					'class' => 'FacebookOAuthService',
+					'client_id' => '366086316833196',
+					'client_secret' => '92dd47a74620ae3328e6f43f1b46c958'
+				),
+				'twitter' => array(
+					'class' => 'TwitterOAuthService',
+					'key' => 'Ow9g3Vl0eCDH9ajAu4WkA',
+					'secret' => 'sRv12o8inFpDn9WgcxQYRb4ID74kpsnI7phKgUotr4',
+				),
 			),
-		),
-		'oauth' => array(
-			// the list of additional properties of this action is below
-			'class'=>'ext.hoauth.HOAuthAction',
-			// Yii alias for your user's model, or simply class name, when it already on yii's import path
-			// default value of this property is: User
-			'model' => 'User',
-			// map model attributes to attributes of user's social profile
-			// model attribute => profile attribute
-			// the list of avaible attributes is below
-			'attributes' => array(
-				'email' => 'email',
-				'fname' => 'firstName',
-				'lname' => 'lastName',
-				'gender' => 'genderShort',
-				'birthday' => 'birthDate',
-				// you can also specify additional values,
-				// that will be applied to your model (eg. account activation status)
-				'acc_status' => 1,
-			),
-		),
-		// this is an admin action that will help you to configure HybridAuth
-		// (you must delete this action, when you'll be ready with configuration, or
-		// specify rules for admin role. User shouldn't have access to this action!)
-		'oauthadmin' => array(
-			'class'=>'ext.hoauth.HOAuthAdminAction',
 		),
 	),
 

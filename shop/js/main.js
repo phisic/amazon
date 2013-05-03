@@ -17,6 +17,24 @@ $(function() {
 		return false;
 	});
 
+	$(document).on('click', '#registerWithAjax', function() {
+		if(_formValidation('#register-form')) {
+			jQuery.ajax({'type':'POST',
+				'url':'/site/ajaxRegister',
+				'cache':false,
+				'data':jQuery(this).parents("form").serialize(),
+				'success': function(data) {
+					if(data.success) {
+						location.href = data.url;
+					} else {
+						alert('Incorrect username or password');
+					}},
+				'dataType': 'json'
+			});
+		}
+		return false;
+	});
+
 	var _formValidation = function($id) {
 		var $form = $($id);
 		var hasError = false;

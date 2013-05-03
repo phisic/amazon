@@ -6,9 +6,10 @@
 	<meta name="language" content="en"/>
 
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-
+	<script type="text/javascript" src="/js/main.js"></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
@@ -97,46 +98,8 @@
 </div>
 <!-- page -->
 <? if (Yii::app()->user->getIsGuest()) : ?>
-<!-- page -->
-	<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'loginModal')); ?>
-<div class="modal-header">
-	<a class="close" data-dismiss="modal">&times;</a>
-	<h4>Login</h4>
-</div>
-	<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-		'id' => 'login-form',
-		'type' => 'horizontal',
-		'enableClientValidation' => true,
-		'clientOptions' => array(
-			'validateOnSubmit' => true,
-		),
-	)); ?>
-<div class="modal-body">
-<? $model = new LoginForm; ?>
-	<div class="form">
-		<?php echo $form->textFieldRow($model, 'username'); ?>
-		<?php echo $form->passwordFieldRow($model, 'password'); ?>
-		<?php echo $form->checkBoxRow($model, 'rememberMe'); ?>
-	</div>
-
-	<div class="modal-footer">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType' => 'button',
-		'url' => Yii::app()->createUrl('/site/login'),
-		'type' => 'primary',
-		'label' => 'Login',
-		'htmlOptions' => array(
-			'id' => 'loginWithAjax'
-		)
-	)); ?>
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'label' => 'Close',
-		'url' => '#',
-		'htmlOptions' => array('data-dismiss' => 'modal'),
-	)); ?>
-	</div>
-	<?php $this->endWidget(); ?>
-	<?php $this->endWidget(); ?>
-	<? endif ?>
+<? $this->renderPartial('//site/login-form'); ?>
+<? $this->renderPartial('//site/register-form'); ?>
+<? endif ?>
 </body>
 </html>
