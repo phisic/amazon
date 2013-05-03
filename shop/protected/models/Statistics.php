@@ -20,7 +20,8 @@ class Statistics {
             Yii::app()->cache->add('price-drops-daily', $r, 3600);
         }
         
-        //print_r($r);exit;
+        if(empty($r['Items']['Item']))
+            return array('items'=>array(),'priceDrops'=>array());
         return array('items'=>$r['Items']['Item'],'priceDrops'=>$asins);
     }
     

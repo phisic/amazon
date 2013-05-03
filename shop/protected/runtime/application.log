@@ -2379,3 +2379,21 @@ Stack trace:
 REQUEST_URI=/site/ajaxRegister
 HTTP_REFERER=http://ara.lan/
 ---
+2013/05/03 11:54:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/bootstrap/css/main.css".' in E:\Mine\a\amazon\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 E:\Mine\a\amazon\Yii\web\CWebApplication.php(141): CWebApplication->runController('themes/bootstra...')
+#1 E:\Mine\a\amazon\Yii\base\CApplication.php(170): CWebApplication->processRequest()
+#2 E:\Mine\a\amazon\shop\index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/bootstrap/css/main.css
+HTTP_REFERER=http://ara.lan/
+---
+2013/05/03 11:54:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "themes/bootstrap/css/main.css".' in E:\Mine\a\amazon\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 E:\Mine\a\amazon\Yii\web\CWebApplication.php(141): CWebApplication->runController('themes/bootstra...')
+#1 E:\Mine\a\amazon\Yii\base\CApplication.php(170): CWebApplication->processRequest()
+#2 E:\Mine\a\amazon\shop\index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/themes/bootstrap/css/main.css
+HTTP_REFERER=http://ara.lan/
+---

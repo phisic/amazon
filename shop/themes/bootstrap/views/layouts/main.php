@@ -1,105 +1,137 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="language" content="en"/>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="en" />
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css"/>
-	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css" />
 
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-	<script type="text/javascript" src="/js/main.js"></script>
-</head>
-<body>
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<div class="row-fluid">
-				<div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
-				<div class="span7">
-					<form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
-						<div class="input-append input-block-level">
-							<input name="search" type="text" placeholder="search..." class="input-block-level">
-							<button class="btn" type="submit">GO</button>
-						</div>
-					</form>
-				</div>
-				<div class="span3 text-right">
-					<? if (Yii::app()->user->getIsGuest()) : ?>
-					<?php $this->widget('bootstrap.widgets.TbButton', array(
-						'label' => 'Login',
-						'type' => 'primary',
-						'htmlOptions' => array(
-							'data-toggle' => 'modal',
-							'data-target' => '#loginModal',
-						),
-					)); ?>
-					<?php $this->widget('bootstrap.widgets.TbButton', array(
-						'label' => 'Register',
-						'type' => 'primary',
-						'htmlOptions' => array(
-							'data-toggle' => 'modal',
-							'data-target' => '#registerModal',
-						),
-					)); ?>
-					<? else : ?>
-					<?= Yii::app()->user->name ?> <a href="/site/logout" class="btn btn-primary"
-					                                 type="submit">Logout</a>
-					<? endif ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span2">
-					<?php
-					$this->widget('bootstrap.widgets.TbButtonGroup', array(
-						'htmlOptions' => array('class' => 'btn-block'),
-						'type' => 'warning', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-						'buttons' => array(
-							array('label' => 'All categories', 'htmlOptions' => array('class' => ''), 'items' => array(
-								array('label' => 'Laptops', 'url' => '#'),
-								array('label' => 'Tablets', 'url' => '#'),
-								array('label' => 'Ultrabooks', 'url' => '#'),
-								'---',
-								array('label' => 'All categories', 'url' => '#'),
-							)),
-						),
-					));
-					?></div>
-				<div class="span8"><h4><a href="<?=Yii::app()->createUrl('search/toppricedrops')?>">Top Price Drops
-					Today</a> / <a href="<?=Yii::app()->createUrl('search/bestsellers')?>">Best Sellers</a> / <a
-						href="<?=Yii::app()->createUrl('search/topreviewed')?>">Top Reviewed</a> / <a
-						href="<?=Yii::app()->createUrl('search/newreleases')?>">New Releases</a></h4></div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container" id="page">
+        <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+	    <script type="text/javascript" src="/js/main.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
+                        <div class="span7">
+                            <form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
+                                <div class="input-append input-block-level">
+                                    <input name="search" type="text" placeholder="search..." class="input-block-level">
+                                        <button class="btn" type="submit">GO</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="span3 text-right">
+	                        <? if (Yii::app()->user->getIsGuest()) : ?>
+	                        <?php $this->widget('bootstrap.widgets.TbButton', array(
+		                        'label' => 'Login',
+		                        'type' => 'primary',
+		                        'htmlOptions' => array(
+			                        'data-toggle' => 'modal',
+			                        'data-target' => '#loginModal',
+		                        ),
+	                        )); ?>
+	                        <?php $this->widget('bootstrap.widgets.TbButton', array(
+		                        'label' => 'Register',
+		                        'type' => 'primary',
+		                        'htmlOptions' => array(
+			                        'data-toggle' => 'modal',
+			                        'data-target' => '#registerModal',
+		                        ),
+	                        )); ?>
+	                        <? else : ?>
+	                        <?= Yii::app()->user->name ?> <a href="/site/logout" class="btn btn-primary"
+	                                                         type="submit">Logout</a>
+	                        <? endif ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span2">
+                            <?php
+                            $this->widget('bootstrap.widgets.TbButtonGroup', array(
+                                'htmlOptions' => array('class' => 'btn-block'),
+                                'type' => 'warning', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+                                'buttons' => array(
+                                    array('label' => 'All categories', 'htmlOptions' => array('class' => ''), 'items' => array(
+                                            array('label' => 'Laptops', 'url' => '#'),
+                                            array('label' => 'Tablets', 'url' => '#'),
+                                            array('label' => 'Ultrabooks', 'url' => '#'),
+                                            '---',
+                                            array('label' => 'All categories', 'url' => '#'),
+                                        )),
+                                ),
+                            ));
+                            ?></div>
+                        <div class="span8"><h4><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a></h4></div>
+                    </div>   
+                </div>
+            </div>
+        </div>
+        <div class="container" id="page">
 
-	<?php if (isset($this->breadcrumbs)): ?>
-		<?php
-		$this->widget('bootstrap.widgets.TbBreadcrumbs', array(
-			'links' => $this->breadcrumbs,
-		));
-		?><!-- breadcrumbs -->
-	<?php endif ?>
+            <?php if (isset($this->breadcrumbs)): ?>
+                <?php
+                $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
+                    'links' => $this->breadcrumbs,
+                ));
+                ?><!-- breadcrumbs -->
+            <?php endif ?>
 
-	<?php echo $content; ?>
+            <?php echo $content; ?>
 
-	<div class="clear"></div>
+            <div class="clear"></div>
 
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div>
-	<!-- footer -->
+            <div id="footer">
+                Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
+                All Rights Reserved.<br/>
+                <?php echo Yii::powered(); ?>
+            </div><!-- footer -->
 
-</div>
-<!-- page -->
-<? if (Yii::app()->user->getIsGuest()) : ?>
-<? $this->renderPartial('//site/login-form'); ?>
-<? $this->renderPartial('//site/register-form'); ?>
-<? endif ?>
-</body>
+        </div><!-- page -->
+        <div class="hide watch-form-body">
+            <form class="form-horizontal">
+                <p>
+                <div><span>First Name<span class="text-error">*</span></span></div>
+                <input type="text" name="firstname" class="input-large">
+                </p>
+                <p>
+                <div><span>Email<span class="text-error">*</span></span></div>
+                <input type="text" name="email" class="input-large">
+                </p>    
+                <p>
+                <button tag="" type="button" class="btn btn-primary">Watch</button> 
+                <button type="button" class="btn btn-warning pull-right">Cancel</button>
+                </p>
+            </form>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.watch-click').click(function() {
+                    return false;
+                });
+                $('.form-horizontal .btn-primary').live('click', function() {
+                    alert(1);
+                })
+                $('.form-horizontal .btn-warning').live('click', function() {
+                    var elId = $(this).prev().attr('tag');
+                    $('#'+elId).popover('hide');
+                })
+                $('.watch-click').each(function() {
+                    var el = $(this);
+                    var id = el.attr('id');
+                    $('.watch-form-body .btn-primary').attr('tag', id);
+                    el.popover({"html": true, "content": $('.watch-form-body').html(), "placement": "bottom"});
+                });
+            })
+
+        </script>
+        <? if (Yii::app()->user->getIsGuest()) : ?>
+	        <? $this->renderPartial('//site/login-form'); ?>
+	        <? $this->renderPartial('//site/register-form'); ?>
+	        <? endif ?>
+    </body>
 </html>

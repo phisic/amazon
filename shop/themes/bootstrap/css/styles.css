@@ -3,7 +3,7 @@
 }
 
 
-.editable-click, a.editable-click, a.editable-click:hover {
+.watch-click, a.watch-click, a.watch-click:hover {
     border-bottom: 1px dashed #0088CC;
     text-decoration: none;
 }
