@@ -25,20 +25,19 @@ class SiteController extends Controller {
      * when an action is not explicitly requested by users.
      */
     public function actionIndex() {
-//        $s = new Statistics();
-//
-//        //Top price drops
-//        $priceDrops = $s->getTopPriceDrops(7);
-//        $pricedrop = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Price Drops Today <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/toppricedrops').'">View All</a>', 'items' => $priceDrops['items'],'priceDrops'=>$priceDrops['priceDrops']), true);
-//
-//        //BestSellers
-//        $bestSellers = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Bestsellers <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/bestsellers').'">View All</a>', 'items' => $s->getTopBestSellers(7)), true);
-//
-//        //Reviews
-//        $reviews = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Reviewed <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/topreviewed').'">View All</a>', 'items' => $s->getTopReviewed(7)), true);
-//
-//        $this->render('index', array('items' => $s->getNewReleases(), 'pricedrop' => $pricedrop, 'bestseller' => $bestSellers, 'review'=>$reviews));
-	    $this->render('index');
+        $s = new Statistics();
+
+        //Top price drops
+        $priceDrops = $s->getTopPriceDrops(7);
+        $pricedrop = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Price Drops Today <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/toppricedrops').'">View All</a>', 'items' => $priceDrops['items'],'priceDrops'=>$priceDrops['priceDrops']), true);
+
+        //BestSellers
+        $bestSellers = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Bestsellers <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/bestsellers').'">View All</a>', 'items' => $s->getTopBestSellers(7)), true);
+
+        //Reviews
+        $reviews = $this->renderFile(Yii::app()->getTheme()->getBasePath() . '/views/search/index.php', array('title' => 'Top7 Reviewed <a style="font-size:16px;" href="'.Yii::app()->createUrl('search/topreviewed').'">View All</a>', 'items' => $s->getTopReviewed(7)), true);
+
+        $this->render('index', array('items' => $s->getNewReleases(), 'pricedrop' => $pricedrop, 'bestseller' => $bestSellers, 'review'=>$reviews));
     }
 
     /**

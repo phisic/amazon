@@ -2,11 +2,11 @@
 <?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'loginModal')); ?>
 <div class="modal-header">
 	<a class="close" data-dismiss="modal">&times;</a>
-	<h4>Login</h4>
+	<h4>Login using Facebook, Google or Twitter</h4>
 	<ul class="services">
-		<li><a href="/site/login/service/facebook"><img src="/images/services/fb.png"></a></li>
-		<li><a href="/site/login/service/google"><img src="/images/services/gl.png"></a></li>
-		<li><a href="/site/login/service/twitter"><img src="/images/services/t.png"></a></li>
+        <li><a href="<?=Yii::app()->createUrl('site/login/service/facebook')?>"><img src="<?=Yii::app()->theme->baseUrl ?>/images/services/fb.png"></a></li>
+		<li><a href="<?=Yii::app()->createUrl('site/login/service/google')?>"><img src="<?=Yii::app()->theme->baseUrl ?>/images/services/gl.png"></a></li>
+		<li><a href="<?=Yii::app()->createUrl('site/login/service/twitter')?>"><img src="<?=Yii::app()->theme->baseUrl ?>/images/services/t.png"></a></li>
 	</ul>
 </div>
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

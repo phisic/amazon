@@ -8,8 +8,7 @@
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css" />
 
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
-	    <link rel="stylesheet" type="text/css" href="/css/style.css" />
-	    <script type="text/javascript" src="/js/main.js"></script>
+	    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/main.js"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -44,7 +43,7 @@
 		                        ),
 	                        )); ?>
 	                        <? else : ?>
-	                        <?= Yii::app()->user->name ?> <a href="/site/logout" class="btn btn-primary"
+	                        <?= Yii::app()->user->name ?> <a href="<?=Yii::app()->createUrl('site/logout')?>" class="btn btn-primary"
 	                                                         type="submit">Logout</a>
 	                        <? endif ?>
                         </div>
@@ -93,7 +92,7 @@
 
         </div><!-- page -->
         <div class="hide watch-form-body">
-            <form class="form-horizontal">
+            <form class="form-horizontal watch-form">
                 <p>
                 <div><span>First Name<span class="text-error">*</span></span></div>
                 <input type="text" name="firstname" class="input-large">
@@ -108,28 +107,7 @@
                 </p>
             </form>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('.watch-click').click(function() {
-                    return false;
-                });
-                $('.form-horizontal .btn-primary').live('click', function() {
-                    alert(1);
-                })
-                $('.form-horizontal .btn-warning').live('click', function() {
-                    var elId = $(this).prev().attr('tag');
-                    $('#'+elId).popover('hide');
-                })
-                $('.watch-click').each(function() {
-                    var el = $(this);
-                    var id = el.attr('id');
-                    $('.watch-form-body .btn-primary').attr('tag', id);
-                    el.popover({"html": true, "content": $('.watch-form-body').html(), "placement": "bottom"});
-                });
-            })
-
-        </script>
-        <? if (Yii::app()->user->getIsGuest()) : ?>
+            <? if (Yii::app()->user->getIsGuest()) : ?>
 	        <? $this->renderPartial('//site/login-form'); ?>
 	        <? $this->renderPartial('//site/register-form'); ?>
 	        <? endif ?>

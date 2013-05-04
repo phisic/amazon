@@ -1,4 +1,3 @@
-<? return ?>
 <div class="hero-unit">
     <h1>Hello, currently 15 000 laptops is here</h1>
     <h1>Are you looking for best price laptop?</h1>

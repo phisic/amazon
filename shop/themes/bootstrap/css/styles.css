@@ -7,3 +7,23 @@
     border-bottom: 1px dashed #0088CC;
     text-decoration: none;
 }
+
+.services {
+	float: right;
+}
+.services li {
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+.modal-header {
+	overflow: hidden;
+}
+
+.modal-header h4 {
+	float: left;
+}
+#login-form {
+	clear: both;
+}
