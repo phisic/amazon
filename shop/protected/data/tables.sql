@@ -36,3 +36,13 @@ CREATE  TABLE `amazon`.`price_log` (
   `ItemsRead` INT NULL ,
   `DateEnd` TIMESTAMP NULL ,
   PRIMARY KEY (`Id`) );
+
+CREATE  TABLE `amazon`.`watch` (
+  `Id` INT NOT NULL AUTO_INCREMENT ,
+  `ASIN` VARCHAR(15) NULL ,
+  `UserId` INT NULL ,
+  `Email` VARCHAR(64) NULL ,
+  `NewUsed` TINYINT NULL DEFAULT 1 ,
+  `Date` TIMESTAMP NULL ,
+  `Active` TINYINT NULL DEFAULT 1 ,
+  PRIMARY KEY (`Id`) );
