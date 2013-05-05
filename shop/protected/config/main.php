@@ -101,6 +101,8 @@ return array(
 			'password' => '1',
 			'charset' => 'utf8',
             'tablePrefix' => 'tbl_',
+            'enableProfiling'=>true,
+            'enableParamLogging'=>true,
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -117,11 +119,12 @@ return array(
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
+				
 				array(
-					'class'=>'CWebLogRoute',
+					'class' => 'CProfileLogRoute',
+                    'report' => 'summary',
 				),
-				*/
+				
 			),
 		),
 		'loid' => array(
