@@ -1,6 +1,3 @@
-<style>
-
-</style>
 <div class="row">
     <div class="span4"><img src="<?= $i['LargeImage']['URL'] ?>"></div>
     <div class="span8">

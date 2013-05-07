@@ -37,12 +37,15 @@ CREATE  TABLE `amazon`.`price_log` (
   `DateEnd` TIMESTAMP NULL ,
   PRIMARY KEY (`Id`) );
 
-CREATE  TABLE `amazon`.`watch` (
-  `Id` INT NOT NULL AUTO_INCREMENT ,
-  `ASIN` VARCHAR(15) NULL ,
-  `UserId` INT NULL ,
-  `Email` VARCHAR(64) NULL ,
-  `NewUsed` TINYINT NULL DEFAULT 1 ,
-  `Date` TIMESTAMP NULL ,
-  `Active` TINYINT NULL DEFAULT 1 ,
-  PRIMARY KEY (`Id`) );
+CREATE TABLE `watch` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ASIN` varchar(15) DEFAULT NULL,
+  `UserId` int(11) DEFAULT '0',
+  `Email` varchar(64) DEFAULT NULL,
+  `NewUsed` enum('new','used') DEFAULT 'new',
+  `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `Active` tinyint(4) DEFAULT '1',
+  `FirstName` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

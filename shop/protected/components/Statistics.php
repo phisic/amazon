@@ -1,6 +1,6 @@
 <?php
 
-class Statistics {
+class Statistics extends CApplicationComponent {
 
     public function getTopPriceDrops($limit = 10) {
         $c = new CDbCriteria(array(
@@ -81,6 +81,22 @@ class Statistics {
         }
         
         return $r['Items']['Item'];
+    }
+    
+    public function inWatch($asinList){
+        if(Yii::app()->user->getIsGuest())
+            return array();
+        
+        $c = new CDbCriteria(array('select'=>'ASIN,NewUsed'));
+        $c->addInCondition('ASIN', $asinList);
+        $c->addColumnCondition(array('UserId'=>Yii::app()->user->getId()));
+        $r = Yii::app()->db->getCommandBuilder()->createFindCommand('watch', $c)->queryAll();
+        $list = array();
+        foreach($r as $row){
+            $list[$row['ASIN']][$row['NewUsed']] = true;
+        }
+        
+        return $list;
     }
 
 }

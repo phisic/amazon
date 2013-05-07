@@ -25,7 +25,7 @@ class SiteController extends Controller {
      * when an action is not explicitly requested by users.
      */
     public function actionIndex() {
-        $s = new Statistics();
+        $s = Yii::app()->stat;
 
         //Top price drops
         $priceDrops = $s->getTopPriceDrops(7);

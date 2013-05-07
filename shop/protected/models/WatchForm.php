@@ -1,25 +1,50 @@
 <?php
 
-class WatchForm extends CFormModel
-{
-	public $firstname;
-	public $email;
+class WatchForm extends CFormModel {
 
-	public function rules()
-	{
-		return array(
-			array('email, firstname', 'required'),
-			array('email', 'email'),
-		);
-	}
+    public $FirstName;
+    public $Email;
+    public $ASIN;
+    public $NewUsed;
 
-	/**
-	 * Declares attribute labels.
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'firstname'=>'First name',
-		);
-	}
+    public function rules() {
+        return array(
+            array('Email, FirstName, ASIN, NewUsed', 'required'),
+            array('Email', 'email'),
+            array('ASIN', 'uniqASINEmail'),
+        );
+    }
+
+    /**
+     * Declares attribute labels.
+     */
+    public function attributeLabels() {
+        return array(
+            'FirstName' => 'First name',
+        );
+    }
+
+    public function uniqASINEmail() {
+        $c = new CDbCriteria();
+        $c->addColumnCondition(array('ASIN' => $this->ASIN, 'NewUsed' => $this->NewUsed));
+        if (Yii::app()->user->getIsGuest()) {
+            $c->addColumnCondition(array('Email' => $this->Email));
+        } else {
+            $c->addColumnCondition(array('UserId' => Yii::app()->user->getId()));
+        }
+
+        $rowCount = Yii::app()->db->getCommandBuilder()->createCountCommand('watch', $c)->queryScalar();
+        if ($rowCount)
+            $this->addError('Email', (Yii::app()->user->getIsGuest() ? 'Already in watch for this email.' : 'Already in your watch.'));
+    }
+
+    public function save() {
+        if ($this->validate()) {
+            $data = $this->getAttributes();
+                        
+            $data['UserId'] = Yii::app()->user->getIsGuest() ? 0 : Yii::app()->user->getId();
+            return Yii::app()->db->getCommandBuilder()->createInsertCommand('watch', $data)->execute();
+        }
+    }
+
 }

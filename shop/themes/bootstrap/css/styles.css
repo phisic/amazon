@@ -7,6 +7,11 @@
     border-bottom: 1px dashed #0088CC;
     text-decoration: none;
 }
+.in-watch, a.in-watch, a.in-watch:hover {
+    text-decoration: none;
+    cursor: default;
+    color: #006600;
+}
 
 .services {
 	float: right;

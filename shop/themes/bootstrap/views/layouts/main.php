@@ -9,6 +9,7 @@
 
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/main.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/<?=Yii::app()->user->getIsGuest() ? 'watchGuest.js' : 'watchUser.js'?>"></script>
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -91,28 +92,32 @@
             </div><!-- footer -->
 
         </div><!-- page -->
-        <div class="hide watch-form-body">
-            <form class="form-horizontal watch-form" action="<?=Yii::app()->createUrl('watch/index')?>">
-                <div class="text-error hide"></div>
-                <div class="watch-body">
-                    <p>
-                    <div><span>First name<span class="text-error">*</span></span></div>
-                    <input type="text" name="firstname" class="input-large">
-                    </p>
-                    <p>
-                    <div><span>Email<span class="text-error">*</span></span></div>
-                    <input type="text" name="email" class="input-large">
-                    </p>    
-                    <p>
-                    <button tag="" type="button" class="btn btn-primary">Watch</button> 
-                    <button type="button" class="btn btn-warning pull-right">Cancel</button>
-                    </p>
-                </div>
-            </form>
-        </div>
-            <? if (Yii::app()->user->getIsGuest()) : ?>
+        <?php if(Yii::app()->user->getIsGuest()){?>
+            <div class="hide watch-form-body">
+                <form class="form-horizontal watch-form" action="<?=Yii::app()->createUrl('watch/index')?>">
+                    <div class="text-error hide"></div>
+                    <div class="watch-body">
+                        <p>
+                        <div><span>First name<span class="text-error">*</span></span></div>
+                        <input type="text" name="FirstName" class="input-large">
+                        </p>
+                        <p>
+                        <div><span>Email<span class="text-error">*</span></span></div>
+                        <input type="text" name="Email" class="input-large">
+                        </p>    
+                        <p>
+                        <button tag="" type="button" class="btn btn-primary">Watch</button> 
+                        <button type="button" class="btn btn-warning pull-right">Cancel</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
 	        <? $this->renderPartial('//site/login-form'); ?>
 	        <? $this->renderPartial('//site/register-form'); ?>
-	        <? endif ?>
+        <?php 
+        }else{
+            echo '<script type="text/javascript">var watchUrl = "'.Yii::app()->createUrl('watch/index').'"</script>';
+        } 
+        ?>
     </body>
 </html>
