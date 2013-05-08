@@ -6,10 +6,12 @@ class WatchForm extends CFormModel {
     public $Email;
     public $ASIN;
     public $NewUsed;
+    public $Price;
+    public $PriceDate;
 
     public function rules() {
         return array(
-            array('Email, FirstName, ASIN, NewUsed', 'required'),
+            array('Email, FirstName, ASIN, NewUsed, Price, PriceDate', 'required'),
             array('Email', 'email'),
             array('ASIN', 'uniqASINEmail'),
         );

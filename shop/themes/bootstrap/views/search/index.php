@@ -36,9 +36,9 @@ foreach ($items as $n => $item) {
                 <a href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>#history">See price history</a> 
                 <?php
                 if ($newPrice)
-                    echo ' / '. (isset($inwatch[$item['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$item['ASIN'].'-new" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
+                    echo ' / '. (isset($inwatch[$item['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$item['ASIN'].'-new-'.$newPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
                 if ($usedPrice)
-                    echo ' / '. (isset($inwatch[$item['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$item['ASIN'].'-used" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
+                    echo ' / '. (isset($inwatch[$item['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$item['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
                 ?>
             </h5> 
             <h6><ul>

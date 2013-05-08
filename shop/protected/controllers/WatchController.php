@@ -7,6 +7,8 @@ class WatchController extends Controller {
        
        $data['ASIN'] = explode('-', $_POST['ASIN']);
        $data['NewUsed'] = $data['ASIN'][1];
+       $data['Price'] = $data['ASIN'][2];
+       $data['PriceDate'] = date('Y-m-d H:i:s');
        $data['ASIN'] = $data['ASIN'][0];
        
        if(Yii::app()->user->getIsGuest()){

@@ -43,9 +43,13 @@ CREATE TABLE `watch` (
   `UserId` int(11) DEFAULT '0',
   `Email` varchar(64) DEFAULT NULL,
   `NewUsed` enum('new','used') DEFAULT 'new',
-  `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `DateCreate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `Active` tinyint(4) DEFAULT '1',
   `FirstName` varchar(45) DEFAULT NULL,
+  `Price` int(11) DEFAULT NULL,
+  `PriceDate` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
