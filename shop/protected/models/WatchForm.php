@@ -43,10 +43,16 @@ class WatchForm extends CFormModel {
     public function save() {
         if ($this->validate()) {
             $data = $this->getAttributes();
-                        
+
             $data['UserId'] = Yii::app()->user->getIsGuest() ? 0 : Yii::app()->user->getId();
             return Yii::app()->db->getCommandBuilder()->createInsertCommand('watch', $data)->execute();
         }
+    }
+
+    public function remove($id) {
+        $c = new CDbCriteria();
+        $c->addColumnCondition(array('id' => $id));
+        return Yii::app()->db->getCommandBuilder()->createDeleteCommand('watch', $c)->execute();
     }
 
 }

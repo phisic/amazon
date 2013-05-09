@@ -1,0 +1,1 @@
+<h3 class="text-success">Successfully removed from watch.</h3>

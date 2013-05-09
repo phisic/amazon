@@ -98,5 +98,9 @@ class Statistics extends CApplicationComponent {
         
         return $list;
     }
-
+    
+    public function getHash($asin, $newUsed, $id){
+        return md5($asin.$newUsed.Yii::app()->params['secret'].$id);
+    }
+    
 }

@@ -1,4 +1,4 @@
 <?php
 return array(
-    'ProductList' => Yii::app()->basePath . 'widgets/ProductList.php'
+    'Statistics' => Yii::app()->basePath . '/components/Statistics.php',
 );
