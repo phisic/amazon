@@ -61,6 +61,9 @@ class WatchCommand extends CConsoleCommand {
         $template = file_get_contents('pricedropNotification.html');
 
         foreach ($priceDrops as $d) {
+            $c = new CDbCriteria();
+            $c->addColumnCondition(array('id'=>$d['Id']));
+            Yii::app()->db->getCommandBuilder()->createUpdateCommand('watch', array('Price'=>$d['Price']+$d['PriceDrop']), $c)->execute();
             if(empty($d['Email']))
                 continue;
             
