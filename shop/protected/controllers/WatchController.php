@@ -38,10 +38,10 @@ class WatchController extends Controller {
             throw new CHttpException('404');
         }    
 
-        $newUsed = $asin[1];
-        $hash = $asin[2];
-        $id = $asin[3];
-        $asin = $asin[0];
+        $newUsed = $parts[1];
+        $hash = $parts[2];
+        $id = $parts[3];
+        $asin = $parts[0];
 
         if (Yii::app()->stat->getHash($asin, $newUsed, $id) == $hash) {
             $wf = new WatchForm;
