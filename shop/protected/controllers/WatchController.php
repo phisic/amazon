@@ -48,7 +48,8 @@ class WatchController extends Controller {
             $wf->remove($id);
             $this->render('remove');
         }  else {
-            throw new CHttpException('404');
+           echo $hash.'!='.Yii::app()->stat->getHash($asin, $newUsed, $id);
+            //throw new CHttpException('404');
         }
     }
 
