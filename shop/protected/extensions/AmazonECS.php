@@ -231,8 +231,8 @@ class AmazonECS extends CApplicationComponent
     $soapClient = new SoapClient(
       $this->webserviceWsdl,
       array('exceptions' => 1, 
-          //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
-          'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
+          'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
+          //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
           )
     );
 

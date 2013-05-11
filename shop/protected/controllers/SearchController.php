@@ -135,7 +135,7 @@ class SearchController extends Controller {
         $pages = new CPagination($r['count']);
         $pages->pageSize = $size;
 
-        $this->render('index', array('title' => 'Top Price Drops', 'items' => $r['Items']['Item'], 'pages' => $pages, 'priceDrops' => $r['asins']));
+        $this->render('index', array('title' => 'Top Price Drops', 'items' => isset($r['Items']['Item'])?$r['Items']['Item']:array(), 'pages' => $pages, 'priceDrops' => $r['asins']));
     }
 
     public function actionTopReviewed() {
