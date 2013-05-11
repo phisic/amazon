@@ -27,7 +27,7 @@
  */
 
 class SearchController extends Controller {
-    
+
     public function actionIndex() {
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
@@ -43,7 +43,7 @@ class SearchController extends Controller {
             $pages->pageSize = floor($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Search result', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list', array('keyword'=>Yii::app()->request->getParam('search', '')));
+            $this->render('empty_list', array('keyword' => Yii::app()->request->getParam('search', '')));
         }
     }
 
@@ -66,7 +66,7 @@ class SearchController extends Controller {
 
         if (!($r = Yii::app()->cache->get($asin))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-            Yii::app()->cache->add($asin, $r);
+            Yii::app()->cache->add($asin, $r, 3600);
         }
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
@@ -85,13 +85,16 @@ class SearchController extends Controller {
     }
 
     public function actionBestsellers() {
-        $r = Yii::app()->amazon
-                ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
-                ->category('Electronics')
-                ->responseGroup('Medium')
-                ->optionalParameters(array('Sort' => 'salesrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
-                ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-
+        $page = Yii::app()->request->getParam('page', 1);
+        if (!$r = Yii::app()->cache->get('best-' . $page)) {
+            $r = Yii::app()->amazon
+                    ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
+                    ->category('Electronics')
+                    ->responseGroup('Medium')
+                    ->optionalParameters(array('Sort' => 'salesrank', 'ItemPage' => $page))
+                    ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
+            Yii::app()->cache->set('best-' . $page, $r, 1800);
+        }
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
                 $r['Items']['TotalPages'] = 10;
@@ -99,44 +102,52 @@ class SearchController extends Controller {
             $pages->pageSize = ceil($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Best Sellers', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list', array('keyword'=>'Bestsellers'));
+            $this->render('empty_list', array('keyword' => 'Bestsellers'));
         }
     }
 
     public function actionTopPriceDrops() {
         $page = abs(Yii::app()->request->getParam('page', 1));
-        $c = new CDbCriteria(array(
-            'select' => 'ASIN, sum(delta) as price_drop',
-            'order' => 'price_drop desc',
-            'group' => 'ASIN',
-        ));
-        $c->addCondition('`Date` > (now() - Interval 1 DAY)');
-        $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
         $size = 10;
-        $c->limit = $size;
-        $c->offset = $size*($page-1);
-        
-        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
-        $asins = array();
-        foreach ($rows as $row){
-            $asins[$row['ASIN']] = $row['price_drop'];
-        }
-        
-        $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
+        if (!$r = Yii::app()->cache->get('pdrop-' . $page)) {
+            $c = new CDbCriteria(array(
+                'select' => 'ASIN, sum(delta) as price_drop',
+                'order' => 'price_drop desc',
+                'group' => 'ASIN',
+            ));
+            $c->addCondition('`Date` > (now() - Interval 1 DAY)');
+            $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
+            
+            $c->limit = $size;
+            $c->offset = $size * ($page - 1);
 
-        $pages = new CPagination($count);
+            $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
+            $asins = array();
+            foreach ($rows as $row) {
+                $asins[$row['ASIN']] = $row['price_drop'];
+            }
+
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
+            $r['asins'] = $asins;
+            $r['count'] = $count;
+            Yii::app()->cache->set('pdrop-' . $page, $r, 1800);
+        }
+        $pages = new CPagination($r['count']);
         $pages->pageSize = $size;
-        
-        $this->render('index', array('title' => 'Top Price Drops', 'items' => $r['Items']['Item'], 'pages' => $pages, 'priceDrops'=>$asins));
+
+        $this->render('index', array('title' => 'Top Price Drops', 'items' => $r['Items']['Item'], 'pages' => $pages, 'priceDrops' => $r['asins']));
     }
-    
+
     public function actionTopReviewed() {
-        $r = Yii::app()->amazon
-                ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
-                ->category('Electronics')
-                ->responseGroup('Medium')
-                ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
-                ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
+        if (!$r = Yii::app()->cache->get('toprev-' . $page)) {
+            $r = Yii::app()->amazon
+                    ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
+                    ->category('Electronics')
+                    ->responseGroup('Medium')
+                    ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
+                    ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
+            Yii::app()->cache->set('toprev-' . $page, $r, 1800);
+        }
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
                 $r['Items']['TotalPages'] = 10;
@@ -144,11 +155,12 @@ class SearchController extends Controller {
             $pages->pageSize = ceil($r['Items']['TotalResults'] / $r['Items']['TotalPages']);
             $this->render('index', array('title' => 'Top Reviewed', 'items' => $r['Items']['Item'], 'pages' => $pages));
         } else {
-            $this->render('empty_list', array('keyword'=>'Bestsellers'));
+            $this->render('empty_list', array('keyword' => 'Top Reviewed'));
         }
     }
-    
-    public function actionNewReleases(){
+
+    public function actionNewReleases() {
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
+
 }
