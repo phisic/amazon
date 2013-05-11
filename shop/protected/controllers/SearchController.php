@@ -66,7 +66,7 @@ class SearchController extends Controller {
 
         if (!($r = Yii::app()->cache->get($asin))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-            Yii::app()->cache->add($asin, $r, 3600);
+            Yii::app()->cache->add($asin, $r, 1800);
         }
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {

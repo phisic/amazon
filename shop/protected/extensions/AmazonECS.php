@@ -230,7 +230,10 @@ class AmazonECS extends CApplicationComponent
 
     $soapClient = new SoapClient(
       $this->webserviceWsdl,
-      array('exceptions' => 1)
+      array('exceptions' => 1, 
+          'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
+          //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
+          )
     );
 
     $soapClient->__setLocation(str_replace(
@@ -255,7 +258,6 @@ class AmazonECS extends CApplicationComponent
   {
     $timeStamp = $this->getTimestamp();
     $signature = $this->buildSignature($function . $timeStamp);
-
     return array(
       new SoapHeader(
         'http://security.amazonaws.com/doc/2007-01-01/',
