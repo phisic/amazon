@@ -225,14 +225,14 @@ class AmazonECS extends CApplicationComponent
   protected function performSoapRequest($function, $params)
   {
     if (true ===  $this->requestConfig['requestDelay']) {
-      sleep(1);
+      //sleep(1);
     }
 
     $soapClient = new SoapClient(
       $this->webserviceWsdl,
       array('exceptions' => 1, 
-          'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
-          //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
+          //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
+          'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
           )
     );
 
