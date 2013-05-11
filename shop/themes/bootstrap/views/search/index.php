@@ -11,11 +11,11 @@ foreach ($items as $n => $item) {
     ?>
     <div class="row" <?php if ($count > $n) echo 'style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;"'; ?>>
         <div class="span2">
-            <img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->createUrl('images') . '/none.jpg'; ?>" alt="product 2">
+            <img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?=htmlspecialchars($item['ItemAttributes']['Title'])?>">
             <?php if (isset($item['SalesRank'])) echo '<h5>Sales Rank #' . $item['SalesRank'] . '</h5>'; ?>
         </div>
         <div class="span10">
-            <h4><a title="View details of <?= $item['ItemAttributes']['Title'] ?>" href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($item);

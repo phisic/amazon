@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="span4"><img src="<?= $i['LargeImage']['URL'] ?>"></div>
+    <div class="span4"><img alt="image <?=htmlspecialchars($i['ItemAttributes']['Title'])?>" src="<?= isset($i['LargeImage']['URL']) ? $i['LargeImage']['URL'] : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>"></div>
     <div class="span8">
 
         <div class="span8">
