@@ -92,7 +92,7 @@ if (!empty($history)) {
     <script type="text/javascript">
         $(document).ready(function() {
             var plot1 = $.jqplot('chart1', [<?php echo $line; ?>], {
-                title: '<strong><span class="text-info">New price</span>, <span class="text-warning">Used price</span></strong>',
+                title: '<strong><span class="text-info">New price</span>, <span class="text-warning">Used price</span></strong>, time zone in graph GMT+2',
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
