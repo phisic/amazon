@@ -32,18 +32,19 @@ foreach ($items as $i) {
         $p .= ' <a title="'.$i['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:26px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
     $img = isset($i['LargeImage']['URL']) ? str_replace(".jpg", "._AA500_.jpg", $i['LargeImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg';
 
-    $p.= '<h5><a href="'. Yii::app()->createUrl('search/detail/' . $i['ASIN']) .'#history">See price history</a>'; 
+    $ph = '<h5><a href="'. Yii::app()->createUrl('search/detail/' . $i['ASIN']) .'#history">See price history</a>'; 
     if ($newPrice)
-       $p .=' / '. (isset($inwatch[$i['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$i['ASIN'].'-new-'.$newPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
+       $ph .=' / '. (isset($inwatch[$i['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$i['ASIN'].'-new-'.$newPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
     if ($usedPrice)
-       $p .= ' / '. (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
-    $p .= '</h5>';
+       $ph .= ' / '. (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
+    $ph .= '</h5>';
     $list[] = array(
         'text' => '
             <div class="row">
                 <div class="span6"><img src="' . $img . '"></div>
                 <div class="span6">
                  <h3><a title="View details of '.htmlspecialchars($i['ItemAttributes']['Title']).'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning"style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>
+                 '.$ph.'
                  <h4>
                     <ul>
                         <li>' . join('</li><li>', $i['ItemAttributes']['Feature']) . '</li>

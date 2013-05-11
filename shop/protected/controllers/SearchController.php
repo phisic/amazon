@@ -68,7 +68,6 @@ class SearchController extends Controller {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
             Yii::app()->cache->add($asin, $r);
         }
-
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
             $description[] = preg_replace('/<a name="([0-9a-zA-Z]+)">/', '<a name="$1"></a>', $r['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);

@@ -3,7 +3,7 @@
     <div class="span8">
 
         <div class="span8">
-            <h1><?= $i['ItemAttributes']['Title'] ?> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h1>
+            <h1><?= $i['ItemAttributes']['Title'] ?> <span class='text-warning'style='font-size:12px;'><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($i);
@@ -20,12 +20,13 @@
             </h5>
             <h5>
                 <?php
+                $inwatch = Yii::app()->stat->inWatch((array)$i['ASIN']);
                 if ($newPrice)
-                    echo '<a href="">Watch new price</a>';
-                if ($newPrice && $usedPrice)
+                    echo (isset($inwatch[$i['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$i['ASIN'].'-new-'.$newPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
+                if($newPrice && $usedPrice)
                     echo ' / ';
                 if ($usedPrice)
-                    echo '<a href="">Watch used price</a>';
+                    echo (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
                 ?>
             </h5> 
             <h6><ul>
@@ -60,12 +61,25 @@ if (!empty($history))
 if (!empty($history)) {
     $lnew = $lused = array();
     $line = '';
-    foreach ($history as $h) {
-        if (!empty($h['PriceNew']))
-            $lnew[] = '["' . $h['Date'] . '",' . ($h['PriceNew'] / 100) . ']';
-        if (!empty($h['PriceUsed']))
-            $lused[] = '["' . $h['Date'] . '",' . ($h['PriceUsed'] / 100) . ']';
+    foreach ($history as $n => $h) {
+        if (!empty($h['PriceNew'])){
+            if($n == 0 || ($history[$n-1]['PriceNew'] != $h['PriceNew']))            
+                $lnew[] = '["' . $h['Date'] . '",' . ($h['PriceNew'] / 100) . ']';
+        }    
+        if (!empty($h['PriceUsed'])){
+            if($n == 0 || ($history[$n-1]['PriceUsed'] != $h['PriceUsed']))
+                $lused[] = '["' . $h['Date'] . '",' . ($h['PriceUsed'] / 100) . ']';
+        }
     }
+    
+    if($newPrice && !empty($h['PriceNew']) && $h['PriceNew'] != $newPrice){
+        $lnew[] = '["' . date('Y-m-d H:i:s') . '",' . ($newPrice / 100) . ']';
+    }
+    
+    if($usedPrice && !empty($h['PriceUsed']) && $h['PriceUsed'] != $usedPrice){
+        $lused[] = '["' . date('Y-m-d H:i:s') . '",' . ($usedPrice / 100) . ']';
+    }
+    
     if ($lnew)
         $line .= '[' . join(',', $lnew) . ']';
 

@@ -89,6 +89,7 @@ class UpdateCommand extends CConsoleCommand {
                     $items['Items']['Item'] = array('0' => $items['Items']['Item']);
 
                 foreach ($items['Items']['Item'] as $i) {
+                    //old price, add to history as 1 day before price
                     $priceRow = $this->getLastPrice($i['ASIN']);
                     if (empty($priceRow) && !empty($i['ItemAttributes']['ListPrice']['Amount'])) {
                         Yii::app()->db->getCommandBuilder()->createInsertCommand('price', array(
@@ -106,10 +107,17 @@ class UpdateCommand extends CConsoleCommand {
                     } else {
                         $deltaNew = 0;
                     }
+                    
+                    if ($usedPrice = Yii::app()->amazon->getUsedPrice($i)) {
+                        $oldUsed = empty($priceRow['PriceUsed']) ? $usedPrice : $priceRow['PriceUsed'];
+                        $deltaUsed = $oldUsed - $usedPrice;
+                    } else {
+                        $deltaUsed = 0;
+                    }
+                    
                     $usedPrice = Yii::app()->amazon->getUsedPrice($i);
-                    ;
                     //if price changed or no any price row exist
-                    if (!empty($deltaNew) || empty($priceRow)) {
+                    if (!empty($deltaNew) || !empty($deltaUsed) || empty($priceRow)) {
                         $data['ASIN'] = $i['ASIN'];
                         $data['PriceNew'] = $newPrice;
                         $data['PriceUsed'] = $usedPrice;
