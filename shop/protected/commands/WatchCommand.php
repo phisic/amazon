@@ -102,9 +102,10 @@ class WatchCommand extends CConsoleCommand {
                 '{$newPrice}' => $newPrice,
                 '{$amazonLink}' => $d['DetailPageURL'],
                 '{$removeLink}' => $removeUrl,
+                '{$newused}' => ucfirst($d['NewUsed']),
             ));
 
-            UserModule::sendMail($d['Email'], 'Price drop notification from laptoptop7.com', $message);
+            UserModule::sendMail($d['Email'], $pricedDrop. ' laptop price drop notification', $message);
         }
     }
 
