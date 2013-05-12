@@ -139,12 +139,13 @@ class SearchController extends Controller {
     }
 
     public function actionTopReviewed() {
+        $page = abs(Yii::app()->request->getParam('page', 1));
         if (!$r = Yii::app()->cache->get('toprev-' . $page)) {
             $r = Yii::app()->amazon
                     ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                     ->category('Electronics')
                     ->responseGroup('Medium')
-                    ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
+                    ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => $page))
                     ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
             Yii::app()->cache->set('toprev-' . $page, $r, 1800);
         }
