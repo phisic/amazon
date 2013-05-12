@@ -20,12 +20,12 @@
                         <div class="span7">
                             <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
-                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search..." class="input-block-level" value="<?=Yii::app()->request->getParam('search', '')?>">
+                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search for laptops, example: Macbook, Ultrabook" class="input-block-level" value="<?=Yii::app()->request->getParam('search', '')?>">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>
                         </div>
-                        <div class="span3 text-right">
+                        <!-- in development div class="span3 text-right">
 	                        <? if (Yii::app()->user->getIsGuest()) : ?>
 	                        <?php $this->widget('bootstrap.widgets.TbButton', array(
 		                        'label' => 'Login',
@@ -44,10 +44,9 @@
 		                        ),
 	                        )); ?>
 	                        <? else : ?>
-	                        <?= Yii::app()->user->name ?> <a href="<?=Yii::app()->createUrl('site/logout')?>" class="btn btn-primary"
-	                                                         type="submit">Logout</a>
+	                        <?= Yii::app()->user->name ?> <a href="<?=Yii::app()->createUrl('site/logout')?>" class="btn btn-primary" type="submit">Logout</a>
 	                        <? endif ?>
-                        </div>
+                        </div-->
                     </div>
                     <div class="row">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>">Amazon.com</a></div>

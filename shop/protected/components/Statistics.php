@@ -17,7 +17,7 @@ class Statistics extends CApplicationComponent {
             foreach ($rows as $row) {
                 $asins[$row['ASIN']] = $row['price_drop'];
             }
-            
+
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
             $r['asins'] = $asins;
             Yii::app()->cache->add('price-drops-daily', $r, 1800);
@@ -103,6 +103,15 @@ class Statistics extends CApplicationComponent {
 
     public function getHash($asin, $newUsed, $id) {
         return md5($asin . $newUsed . Yii::app()->params['secret'] . $id);
+    }
+
+    public function getLaptopCount() {
+        $row = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', new CDbCriteria(array(
+                    'order' => 'DateEnd desc',
+                    'limit' => 1
+                )))->queryRow();
+        
+        return number_format($row['ItemsRead'],0,'.',' ');
     }
 
 }
