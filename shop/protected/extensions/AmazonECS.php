@@ -18,6 +18,7 @@
  * @link         http://github.com/Exeu/Amazon-ECS-PHP-Library/wiki Wiki
  * @link         http://github.com/Exeu/Amazon-ECS-PHP-Library Source
  */
+
 class AmazonECS extends CApplicationComponent
 {
   const RETURN_TYPE_ARRAY  = 1;
@@ -52,10 +53,10 @@ class AmazonECS extends CApplicationComponent
 
   /**
    * The WSDL File
-   *
+   *http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl
    * @var string
    */
-  protected $webserviceWsdl = 'http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl';
+  protected $webserviceWsdl = 'AWSECommerceService.wsdl';
 
   /**
    * The SOAP Endpoint
@@ -223,15 +224,16 @@ class AmazonECS extends CApplicationComponent
    * @return array The response as an array with stdClass objects
    */
   protected function performSoapRequest($function, $params)
-  {
+  {$t =  microtime(true);
     if (true ===  $this->requestConfig['requestDelay']) {
       //sleep(1);
     }
+    echo 'cache='.ini_get('soap.soap.wsdl_cache_ttl').'#';
     $soapClient = new SoapClient(
-      $this->webserviceWsdl,
+      Yii::app()->basePath.'/../'.$this->webserviceWsdl,
       array('exceptions' => 1, 
           'trace'=>true,
-          'cache_wsdl'=>WSDL_CACHE_NONE,
+          'cache_wsdl'=>WSDL_CACHE_DISK,
           'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
           //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
           )
@@ -242,12 +244,10 @@ class AmazonECS extends CApplicationComponent
       $this->responseConfig['country'],
       $this->webserviceEndpoint
     ));
-
+    
     $soapClient->__setSoapHeaders($this->buildSoapHeader($function));
-
-    $r = $soapClient->__soapCall($function, array($params));
-    echo'soapheader='.$soapClient->__getLastResponseHeaders().' headerend;';exit;
-    return $r;
+    
+    return $soapClient->__soapCall($function, array($params));
   }
 
   /**
