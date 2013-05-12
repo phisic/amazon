@@ -226,9 +226,8 @@ class AmazonECS extends CApplicationComponent
   protected function performSoapRequest($function, $params)
   {$t =  microtime(true);
     if (true ===  $this->requestConfig['requestDelay']) {
-      //sleep(1);
+      sleep(1);
     }
-    echo 'cache='.ini_get('soap.soap.wsdl_cache_ttl').'#';
     $soapClient = new SoapClient(
       Yii::app()->basePath.'/../'.$this->webserviceWsdl,
       array('exceptions' => 1, 
