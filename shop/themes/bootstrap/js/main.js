@@ -55,5 +55,19 @@ $(function() {
 
         return !hasError;
     }
-  
+
+    $('#searchbox').typeahead({
+        items: 10,
+        //minLength: 3,
+        source: function(query, process) {
+            return $.getJSON(
+                    $('#searchbox-form').attr('action'),
+                    {search: query},
+            function(data) {
+                return process(data);
+            });
+        }
+
+    });
+
 });

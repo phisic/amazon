@@ -18,9 +18,9 @@
                     <div class="row-fluid">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
                         <div class="span7">
-                            <form action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
+                            <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
-                                    <input name="search" type="text" placeholder="search..." class="input-block-level">
+                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search..." class="input-block-level" value="<?=Yii::app()->request->getParam('search', '')?>">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>
@@ -50,22 +50,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="span2">
-                            <?php
-                            $this->widget('bootstrap.widgets.TbButtonGroup', array(
-                                'htmlOptions' => array('class' => 'btn-block'),
-                                'type' => 'warning', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-                                'buttons' => array(
-                                    array('label' => 'All categories', 'htmlOptions' => array('class' => ''), 'items' => array(
-                                            array('label' => 'Laptops', 'url' => '#'),
-                                            array('label' => 'Tablets', 'url' => '#'),
-                                            array('label' => 'Ultrabooks', 'url' => '#'),
-                                            '---',
-                                            array('label' => 'All categories', 'url' => '#'),
-                                        )),
-                                ),
-                            ));
-                            ?></div>
+                        <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>">Amazon.com</a></div>
                         <div class="span8"><h4><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a></h4></div>
                     </div>   
                 </div>
@@ -86,9 +71,8 @@
             <div class="clear"></div>
 
             <div id="footer">
-                Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
+                Copyright &copy; <?php echo date('Y'); ?> by Laptop Top7<br/>
                 All Rights Reserved.<br/>
-                <?php echo Yii::powered(); ?>
             </div><!-- footer -->
 
         </div><!-- page -->

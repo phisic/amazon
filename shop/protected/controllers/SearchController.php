@@ -29,6 +29,26 @@
 class SearchController extends Controller {
 
     public function actionIndex() {
+        if(Yii::app()->request->getIsAjaxRequest()){
+            header('Content-Type: application/json');
+            $r = Yii::app()->amazon
+                ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
+                ->category('Electronics')
+                ->responseGroup('ItemAttributes')
+                ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
+            $data = array();
+            if(isset($r['Items']['Item'])){
+                foreach ($r['Items']['Item'] as $i){
+                    $data[] = $i['ItemAttributes']['Title'];
+                }
+                echo CJSON::encode($data);
+            }else{
+                echo '[]';
+            }
+            
+            Yii::app()->end();
+        }
+        
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
