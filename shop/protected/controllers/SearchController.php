@@ -37,6 +37,8 @@ class SearchController extends Controller {
                 ->responseGroup('ItemAttributes')
                 ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
             $data = array();
+            if(isset($r['Items']['Item']['ASIN']))
+                $r['Items']['Item'] = array(0=>$r['Items']['Item']);
             if(isset($r['Items']['Item'])){
                 foreach ($r['Items']['Item'] as $i){
                     $data[] = $i['ItemAttributes']['Title'];
@@ -57,7 +59,9 @@ class SearchController extends Controller {
                 ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
                 ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-
+        if(isset($r['Items']['Item']['ASIN']))
+                $r['Items']['Item'] = array(0=>$r['Items']['Item']);
+        
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
                 $r['Items']['TotalPages'] = 10;
