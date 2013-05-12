@@ -2,6 +2,7 @@
     padding-top: 70px;
 }
 
+#content{min-height: 500px;}
 
 .watch-click, a.watch-click, a.watch-click:hover {
     border-bottom: 1px dashed #0088CC;
