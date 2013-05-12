@@ -34,6 +34,7 @@ class WatchCommand extends CConsoleCommand {
                     $priceDrop = $oldPrice - $newPrice;
                     $row['PriceDrop'] = $priceDrop;
                     if ($priceDrop >= 100) {
+                        $this->addPriceHistory($p);
                         $row['DetailPageURL'] = $p['DetailPageURL'];
                         $row['Title'] = $p['ItemAttributes']['Title'];
                         $priceDrops[] = $row;
@@ -57,17 +58,37 @@ class WatchCommand extends CConsoleCommand {
             return array();
     }
 
-    public function sendMail($priceDrops) {
+    public function addPriceHistory($p) {
+        $c = new CDbCriteria(array('order' => '`Date` desc', 'limit' => 1));
+        $c->addColumnCondition(array('ASIN' => $p['ASIN']));
+        $priceRow = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryRow();
         
-        $template = file_get_contents(Yii::app()->basePath.'/commands/shell/pricedropNotification.html');
+        $newPrice = Yii::app()->amazon->getNewPrice($p);
+        $usedPrice = Yii::app()->amazon->getUsedPrice($p);
+        
+        if ($priceRow['PriceNew'] != $newPrice || $priceRow['PriceUsed'] != $usedPrice) {
+            $data['ASIN'] = $p['ASIN'];
+            $data['PriceNew'] = $newPrice;
+            $data['PriceUsed'] = $usedPrice;
+            if($newPrice)
+                $data['Delta'] = $priceRow['PriceNew'] - $newPrice;
+            else
+                $data['Delta'] = 0;
+            Yii::app()->db->getCommandBuilder()->createInsertCommand('price', $data)->execute();
+        }
+    }
+
+    public function sendMail($priceDrops) {
+
+        $template = file_get_contents(Yii::app()->basePath . '/commands/shell/pricedropNotification.html');
 
         foreach ($priceDrops as $d) {
             $c = new CDbCriteria();
-            $c->addColumnCondition(array('id'=>$d['Id']));
-            Yii::app()->db->getCommandBuilder()->createUpdateCommand('watch', array('Price' => $d['Price']-$d['PriceDrop'],'PriceDate'=>date('Y-m-d H:i:s')), $c)->execute();
-            if(empty($d['Email']))
+            $c->addColumnCondition(array('id' => $d['Id']));
+            Yii::app()->db->getCommandBuilder()->createUpdateCommand('watch', array('Price' => $d['Price'] - $d['PriceDrop'], 'PriceDate' => date('Y-m-d H:i:s')), $c)->execute();
+            if (empty($d['Email']))
                 continue;
-            
+
             $pricedDrop = Yii::app()->amazon->formatUSD($d['PriceDrop']);
             $oldPrice = Yii::app()->amazon->formatUSD($d['Price']);
             $newPrice = Yii::app()->amazon->formatUSD($d['Price'] - $d['PriceDrop']);
@@ -82,7 +103,7 @@ class WatchCommand extends CConsoleCommand {
                 '{$amazonLink}' => $d['DetailPageURL'],
                 '{$removeLink}' => $removeUrl,
             ));
-            
+
             UserModule::sendMail($d['Email'], 'Price drop notification from laptoptop7.com', $message);
         }
     }
