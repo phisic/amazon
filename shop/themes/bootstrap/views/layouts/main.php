@@ -20,7 +20,7 @@
                         <div class="span8">
                             <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
-                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search for laptops, example: Macbook, Ultrabook" class="input-block-level" value="<?=Yii::app()->request->getParam('search', '')?>">
+                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search for laptops, example: Macbook, Ultrabook" class="input-block-level" value="<?=  htmlspecialchars(Yii::app()->request->getParam('search', ''))?>">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>
