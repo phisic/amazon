@@ -227,10 +227,11 @@ class AmazonECS extends CApplicationComponent
     if (true ===  $this->requestConfig['requestDelay']) {
       //sleep(1);
     }
-
     $soapClient = new SoapClient(
       $this->webserviceWsdl,
       array('exceptions' => 1, 
+          'trace'=>true,
+          'cache_wsdl'=>WSDL_CACHE_NONE,
           'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_DEFLATE
           //'compression'=> SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
           )
@@ -244,7 +245,9 @@ class AmazonECS extends CApplicationComponent
 
     $soapClient->__setSoapHeaders($this->buildSoapHeader($function));
 
-    return $soapClient->__soapCall($function, array($params));
+    $r = $soapClient->__soapCall($function, array($params));
+    echo'soapheader='.$soapClient->__getLastResponseHeaders().' headerend;';exit;
+    return $r;
   }
 
   /**
