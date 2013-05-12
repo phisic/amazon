@@ -142,7 +142,7 @@ class SearchController extends Controller {
                 'order' => 'price_drop desc',
                 'group' => 'ASIN',
             ));
-            $c->addCondition('`Date` > (now() - Interval 1 DAY)');
+            $c->addCondition('`Date` > (now() - Interval 1 DAY) and delta > 0');
             $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
             
             $c->limit = $size;
