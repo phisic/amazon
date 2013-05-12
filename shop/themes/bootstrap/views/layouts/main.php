@@ -17,7 +17,7 @@
                 <div class="container">
                     <div class="row-fluid">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
-                        <div class="span7">
+                        <div class="span8">
                             <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
                                     <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search for laptops, example: Macbook, Ultrabook" class="input-block-level" value="<?=Yii::app()->request->getParam('search', '')?>">
@@ -50,7 +50,15 @@
                     </div>
                     <div class="row">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>">Amazon.com</a></div>
-                        <div class="span8"><h4><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a></h4></div>
+                        <div class="span9">
+                            <div class="row">
+                                <div class="span7">
+                                    <h4><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a></h4>
+                                </div>
+                                <div class="span2"><h5><a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a></h5></div>
+                            
+                            </div>
+                        </div>
                     </div>   
                 </div>
             </div>
