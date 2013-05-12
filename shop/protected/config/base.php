@@ -58,7 +58,7 @@ return array(
 			'charset' => 'utf8',
             'tablePrefix' => 'tbl_',
             'enableProfiling'=>true,
-            'queryCachingDuration'=>1000,
+            'schemaCachingDuration' => 3600,
             'enableParamLogging'=>true,
 		),
 		
