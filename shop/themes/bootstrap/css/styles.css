@@ -34,6 +34,6 @@
 	clear: both;
 }
 
-.pager .active {
-    background-color: #B7B7B7;
+.pager .active a {
+    background-color: #ccc;
 }
