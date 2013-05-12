@@ -11,7 +11,7 @@ foreach ($items as $n => $item) {
     ?>
     <div class="row" <?php if ($count > $n) echo 'style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;"'; ?>>
         <div class="span2">
-            <img class="img-rounded" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?=htmlspecialchars($item['ItemAttributes']['Title'])?>">
+            <img class="img-rounded" alt="image <?=htmlspecialchars($item['ItemAttributes']['Title'])?>" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?=htmlspecialchars($item['ItemAttributes']['Title'])?>">
             <?php if (isset($item['SalesRank'])) echo '<h5>Sales Rank #' . $item['SalesRank'] . '</h5>'; ?>
         </div>
         <div class="span10">

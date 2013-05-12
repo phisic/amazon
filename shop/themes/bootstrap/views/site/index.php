@@ -41,7 +41,7 @@ foreach ($items as $i) {
     $list[] = array(
         'text' => '
             <div class="row">
-                <div class="span6"><img src="' . $img . '"></div>
+                <div class="span6"><img alt="image '.htmlspecialchars($i['ItemAttributes']['Title']).'" src="' . $img . '"></div>
                 <div class="span6">
                  <h3><a title="View details of '.htmlspecialchars($i['ItemAttributes']['Title']).'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning"style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>
                  '.$ph.'

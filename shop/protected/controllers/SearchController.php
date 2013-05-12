@@ -49,6 +49,8 @@ class SearchController extends Controller {
             Yii::app()->end();
         }
         
+        $this->pageTitle = 'Search laptop '.Yii::app()->request->getParam('search', '');
+        
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
@@ -88,6 +90,9 @@ class SearchController extends Controller {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
             Yii::app()->cache->add($asin, $r, 1800);
         }
+        
+        $this->pageTitle = 'Laptop details, ' . $r['Items']['Item']['ItemAttributes']['Title'];
+        
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
             $description[] = preg_replace('/<a name="([0-9a-zA-Z]+)">/', '<a name="$1"></a>', $r['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);
@@ -105,6 +110,7 @@ class SearchController extends Controller {
     }
 
     public function actionBestsellers() {
+        $this->pageTitle = 'Bestseller laptops';
         $page = Yii::app()->request->getParam('page', 1);
         if (!$r = Yii::app()->cache->get('best-' . $page)) {
             $r = Yii::app()->amazon
@@ -127,6 +133,7 @@ class SearchController extends Controller {
     }
 
     public function actionTopPriceDrops() {
+        $this->pageTitle = 'Top price drop laptops';
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
         if (!$r = Yii::app()->cache->get('pdrop-' . $page)) {
@@ -159,6 +166,8 @@ class SearchController extends Controller {
     }
 
     public function actionTopReviewed() {
+        $this->pageTitle = 'Top reviewed laptops';
+        
         $page = abs(Yii::app()->request->getParam('page', 1));
         if (!$r = Yii::app()->cache->get('toprev-' . $page)) {
             $r = Yii::app()->amazon
@@ -181,6 +190,7 @@ class SearchController extends Controller {
     }
 
     public function actionNewReleases() {
+        $this->pageTitle = 'New released laptops';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
 
