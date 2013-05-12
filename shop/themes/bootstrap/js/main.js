@@ -59,6 +59,7 @@ $(function() {
     $('#searchbox').typeahead({
         items: 10,
         //minLength: 3,
+        matcher: function () { return true; },
         source: function(query, process) {
             return $.getJSON(
                     $('#searchbox-form').attr('action'),
