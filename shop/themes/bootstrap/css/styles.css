@@ -33,3 +33,7 @@
 #login-form {
 	clear: both;
 }
+
+.pager .active {
+    background-color: #B7B7B7;
+}
