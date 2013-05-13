@@ -54,7 +54,7 @@
                         <div class="span9">
                             <div class="row">
                                 <div class="span7">
-                                    <h4><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a></h4>
+                                    <h5><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a> / <a href="<?= Yii::app()->createUrl('search/all') ?>">All Laptops</a></h5>
                                 </div>
                                 <div class="span2"><h5><a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a></h5></div>
                             

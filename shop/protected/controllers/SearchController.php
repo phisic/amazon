@@ -197,5 +197,37 @@ class SearchController extends Controller {
         $this->pageTitle = 'New released laptops';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
+    
+    public function actionAll() {
+        $this->pageTitle = 'All laptops';
+        $page = abs(Yii::app()->request->getParam('page', 1));
+        $size = 10;
+        if (!$r = Yii::app()->cache->get('all-' . $page)) {
+            $c = new CDbCriteria(array(
+                'select' => 'ASIN',
+                'order' => '`Date` desc',
+                'distinct'=>true,
+            ));
+            $c->addCondition('`Date` > (now() - Interval 4 WEEK)');
+            $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
+            
+            $c->limit = $size;
+            $c->offset = $size * ($page - 1);
+
+            $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
+            $asins = array();
+            foreach ($rows as $row) {
+                $asins[] = $row['ASIN'];
+            }
+
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', $asins));
+            $r['count'] = $count;
+            Yii::app()->cache->set('all-' . $page, $r, 1800);
+        }
+        $pages = new CPagination($r['count']);
+        $pages->pageSize = $size;
+
+        $this->render('index', array('title' => 'All laptops', 'items' => isset($r['Items']['Item'])?$r['Items']['Item']:array(), 'pages' => $pages));
+    }
 
 }
