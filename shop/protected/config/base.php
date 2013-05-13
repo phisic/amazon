@@ -47,7 +47,7 @@ return array(
             'accessKey'=>'AKIAIDT5J2U4KPAIAARA',
             'secretKey'=>'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', 
             'country'=>'COM', 
-            'associateTag'=>'internetsup02-20',
+            'associateTag'=>'laptoptop7com-20',
         ),
 		
 		'db'=>array(
