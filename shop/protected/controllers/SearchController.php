@@ -87,7 +87,9 @@ class SearchController extends Controller {
         $cs->registerCssFile($tp . '/css/details.css');
 
         $c = new CDbCriteria();
-        $c->compare('ASIN', $asin);
+        $c->addColumnCondition(array('ASIN'=>$asin));
+        $c->addCondition('(PriceNew > 0 or PriceUsed > 0)');
+        
         $history = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
 
         if (!($r = Yii::app()->cache->get($asin))) {
