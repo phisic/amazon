@@ -42,9 +42,13 @@
         </div>
     </div>
 </div>
+<a name="history"></a><h3>Price history from amazon.com</h3>
 <?php
-if (!empty($history))
-    echo '<a name="history"></a><h3>Price history from amazon.com</h3><div id="chart1"></div>';
+
+if (empty($history))
+    echo '<h6>Price history not available for this laptop</h6>';
+else 
+    echo '<div id="chart1"></div>';
 ?>
 
 <div id="productDescription">
