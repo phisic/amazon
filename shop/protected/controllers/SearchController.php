@@ -100,7 +100,7 @@ class SearchController extends Controller {
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
             $description[] = preg_replace('/<a name="([0-9a-zA-Z]+)">/', '<a name="$1"></a>', $r['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);
-        } else {
+        } elseif(isset($r['Items']['Item']['EditorialReviews']['EditorialReview'])) {
             foreach ($r['Items']['Item']['EditorialReviews']['EditorialReview'] as $i) {
                 $description[] = preg_replace(array(
                     '@<a name="([0-9a-zA-Z]+)">@',

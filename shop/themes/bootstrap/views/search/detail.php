@@ -44,7 +44,7 @@
 </div>
 <?php
 if (!empty($history))
-    echo '<a name="history"></a><h3>Price history from amazon.com</h3><div id="chart1" style=""></div>';
+    echo '<a name="history"></a><h3>Price history from amazon.com</h3><div id="chart1"></div>';
 ?>
 
 <div id="productDescription">
@@ -89,6 +89,7 @@ if (!empty($history)) {
     if ($lused)
         $line .= '[' . join(',', $lused) . ']';
     ?>
+    <?php if(!empty($line)){?>
     <script type="text/javascript">
         $(document).ready(function() {
             var plot1 = $.jqplot('chart1', [<?php echo $line; ?>], {
@@ -115,4 +116,5 @@ if (!empty($history)) {
             });
         });
     </script>
+    <?php } ?>
 <?php } ?>
