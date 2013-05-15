@@ -113,5 +113,10 @@ class Statistics extends CApplicationComponent {
         
         return number_format($row['ItemsRead'],0,'.',' ');
     }
+    
+    public function wrapText($str, $length){
+        $code = '@@@';
+        return array_shift(explode($code, wordwrap($str, $length, $code)));
+    }
 
 }
