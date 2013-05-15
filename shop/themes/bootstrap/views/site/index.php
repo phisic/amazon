@@ -39,7 +39,7 @@ foreach ($items as $i) {
        $ph .= ' / '. (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
     $ph .= '</h5>';
     foreach ($i['ItemAttributes']['Feature'] as &$feature){
-        $feature = Yii::app()->stat->warpText($feature, 100);
+        $feature = Yii::app()->stat->wrapText($feature, 100);
     }
     $list[] = array(
         'text' => '
