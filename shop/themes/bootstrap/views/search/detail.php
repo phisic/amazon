@@ -46,7 +46,7 @@
 <?php
 
 if (empty($history))
-    echo '<h6>Price history not available for this laptop</h6>';
+    echo '<p>Price history not available for this laptop</p>';
 else 
     echo '<div id="chart1"></div>';
 ?>

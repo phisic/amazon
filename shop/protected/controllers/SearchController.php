@@ -29,39 +29,39 @@
 class SearchController extends Controller {
 
     public function actionIndex() {
-        if(Yii::app()->request->getIsAjaxRequest()){
+        if (Yii::app()->request->getIsAjaxRequest()) {
             header('Content-Type: application/json');
             $r = Yii::app()->amazon
-                ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
-                ->category('Electronics')
-                ->responseGroup('ItemAttributes')
-                ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
+                    ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
+                    ->category('Electronics')
+                    ->responseGroup('ItemAttributes')
+                    ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
             $data = array();
-            if(isset($r['Items']['Item']['ASIN']))
-                $r['Items']['Item'] = array(0=>$r['Items']['Item']);
-            if(isset($r['Items']['Item'])){
-                foreach ($r['Items']['Item'] as $i){
+            if (isset($r['Items']['Item']['ASIN']))
+                $r['Items']['Item'] = array(0 => $r['Items']['Item']);
+            if (isset($r['Items']['Item'])) {
+                foreach ($r['Items']['Item'] as $i) {
                     $data[] = $i['ItemAttributes']['Title'];
                 }
                 echo CJSON::encode($data);
-            }else{
+            } else {
                 echo '[]';
             }
-            
+
             Yii::app()->end();
         }
-        
-        $this->pageTitle = 'Search laptop '.Yii::app()->request->getParam('search', '');
-        
+
+        $this->pageTitle = 'Search laptop ' . Yii::app()->request->getParam('search', '');
+
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
                 ->category('Electronics')
                 ->responseGroup('Medium')
                 ->optionalParameters(array('ItemPage' => Yii::app()->request->getParam('page', 1)))
                 ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-        if(isset($r['Items']['Item']['ASIN']))
-                $r['Items']['Item'] = array(0=>$r['Items']['Item']);
-        
+        if (isset($r['Items']['Item']['ASIN']))
+            $r['Items']['Item'] = array(0 => $r['Items']['Item']);
+
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
                 $r['Items']['TotalPages'] = 10;
@@ -87,22 +87,22 @@ class SearchController extends Controller {
         $cs->registerCssFile($tp . '/css/details.css');
 
         $c = new CDbCriteria();
-        $c->addColumnCondition(array('ASIN'=>$asin));
+        $c->addColumnCondition(array('ASIN' => $asin));
         $c->addCondition('(PriceNew > 0 or PriceUsed > 0)');
-        
+
         $history = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
 
         if (!($r = Yii::app()->cache->get($asin))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
             Yii::app()->cache->add($asin, $r, 1800);
         }
-        
+
         $this->pageTitle = 'Laptop details, ' . $r['Items']['Item']['ItemAttributes']['Title'];
-        
+
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
             $description[] = preg_replace('/<a name="([0-9a-zA-Z]+)">/', '<a name="$1"></a>', $r['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);
-        } elseif(isset($r['Items']['Item']['EditorialReviews']['EditorialReview'])) {
+        } elseif (isset($r['Items']['Item']['EditorialReviews']['EditorialReview'])) {
             foreach ($r['Items']['Item']['EditorialReviews']['EditorialReview'] as $i) {
                 $description[] = preg_replace(array(
                     '@<a name="([0-9a-zA-Z]+)">@',
@@ -150,7 +150,7 @@ class SearchController extends Controller {
             ));
             $c->addCondition('`Date` > (now() - Interval 1 DAY) and delta > 0');
             $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
-            
+
             $c->limit = $size;
             $c->offset = $size * ($page - 1);
 
@@ -168,12 +168,12 @@ class SearchController extends Controller {
         $pages = new CPagination($r['count']);
         $pages->pageSize = $size;
 
-        $this->render('index', array('title' => 'Top Price Drops', 'items' => isset($r['Items']['Item'])?$r['Items']['Item']:array(), 'pages' => $pages, 'priceDrops' => $r['asins']));
+        $this->render('index', array('title' => 'Top Price Drops', 'items' => isset($r['Items']['Item']) ? $r['Items']['Item'] : array(), 'pages' => $pages, 'priceDrops' => $r['asins']));
     }
 
     public function actionTopReviewed() {
         $this->pageTitle = 'Top reviewed laptops';
-        
+
         $page = abs(Yii::app()->request->getParam('page', 1));
         if (!$r = Yii::app()->cache->get('toprev-' . $page)) {
             $r = Yii::app()->amazon
@@ -199,37 +199,31 @@ class SearchController extends Controller {
         $this->pageTitle = 'New released laptops';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
-    
+
     public function actionAll() {
         $this->pageTitle = 'All laptops';
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
-        if (!$r = Yii::app()->cache->get('all-' . $page)) {
-            $c = new CDbCriteria(array(
-                'select' => 'ASIN',
-                'order' => '`Date` desc',
-                'distinct'=>true,
-            ));
-            $c->addCondition('`Date` > (now() - Interval 4 WEEK)');
-            $count = Yii::app()->db->getCommandBuilder()->createCountCommand('price', $c)->queryScalar();
-            
-            $c->limit = $size;
-            $c->offset = $size * ($page - 1);
+        $c = new CDbCriteria(array(
+            'select' => 'ASIN',
+            'order' => 'SalesRank',
+            'distinct' => true,
+        ));
 
-            $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
-            $asins = array();
-            foreach ($rows as $row) {
-                $asins[] = $row['ASIN'];
-            }
+        $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
 
-            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', $asins));
-            $r['count'] = $count;
-            Yii::app()->cache->set('all-' . $page, $r, 1800);
+        $c->limit = $size;
+        $c->offset = $size * ($page - 1);
+
+        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+        $list = array();
+        foreach ($rows as $row){
+            $list[] = unserialize($row['Data']);
         }
-        $pages = new CPagination($r['count']);
+        $pages = new CPagination($count);
         $pages->pageSize = $size;
 
-        $this->render('index', array('title' => 'All laptops', 'items' => isset($r['Items']['Item'])?$r['Items']['Item']:array(), 'pages' => $pages));
+        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages));
     }
 
 }
