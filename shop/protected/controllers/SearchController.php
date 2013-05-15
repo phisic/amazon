@@ -205,7 +205,6 @@ class SearchController extends Controller {
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
         $c = new CDbCriteria(array(
-            'select' => 'ASIN',
             'order' => 'SalesRank',
             'distinct' => true,
         ));
