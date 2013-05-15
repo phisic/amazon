@@ -4,7 +4,7 @@ class UpdateCommand extends CConsoleCommand {
 
     public function getHighPriceAsin($maxPrice, $minPrice) {
         $asin = array();
-                
+
         for ($page = 1; $page <= 10; $page++) {
             $r = Yii::app()->amazon
                     ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
@@ -21,8 +21,8 @@ class UpdateCommand extends CConsoleCommand {
                 else
                     $asin[$page][] = $i;
             }
-            
-            if(count($r['Items']['Item'])<10)
+
+            if (count($r['Items']['Item']) < 10)
                 return $asin;
             usleep(500000);
         }
@@ -37,7 +37,7 @@ class UpdateCommand extends CConsoleCommand {
     }
 
     public function getItemsByAsin($asin) {
-        return Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Offers,ItemAttributes')->lookup(join(',', $asin));
+        return Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup(join(',', $asin));
     }
 
     public function run($args) {
@@ -62,14 +62,14 @@ class UpdateCommand extends CConsoleCommand {
 
         $page = 1;
         $itemsRead = 0;
-        
+
         do {
             $startPrice = $maxPrice;
-            
-            $minPrice = Yii::app()->db->createCommand('select min(pricenew) as minprice from (select pricenew from price where pricenew < '.$maxPrice.' group by ASIN order by pricenew desc limit 90) s;')->queryScalar();
-            if(empty($minPrice))
+
+            $minPrice = Yii::app()->db->createCommand('select min(pricenew) as minprice from (select pricenew from price where pricenew < ' . $maxPrice . ' group by ASIN order by pricenew desc limit 90) s;')->queryScalar();
+            if (empty($minPrice))
                 $minPrice = $maxPrice - 1000;
-            echo 'MaxPrice = ' . $maxPrice . " MinPrice = ".$minPrice. " delta = ".($maxPrice-$minPrice)."\n";
+            echo 'MaxPrice = ' . $maxPrice . " MinPrice = " . $minPrice . " delta = " . ($maxPrice - $minPrice) . "\n";
             $delta = $maxPrice - $minPrice;
 
             $asinList = $this->getHighPriceAsin($maxPrice, $minPrice);
@@ -89,6 +89,8 @@ class UpdateCommand extends CConsoleCommand {
                     $items['Items']['Item'] = array('0' => $items['Items']['Item']);
 
                 foreach ($items['Items']['Item'] as $i) {
+                    //add to cache
+                    $this->addToListing($i, $logId);
                     //old price, add to history as 1 day before price
                     $priceRow = $this->getLastPrice($i['ASIN']);
                     if (empty($priceRow) && !empty($i['ItemAttributes']['ListPrice']['Amount'])) {
@@ -107,14 +109,14 @@ class UpdateCommand extends CConsoleCommand {
                     } else {
                         $deltaNew = 0;
                     }
-                    
+
                     if ($usedPrice = Yii::app()->amazon->getUsedPrice($i)) {
                         $oldUsed = empty($priceRow['PriceUsed']) ? $usedPrice : $priceRow['PriceUsed'];
                         $deltaUsed = $oldUsed - $usedPrice;
                     } else {
                         $deltaUsed = 0;
                     }
-                    
+
                     $usedPrice = Yii::app()->amazon->getUsedPrice($i);
                     //if price changed or no any price row exist
                     if (!empty($deltaNew) || !empty($deltaUsed) || empty($priceRow)) {
@@ -140,6 +142,7 @@ class UpdateCommand extends CConsoleCommand {
         } while (true);
 
         Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('DateEnd' => date('Y-m-d H:i:s')), $c)->execute();
+        $this->deleteOldListing($newLogId);
     }
 
     protected function getLastPrice($ASIN) {
@@ -147,6 +150,24 @@ class UpdateCommand extends CConsoleCommand {
         $c->addColumnCondition(array('ASIN' => $ASIN));
 
         return Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryRow();
+    }
+
+    protected function addToListing($i, $logId) {
+        Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
+            'LogId' => $logId,
+            'Data' => serialize($i),
+            'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
+            'ASIN' => $i['ASIN'],
+        ))->execute();
+    }
+    
+    protected function deleteOldListing($newLogId){
+        if(empty($newLogId))
+            return;
+        $c = new CDbCriteria();
+        $c->addCondition('LogId < :lid and Date <= (now() - INTERVAL 1 DAY)');
+        $c->params[':lid'] = $newLogId;
+        Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
     }
 
 }
