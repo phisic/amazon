@@ -217,7 +217,10 @@ class SearchController extends Controller {
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
         foreach ($rows as $row){
-            $list[] = unserialize($row['Data']);
+            echo $row['ASIN']."<br>";
+            
+             $list[] = unserialize($row['Data']);
+            
         }
         $pages = new CPagination($count);
         $pages->pageSize = $size;
