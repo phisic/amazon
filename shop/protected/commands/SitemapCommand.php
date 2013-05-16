@@ -38,6 +38,7 @@ class SitemapCommand extends CConsoleCommand {
                     $this->writeUrl(array('u' => 'laptoptop7.com/search/detail/' . $r['ASIN'], 'p' => '0.8', 'f' => 'weekly'), $f);
                 }
             }
+            $page++;
         }
         fwrite($f, '</urlset>');
         fclose($f);
