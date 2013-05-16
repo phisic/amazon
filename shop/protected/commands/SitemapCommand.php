@@ -1,7 +1,8 @@
 <?php
 
 class SitemapCommand extends CConsoleCommand {
-
+    protected $urls = 0;
+    
     public function run($args) {
         $urls = array(
             array('u' => 'laptoptop7.com', 'p' => 0.9, 'f' => 'daily'),
@@ -42,11 +43,13 @@ class SitemapCommand extends CConsoleCommand {
         }
         fwrite($f, '</urlset>');
         fclose($f);
+        echo 'Urls written:'.$this->urls."\n";
     }
 
     protected function writeUrl($u, $f) {
+        $this->urls++;
         $s = '<url>' . "\n";
-        $s .= '<loc>' . $u['u'] . '</loc>' . "\n";
+        $s .= '<loc>http://' . $u['u'] . '/</loc>' . "\n";
         $s .= '<changefreq>' . $u['f'] . '</changefreq>' . "\n";
         $s .= '<priority>' . $u['p'] . '</priority>' . "\n";
         $s .= '</url>' . "\n";
