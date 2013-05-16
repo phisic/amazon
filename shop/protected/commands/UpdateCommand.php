@@ -142,7 +142,7 @@ class UpdateCommand extends CConsoleCommand {
         } while (true);
 
         Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('DateEnd' => date('Y-m-d H:i:s')), $c)->execute();
-        $this->deleteOldListing($newLogId);
+        $this->deleteOldListing($logId);
     }
 
     protected function getLastPrice($ASIN) {

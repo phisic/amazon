@@ -51,5 +51,12 @@ CREATE TABLE `watch` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
+CREATE TABLE `listing` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ASIN` varchar(15) DEFAULT NULL,
+  `Data` longtext,
+  `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `LogId` int(11) DEFAULT NULL,
+  `SalesRank` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
