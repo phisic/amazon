@@ -91,12 +91,21 @@ class SearchController extends Controller {
         $c->addCondition('(PriceNew > 0 or PriceUsed > 0)');
 
         $history = Yii::app()->db->getCommandBuilder()->createFindCommand('price', $c)->queryAll();
-
-        if (!($r = Yii::app()->cache->get($asin))) {
-            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-            Yii::app()->cache->add($asin, $r, 1800);
+        $row = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', new CDbCriteria(array(
+                    'select' => 'Data',
+                    'condition' => 'ASIN=:a',
+                    'params' => array(':a' => $asin)
+                )))->queryRow();
+        
+        if (empty($row['Data'])) {
+            if (!($r = Yii::app()->cache->get($asin))) {
+                $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
+                Yii::app()->cache->add($asin, $r, 1800);
+            }
+        }else{
+            $r['Items']['Item'] = unserialize($row['Data']);
         }
-
+        
         $this->pageTitle = 'Laptop details, ' . $r['Items']['Item']['ItemAttributes']['Title'];
 
         $description = array();
@@ -216,8 +225,8 @@ class SearchController extends Controller {
 
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
-        foreach ($rows as $row){
-             $list[] = unserialize($row['Data']);
+        foreach ($rows as $row) {
+            $list[] = unserialize($row['Data']);
         }
         $pages = new CPagination($count);
         $pages->pageSize = $size;
