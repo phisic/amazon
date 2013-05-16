@@ -1,6 +1,6 @@
 <?php
 
-class WatchCommand extends CConsoleCommand {
+class SitemapCommand extends CConsoleCommand {
 
     public function run($args) {
         $urls = array(
