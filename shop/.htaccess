@@ -3,8 +3,8 @@ RewriteEngine on
 RewriteRule .*\.sh - [F]
 RewriteRule .*\.git.* - [F,L]
 
-RewriteCond %{HTTP_HOST} ^www\.laptoptop7\.com$
-RewriteRule (.*) http://laptoptop7.com/$1 [R=Permanent]
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 # if a directory or a file exists, use it directly
 RewriteCond %{REQUEST_FILENAME} !-f
