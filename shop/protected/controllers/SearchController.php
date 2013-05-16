@@ -106,7 +106,7 @@ class SearchController extends Controller {
             $r['Items']['Item'] = unserialize($row['Data']);
         }
         
-        $this->pageTitle = 'Laptop details, ' . $r['Items']['Item']['ItemAttributes']['Title'];
+        $this->pageTitle = $r['Items']['Item']['ItemAttributes']['Title'];
 
         $description = array();
         if (isset($r['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
