@@ -43,6 +43,7 @@ class UpdateCommand extends CConsoleCommand {
     public function run($args) {
         $lowPrice = 6000;
         $highPrice = 1000000;
+        $itemsRead = 0;
         $lastLog = $this->getLastLog();
         if (empty($lastLog))
             $maxPrice = $highPrice;
@@ -59,13 +60,13 @@ class UpdateCommand extends CConsoleCommand {
             $logId = Yii::app()->db->getCommandBuilder()->getLastInsertID('price_log');
         }else{
             $logId = $lastLog['Id'];
+            $itemsRead = $lastLog['ItemsRead'];
         }
         
         $c = new CDbCriteria();
         $c->compare('Id', $logId);
 
         $page = 1;
-        $itemsRead = 0;
 
         do {
             $startPrice = $maxPrice;
