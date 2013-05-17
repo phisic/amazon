@@ -50,13 +50,17 @@ class UpdateCommand extends CConsoleCommand {
             $maxPrice = $lastLog['Price'];
         else
             $maxPrice = $highPrice;
-        Yii::app()->db->getCommandBuilder()->createInsertCommand('price_log', array(
-            'Price' => $maxPrice,
-            'ItemsRead' => 0,
-            'DateStart' => date('Y-m-d H:i:s')
-        ))->execute();
-        $logId = Yii::app()->db->getCommandBuilder()->getLastInsertID('price_log');
-
+        if ($maxPrice == $highPrice) {
+            Yii::app()->db->getCommandBuilder()->createInsertCommand('price_log', array(
+                'Price' => $maxPrice,
+                'ItemsRead' => 0,
+                'DateStart' => date('Y-m-d H:i:s')
+            ))->execute();
+            $logId = Yii::app()->db->getCommandBuilder()->getLastInsertID('price_log');
+        }else{
+            $logId = $lastLog['Id'];
+        }
+        
         $c = new CDbCriteria();
         $c->compare('Id', $logId);
 
@@ -160,9 +164,9 @@ class UpdateCommand extends CConsoleCommand {
             'ASIN' => $i['ASIN'],
         ))->execute();
     }
-    
-    protected function deleteOldListing($newLogId){
-        if(empty($newLogId))
+
+    protected function deleteOldListing($newLogId) {
+        if (empty($newLogId))
             return;
         $c = new CDbCriteria();
         $c->addCondition('LogId < :lid and Date <= (now() - INTERVAL 1 DAY)');
