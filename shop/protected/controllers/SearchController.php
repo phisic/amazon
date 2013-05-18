@@ -28,27 +28,40 @@
 
 class SearchController extends Controller {
 
+    public function ajaxsearch() {
+        header('Content-Type: application/json');
+        $keyword = Yii::app()->request->getParam('search', '');
+        $keywords = explode(' ', $keyword);
+        $params = array(':k'=>$keyword);
+        foreach ($keywords as $k => $word) {
+            if(empty($word))
+                continue;
+            $where[] = 'MATCH (Title) AGAINST (:w' . $k . ' IN BOOLEAN MODE)';
+            $params[':w' . $k] = $word . '*';
+        }
+        
+        $where = $where ? ' WHERE ' . join(' AND ', $where) : '';
+        $s1 = 'SELECT Title FROM listing WHERE MATCH (Title) AGAINST (:k) LIMIT 10';
+        $s2 = 'SELECT Title FROM listing ' . $where . ' LIMIT 10';
+        $sql = 'SELECT distinct * from (('.$s1.') UNION ('.$s2.')) s';
+        $r = Yii::app()->db->getCommandBuilder()->createSqlCommand($sql, $params)->queryAll();
+
+        $data = array();
+        if (!empty($r)) {
+            foreach ($r as $i) {
+                $data[] = $i['Title'];
+            }
+            echo CJSON::encode($data);
+        } else {
+            echo '[]';
+        }
+
+        Yii::app()->end();
+    }
+
     public function actionIndex() {
         if (Yii::app()->request->getIsAjaxRequest()) {
-            header('Content-Type: application/json');
-            $r = Yii::app()->amazon
-                    ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
-                    ->category('Electronics')
-                    ->responseGroup('ItemAttributes')
-                    ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-            $data = array();
-            if (isset($r['Items']['Item']['ASIN']))
-                $r['Items']['Item'] = array(0 => $r['Items']['Item']);
-            if (isset($r['Items']['Item'])) {
-                foreach ($r['Items']['Item'] as $i) {
-                    $data[] = $i['ItemAttributes']['Title'];
-                }
-                echo CJSON::encode($data);
-            } else {
-                echo '[]';
-            }
-
-            Yii::app()->end();
+            $this->ajaxsearch();
         }
 
         $this->pageTitle = 'Search laptop ' . Yii::app()->request->getParam('search', '');
@@ -96,16 +109,16 @@ class SearchController extends Controller {
                     'condition' => 'ASIN=:a',
                     'params' => array(':a' => $asin)
                 )))->queryRow();
-        
+
         if (empty($row['Data'])) {
             if (!($r = Yii::app()->cache->get($asin))) {
                 $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
                 Yii::app()->cache->add($asin, $r, 1800);
             }
-        }else{
+        } else {
             $r['Items']['Item'] = unserialize($row['Data']);
         }
-        
+
         $this->pageTitle = $r['Items']['Item']['ItemAttributes']['Title'];
 
         $description = array();
