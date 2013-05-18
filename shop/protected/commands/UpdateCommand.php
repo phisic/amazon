@@ -41,6 +41,9 @@ class UpdateCommand extends CConsoleCommand {
     }
 
     public function run($args) {
+        if(isset($args[0]) && $args[0]=='fix')
+            return $this->fixListing();
+        
         $lowPrice = 6000;
         $highPrice = 1000000;
         $itemsRead = 0;
@@ -163,6 +166,7 @@ class UpdateCommand extends CConsoleCommand {
             'Data' => serialize($i),
             'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
             'ASIN' => $i['ASIN'],
+            'Title' => isset($i['ItemAttributes']['Title'])?$i['ItemAttributes']['Title'] : '',
         ))->execute();
     }
 
@@ -173,6 +177,27 @@ class UpdateCommand extends CConsoleCommand {
         $c->addCondition('LogId < :lid');
         $c->params[':lid'] = $newLogId;
         Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
+    }
+    
+    protected function fixListing(){
+        $rows = true;
+        $size = 100;
+        $page = 0;
+        while($rows){
+            $c = new CDbCriteria(array('select'=>'Data,ASIN'));
+            $c->limit = $size;
+            $c->offset = $size * $page;
+            $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+            foreach ($rows as $row){
+                $data = @unserialize($row['Data']);
+                if($data && isset($data['ItemAttributes']['Title'])){
+                    $c2 = new CDbCriteria();
+                    $c2->compare('ASIN', $row['ASIN']);
+                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Title'=>$data['ItemAttributes']['Title']), $c2)->execute();
+                }
+            }
+            $page++;
+        }
     }
 
 }

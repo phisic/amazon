@@ -55,11 +55,26 @@ $(function() {
 
         return !hasError;
     }
+    $.fn.typeahead.Constructor.prototype.render = function(items) {
 
+        var that = this;
+
+        items = $(items).map(function(i, item) {
+            i = $(that.options.item).attr('data-value', item);
+            i.find('a').html(that.highlighter(item));
+            return i[0];
+        });
+
+        this.$menu.html(items);
+        return this;
+    };
+    
     $('#searchbox').typeahead({
         items: 10,
         //minLength: 3,
-        matcher: function () { return true; },
+        matcher: function() {
+            return true;
+        },
         source: function(query, process) {
             return $.getJSON(
                     $('#searchbox-form').attr('action'),

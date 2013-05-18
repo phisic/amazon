@@ -60,3 +60,16 @@ CREATE TABLE `listing` (
   `SalesRank` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE  TABLE `part` (
+  `Id` INT NOT NULL AUTO_INCREMENT ,
+  `Type` ENUM('cpu','hdd','vga','ram','screen') NULL ,
+  `Model` VARCHAR(255) NULL ,
+  `Score` INT NULL ,
+  `Description` LONGTEXT NULL ,
+  `Image` VARCHAR(255) NULL ,
+  PRIMARY KEY (`Id`) 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `amazon`.`listing` ADD COLUMN `CPU` INT NULL DEFAULT 0  AFTER `SalesRank` , ADD COLUMN `VGA` INT NULL DEFAULT 0  AFTER `CPU` , ADD COLUMN `RAM` INT NULL DEFAULT 0  AFTER `VGA` , ADD COLUMN `HDD` INT NULL DEFAULT 0  AFTER `RAM` , ADD COLUMN `Screen` INT NULL DEFAULT 0  AFTER `HDD` ;
+ALTER TABLE `amazon`.`part` ADD INDEX `typemodel` (`Type` ASC, `Model` ASC) ;
+ALTER TABLE `amazon`.`listing` ADD COLUMN `Title` VARCHAR(300) NULL  AFTER `SalesRank` ;
