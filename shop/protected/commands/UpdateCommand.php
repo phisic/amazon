@@ -24,7 +24,7 @@ class UpdateCommand extends CConsoleCommand {
 
             if (count($r['Items']['Item']) < 10)
                 return $asin;
-            usleep(500000);
+            usleep(800000);
         }
         return $asin;
     }
@@ -88,7 +88,7 @@ class UpdateCommand extends CConsoleCommand {
                 break;
             foreach ($asinList as $page => $asins) {
                 $items = $this->getItemsByAsin($asins);
-                usleep(500000);
+                usleep(900000);
                 echo '  Page=' . $page . ' Asin:' . join(',', $asins) . "\n";
                 if (count($asins) == 1)
                     $items['Items']['Item'] = array('0' => $items['Items']['Item']);
@@ -170,7 +170,7 @@ class UpdateCommand extends CConsoleCommand {
         if (empty($newLogId))
             return;
         $c = new CDbCriteria();
-        $c->addCondition('LogId < :lid and Date <= (now() - INTERVAL 1 DAY)');
+        $c->addCondition('LogId < :lid');
         $c->params[':lid'] = $newLogId;
         Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
     }
