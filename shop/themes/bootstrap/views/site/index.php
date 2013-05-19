@@ -1,12 +1,5 @@
 <div class="hero-unit">
-    <h1>Hello, currently <?=Yii::app()->stat->getLaptopCount()?> laptops is here</h1>
-    <h1>Are you looking for best price laptop?</h1>
-    <h1></h1>
-    <p style="font-size:20px;">
-        We can help you to find best price laptop, search laptops and watch amazon prices.
-        When price dropped we will email to you, just add laptop to watch!
-        Also, we provide price history for every laptop, so you can easily decide is this best price.
-    </p>
+    <h3> <?=Yii::app()->stat->getLaptopCount()?> laptops in the database</h3>
 </div>
 <?php
 $list = array();
