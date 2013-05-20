@@ -150,7 +150,6 @@ class UpdateCommand extends CConsoleCommand {
         } while (true);
 
         Yii::app()->db->getCommandBuilder()->createUpdateCommand('price_log', array('DateEnd' => date('Y-m-d H:i:s')), $c)->execute();
-        $this->deleteOldListing($logId);
     }
 
     protected function getLastPrice($ASIN) {
@@ -161,24 +160,23 @@ class UpdateCommand extends CConsoleCommand {
     }
 
     protected function addToListing($i, $logId) {
-        Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
+        $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
             'LogId' => $logId,
             'Data' => serialize($i),
             'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
             'ASIN' => $i['ASIN'],
             'Title' => isset($i['ItemAttributes']['Title'])?$i['ItemAttributes']['Title'] : '',
         ))->execute();
+        if($result){
+            $id = Yii::app()->db->getCommandBuilder()->getLastInsertID('listing');
+            
+            $c = new CDbCriteria();
+            $c->addColumnCondition(array('ASIN'=>$i['ASIN']));
+            $c->addCondition('Id != '.$id);
+            Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
+        }
     }
 
-    protected function deleteOldListing($newLogId) {
-        if (empty($newLogId))
-            return;
-        $c = new CDbCriteria();
-        $c->addCondition('LogId < :lid');
-        $c->params[':lid'] = $newLogId;
-        Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
-    }
-    
     protected function fixListing(){
         $rows = true;
         $size = 100;
