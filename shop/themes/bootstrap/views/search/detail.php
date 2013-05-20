@@ -33,7 +33,7 @@
                     <?php
                     if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature']))
                         foreach ($i['ItemAttributes']['Feature'] as $attr) {
-                            echo '<li>' . $attr . '</li>';
+                            echo '<li>' . htmlspecialchars_decode($attr) . '</li>';
                         }
                     ?>
                 </ul>
@@ -56,7 +56,7 @@ else
     if (!empty($i['EditorialReviews']['EditorialReview'])) {
         echo '<h3>Product description</h3>';
         foreach ($i['EditorialReviews']['EditorialReview'] as $d) {
-            echo $d;
+            echo htmlspecialchars_decode($d);
         }
     }
     ?>
