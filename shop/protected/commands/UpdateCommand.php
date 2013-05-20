@@ -41,9 +41,9 @@ class UpdateCommand extends CConsoleCommand {
     }
 
     public function run($args) {
-        if(isset($args[0]) && $args[0]=='fix')
+        if (isset($args[0]) && $args[0] == 'fix')
             return $this->fixListing();
-        
+
         $lowPrice = 6000;
         $highPrice = 1000000;
         $itemsRead = 0;
@@ -61,11 +61,11 @@ class UpdateCommand extends CConsoleCommand {
                 'DateStart' => date('Y-m-d H:i:s')
             ))->execute();
             $logId = Yii::app()->db->getCommandBuilder()->getLastInsertID('price_log');
-        }else{
+        } else {
             $logId = $lastLog['Id'];
             $itemsRead = $lastLog['ItemsRead'];
         }
-        
+
         $c = new CDbCriteria();
         $c->compare('Id', $logId);
 
@@ -161,37 +161,54 @@ class UpdateCommand extends CConsoleCommand {
 
     protected function addToListing($i, $logId) {
         $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
-            'LogId' => $logId,
-            'Data' => serialize($i),
-            'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
-            'ASIN' => $i['ASIN'],
-            'Title' => isset($i['ItemAttributes']['Title'])?$i['ItemAttributes']['Title'] : '',
-        ))->execute();
-        if($result){
+                    'LogId' => $logId,
+                    'Data' => $this->serializeItem($i),
+                    'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
+                    'ASIN' => $i['ASIN'],
+                    'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
+                ))->execute();
+        if ($result) {
             $id = Yii::app()->db->getCommandBuilder()->getLastInsertID('listing');
-            
+
             $c = new CDbCriteria();
-            $c->addColumnCondition(array('ASIN'=>$i['ASIN']));
-            $c->addCondition('Id != '.$id);
+            $c->addColumnCondition(array('ASIN' => $i['ASIN']));
+            $c->addCondition('Id != ' . $id);
             Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
         }
     }
 
-    protected function fixListing(){
+    protected function serializeItem($item) {
+        if (isset($item['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
+            $item['Items']['Item']['EditorialReviews']['EditorialReview']['Content'] = htmlspecialchars($item['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);
+        } elseif (isset($r['Items']['Item']['EditorialReviews']['EditorialReview'])) {
+            foreach ($r['Items']['Item']['EditorialReviews']['EditorialReview'] as &$i) {
+                $i['Content'] = htmlspecialchars($i['Content']);
+            }
+        }
+
+        if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
+            foreach ($item['ItemAttributes']['Feature'] as &$attr) {
+               $attr = htmlspecialchars($attr);
+            }
+            
+        return serialize($item);
+    }
+
+    protected function fixListing() {
         $rows = true;
         $size = 100;
         $page = 0;
-        while($rows){
-            $c = new CDbCriteria(array('select'=>'Data,ASIN'));
+        while ($rows) {
+            $c = new CDbCriteria(array('select' => 'Data,ASIN'));
             $c->limit = $size;
             $c->offset = $size * $page;
             $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
-            foreach ($rows as $row){
+            foreach ($rows as $row) {
                 $data = @unserialize($row['Data']);
-                if($data && isset($data['ItemAttributes']['Title'])){
+                if ($data && isset($data['ItemAttributes']['Title'])) {
                     $c2 = new CDbCriteria();
                     $c2->compare('ASIN', $row['ASIN']);
-                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Title'=>$data['ItemAttributes']['Title']), $c2)->execute();
+                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Title' => $data['ItemAttributes']['Title']), $c2)->execute();
                 }
             }
             $page++;
