@@ -32,18 +32,18 @@ class SearchController extends Controller {
         header('Content-Type: application/json');
         $keyword = Yii::app()->request->getParam('search', '');
         $keywords = explode(' ', $keyword);
-        $params = array(':k'=>$keyword);
+        $params = array(':k' => $keyword);
         foreach ($keywords as $k => $word) {
-            if(empty($word))
+            if (empty($word))
                 continue;
             $where[] = 'MATCH (Title) AGAINST (:w' . $k . ' IN BOOLEAN MODE)';
             $params[':w' . $k] = $word . '*';
         }
-        
+
         $where = $where ? ' WHERE ' . join(' AND ', $where) : '';
         $s1 = 'SELECT Title FROM listing WHERE MATCH (Title) AGAINST (:k) LIMIT 10';
         $s2 = 'SELECT Title FROM listing ' . $where . ' LIMIT 10';
-        $sql = 'SELECT distinct * from (('.$s1.') UNION ('.$s2.')) s';
+        $sql = 'SELECT distinct * from ((' . $s1 . ') UNION (' . $s2 . ')) s';
         $r = Yii::app()->db->getCommandBuilder()->createSqlCommand($sql, $params)->queryAll();
 
         $data = array();
@@ -229,22 +229,30 @@ class SearchController extends Controller {
         $c = new CDbCriteria(array(
             'order' => 'SalesRank',
             'distinct' => true,
+            'select'=>'ASIN'
         ));
 
         $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
 
         $c->limit = $size;
         $c->offset = $size * ($page - 1);
-
+        $c->select = '*';
+        $c->group = 'ASIN';
+        
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
+        $parts = array();
         foreach ($rows as $row) {
-            $list[] = unserialize($row['Data']);
+            $data = unserialize($row['Data']);
+            $data['CPU'] = $row['CPU'];
+            $list[] = $data;
+            $parts[] = $row['CPU'];
         }
+
+        $partList = Yii::app()->part->getByIds($parts);
         $pages = new CPagination($count);
         $pages->pageSize = $size;
-
-        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages));
+        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages, 'parts' => $partList));
     }
 
 }

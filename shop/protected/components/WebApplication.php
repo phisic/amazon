@@ -1,5 +1,5 @@
 <?php
-
+/* @property Part $part The amazon connection.*/
 class WebApplication extends CWebApplication
 {
 

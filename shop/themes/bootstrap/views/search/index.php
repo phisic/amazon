@@ -50,6 +50,24 @@ foreach ($items as $n => $item) {
                     ?>
                 </ul>
             </h6>
+            <?php
+            if(!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()){
+                $parts = Yii::app()->part->getByAsin($item['ASIN']);
+                if($parts)
+                    echo '<select id="part_'.$item['ASIN'].'"><option>-</option>';
+                foreach ($parts as $p){
+                    echo '<option value="'.$p['Id'].'" '.(isset($item['CPU']) && ($item['CPU']==$p['Id']) ? 'selected="selected"':'').'>'.$p['Model'].'</option>';
+                }
+                
+                if($parts)
+                    echo '</select>';    
+                echo 'p='.(isset($item['CPU']) ? $item['CPU']: 0);
+            }
+            /*
+            if(isset($item['CPU']) && isset($parts[$item['CPU']]))
+                echo '<h6>CPU: '.$parts[$item['CPU']]['Model'].' / '.$parts[$item['CPU']]['Score'].'/ '.$item['ASIN'].'</h6>';
+             */
+            ?>
         </div>
     </div>
 <?php } ?>

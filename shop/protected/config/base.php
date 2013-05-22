@@ -42,6 +42,19 @@ return array(
 	// application components
 	'components'=>array(
         'stat'=>array('class'=>  'Statistics'),
+        'part'=>array('class'=>  'Part'),
+        'search' => array(
+            'class' => 'application.components.DGSphinxSearch.DGSphinxSearch',
+            'server' => '127.0.0.1',
+            'port' => 3313,
+            'maxQueryTime' => 3000,
+            'enableProfiling'=>0,
+            'enableResultTrace'=>0,
+            'fieldWeights' => array(
+                'name' => 10000,
+                'keywords' => 100,
+            ),
+        ),
         'amazon' => array(
             'class'=>'ext.AmazonECS',
             'accessKey'=>'AKIAIDT5J2U4KPAIAARA',
