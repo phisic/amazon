@@ -53,15 +53,9 @@ foreach ($items as $n => $item) {
             <?php
             if(!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()){
                 $parts = Yii::app()->part->getByAsin($item['ASIN']);
-                if($parts)
-                    echo '<select id="part_'.$item['ASIN'].'"><option>-</option>';
-                foreach ($parts as $p){
-                    echo '<option value="'.$p['Id'].'" '.(isset($item['CPU']) && ($item['CPU']==$p['Id']) ? 'selected="selected"':'').'>'.$p['Model'].'</option>';
+                if(isset($parts['cpu'])){
+                    echo CHtml::dropDownList('cpu-'.$item['ASIN'], isset($item['CPU']) ? $item['CPU'] : 0, array('------') + $parts['cpu'],array('class'=>'match-cpu'));
                 }
-                
-                if($parts)
-                    echo '</select>';    
-                echo 'p='.(isset($item['CPU']) ? $item['CPU']: 0);
             }
             /*
             if(isset($item['CPU']) && isset($parts[$item['CPU']]))
@@ -72,6 +66,9 @@ foreach ($items as $n => $item) {
     </div>
 <?php } ?>
 <?
+if(!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()){
+    echo '<script type="text/javascript">var matchUrl = "'.Yii::app()->createUrl('watch/match').'"</script>';
+}
 if (isset($pages))
     $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions' => array('class' => 'pager'), 'pages' => $pages));
 ?>

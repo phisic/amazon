@@ -52,5 +52,18 @@ class WatchController extends Controller {
             //throw new CHttpException('404');
         }
     }
+    
+    public function actionMatch(){
+        if(Yii::app()->request->isAjaxRequest && isset($_POST['ASIN']) && isset($_POST['part'])){
+            header('Content-Type: application/json');
+            list($type,$asin) = explode('-', $_POST['ASIN']);
+            $part = (int)$_POST['part'];
+            $c = new CDbCriteria();
+            $c->compare('ASIN', $asin);
+            Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(strtoupper($type)=>$part), $c)->execute();
+            echo '{"ok":true}';
+            Yii::app()->end();
+        }
+    }
 
 }

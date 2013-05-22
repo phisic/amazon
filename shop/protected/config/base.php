@@ -94,7 +94,7 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'murod9@gmail.com',
-        'robotEmail'=>'robot@laptoptop7.com',
+        'robotEmail'=>'laptoptop7@laptoptop7.com',
         //Laptops node Id
         'node'=>565108,
         'secret' => '99limon01962a7d10fd4a20156f8d02adea93d1',

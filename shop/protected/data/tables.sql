@@ -1,24 +1,3 @@
-CREATE TABLE `listing` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `ASIN` varchar(15) DEFAULT NULL,
-  `PriceNew` float DEFAULT NULL,
-  `PriceUsed` float DEFAULT NULL,
-  `Delta` float DEFAULT NULL,
-  `Attr` text,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB;
-
-
-CREATE TABLE `listing2` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `ASIN` varchar(15) DEFAULT NULL,
-  `PriceNew` float DEFAULT NULL,
-  `PriceUsed` float DEFAULT NULL,
-  `Delta` float DEFAULT NULL,
-  `Attr` text,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE `price` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `ASIN` varchar(15) DEFAULT NULL,
@@ -61,17 +40,31 @@ CREATE TABLE `listing` (
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE  TABLE `part` (
-  `Id` INT NOT NULL AUTO_INCREMENT ,
-  `Type` ENUM('cpu','hdd','vga','ram','screen') NULL ,
-  `Model` VARCHAR(255) NULL ,
-  `Score` INT NULL ,
-  `Description` LONGTEXT NULL ,
-  `Image` VARCHAR(255) NULL ,
-  PRIMARY KEY (`Id`) 
+CREATE TABLE `listingdata` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ASIN` varchar(45) DEFAULT NULL,
+  `Data` longtext,
+  PRIMARY KEY (`Id`),
+  KEY `ASIN` (`ASIN`),
+) ENGINE=InnoDb DEFAULT CHARSET=latin1;
+
+CREATE TABLE `partmatch` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ASIN` varchar(15) DEFAULT NULL,
+  `Relevance` int(11) DEFAULT NULL,
+  `Type` enum('cpu','vga','hdd') DEFAULT NULL,
+  `PartId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `ASINType` (`ASIN`,`Type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-ALTER TABLE `amazon`.`listing` ADD COLUMN `CPU` INT NULL DEFAULT 0  AFTER `SalesRank` , ADD COLUMN `VGA` INT NULL DEFAULT 0  AFTER `CPU` , ADD COLUMN `RAM` INT NULL DEFAULT 0  AFTER `VGA` , ADD COLUMN `HDD` INT NULL DEFAULT 0  AFTER `RAM` , ADD COLUMN `Screen` INT NULL DEFAULT 0  AFTER `HDD` ;
-ALTER TABLE `amazon`.`part` ADD INDEX `typemodel` (`Type` ASC, `Model` ASC) ;
-ALTER TABLE `amazon`.`listing` ADD COLUMN `Title` VARCHAR(300) NULL  AFTER `SalesRank` ;
-ALTER TABLE `amazon`.`listing` CHANGE COLUMN `Title` `Title` VARCHAR(999) NULL DEFAULT NULL  
-, ADD FULLTEXT INDEX `DataFulltext` (`Data` ASC) ;
+
+CREATE TABLE `part` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Type` enum('cpu','hdd','vga','ram','screen') DEFAULT NULL,
+  `Model` varchar(255) DEFAULT NULL,
+  `Score` int(11) DEFAULT NULL,
+  `Description` longtext,
+  `Image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `typemodel` (`Type`,`Model`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

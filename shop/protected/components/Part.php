@@ -18,7 +18,8 @@ class Part extends CApplicationComponent {
         $c2 = new CDbCriteria(array('select'=>'p.Id,t.Type,p.Model'));
         $c2->join = 'JOIN part p on t.partId=p.id';
         $c2->compare('ASIN', $asin);
-        return Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c2)->queryAll();
+        
+        return CHtml::listData(Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c2)->queryAll(), 'Id', 'Model', 'Type');
     }
     
 }
