@@ -163,22 +163,19 @@ class UpdateCommand extends CConsoleCommand {
         $c = new CDbCriteria();
         $c->addColumnCondition(array('ASIN' => $i['ASIN']));
         $exist = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
-        if($exist){
-            $result = Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(
+        
+        $data = array(
                         'LogId' => $logId,
                         'Data' => $this->serializeItem($i),
                         'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
-                        'ASIN' => $i['ASIN'],
                         'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
-                    ), $c)->execute();
+                    );
+        
+        if($exist > 0){
+            $result = Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', $data, $c)->execute();
         }else{
-            $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
-                        'LogId' => $logId,
-                        'Data' => $this->serializeItem($i),
-                        'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
-                        'ASIN' => $i['ASIN'],
-                        'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
-                    ))->execute();
+            $data['ASIN'] = $i['ASIN'];
+            $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
         }
     }
 
