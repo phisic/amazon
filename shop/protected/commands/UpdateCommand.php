@@ -160,20 +160,25 @@ class UpdateCommand extends CConsoleCommand {
     }
 
     protected function addToListing($i, $logId) {
-        $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
-                    'LogId' => $logId,
-                    'Data' => $this->serializeItem($i),
-                    'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
-                    'ASIN' => $i['ASIN'],
-                    'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
-                ))->execute();
-        if ($result) {
-            $id = Yii::app()->db->getCommandBuilder()->getLastInsertID('listing');
-
-            $c = new CDbCriteria();
-            $c->addColumnCondition(array('ASIN' => $i['ASIN']));
-            $c->addCondition('Id != ' . $id);
-            Yii::app()->db->getCommandBuilder()->createDeleteCommand('listing', $c)->execute();
+        $c = new CDbCriteria();
+        $c->addColumnCondition(array('ASIN' => $i['ASIN']));
+        $exist = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
+        if($exist){
+            $result = Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(
+                        'LogId' => $logId,
+                        'Data' => $this->serializeItem($i),
+                        'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
+                        'ASIN' => $i['ASIN'],
+                        'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
+                    ), $c)->execute();
+        }else{
+            $result = Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', array(
+                        'LogId' => $logId,
+                        'Data' => $this->serializeItem($i),
+                        'SalesRank' => isset($i['SalesRank']) ? $i['SalesRank'] : 1E6,
+                        'ASIN' => $i['ASIN'],
+                        'Title' => isset($i['ItemAttributes']['Title']) ? $i['ItemAttributes']['Title'] : '',
+                    ))->execute();
         }
     }
 
