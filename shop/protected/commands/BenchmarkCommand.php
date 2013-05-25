@@ -62,6 +62,10 @@ class BenchmarkCommand extends CConsoleCommand {
                     if (empty($r)) {
                         $data['Type'] = $type;
                         Yii::app()->db->getCommandBuilder()->createInsertCommand('part', $data)->execute();
+                    }else{
+                        if($data['Type']=='cpu'){
+                            
+                        }
                     }
                 }
             }
@@ -82,7 +86,30 @@ class BenchmarkCommand extends CConsoleCommand {
 
         return array('Model' => strip_tags($model), 'Score' => strip_tags($score));
     }
-
+    
+    protected function findCpuImage($model){
+        if(strpos($model, 'Intel')!==false){
+                if(strpos($model, 'i3-')!==false)
+                   $image = 'intel-i3.gif';
+                if(strpos($model, 'i5-')!==false)
+                   $image = 'intel-i5.gif';
+                if(strpos($model, 'i7-')!==false)
+                   $image = 'intel-i7.gif';
+                if(strpos($model, 'celeron')!==false)
+                   $image = 'intel-celeron.gif';
+                if(strpos($model, 'atom')!==false)
+                   $image = 'intel-atom.gif';
+                if(strpos($model, 'pentium')!==false)
+                   $image = 'intel-pentium.gif';
+                if(empty($image))
+                    $image = 'intel-default.gif';
+                return $image;
+        }
+        if(strpos($model, 'AMD')!==false){
+                
+        }
+    }
+    
     protected function preparematch() {
         $rows = true;
         $size = 100;
@@ -95,6 +122,10 @@ class BenchmarkCommand extends CConsoleCommand {
             $c->offset = $size * $page;
             $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
             foreach ($rows as $row) {
+                $exist = Yii::app()->db->getCommandBuilder()->createFindCommand('listingdata', new CDbCriteria(array('select'=>'ASIN','condition'=>'ASIN="'.$row['ASIN'].'"')))->queryRow();
+                if($exist)
+                    continue;
+                
                 echo 'ASIN=' . $row['ASIN'] . "\n";
                 $d = @unserialize($row['Data']);
                 if (empty($d))
