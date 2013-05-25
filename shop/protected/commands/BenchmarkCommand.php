@@ -125,7 +125,7 @@ class BenchmarkCommand extends CConsoleCommand {
         $rows = true;
         $size = 100;
         $page = 0;
-        
+        Yii::app()->db->getCommandBuilder()->createSqlCommand('truncate partmatch;')->execute();
         $searchCriteria = new stdClass();
         $pages = new CPagination();
         $pages->pageSize = 10000;
