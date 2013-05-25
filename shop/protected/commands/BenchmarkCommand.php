@@ -11,6 +11,11 @@ class BenchmarkCommand extends CConsoleCommand {
     protected $urlLaptop = array(
         'cpu'=>'http://www.cpubenchmark.net/laptop.html',
     );
+    
+    protected $urlAdditional = array(
+        'cpu' => 'cpu-additional.html',
+    );
+    
     public function run($args) {
         $type = $args[0];
         if ($type == 'match') {
@@ -30,10 +35,13 @@ class BenchmarkCommand extends CConsoleCommand {
 
         if (empty($this->url[$type]))
             die('invalid param');
-
+        
+        $contentLaptop = '';
         $content = file_get_contents($this->url[$type]);
         if(isset($this->urlLaptop[$type]))
             $contentLaptop = file_get_contents($this->urlLaptop[$type]);
+        if(isset($this->urlAdditional))
+            $contentLaptop .= file_get_contents($this->urlAdditional[$type]);
         
         $pos1 = strpos($content, '<TABLE ID="cputable" class="cpulist">');
         $pos2 = strpos($content, '</TABLE>');
