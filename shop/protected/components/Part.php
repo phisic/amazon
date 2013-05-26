@@ -10,9 +10,9 @@ class Part extends CApplicationComponent {
         $partList = array();
         foreach ($partsAsin as $partAsin) {
             if(!empty($partAsin['CPU']))
-                $partList[$partAsin['CPU']]= $partAsin['ASIN'];
+                $partList[$partAsin['CPU']][] = $partAsin['ASIN'];
             if(!empty($partAsin['VGA']))
-                $partList[$partAsin['VGA']]= $partAsin['ASIN'];
+                $partList[$partAsin['VGA']][] = $partAsin['ASIN'];
         }
         
         $c2 = new CDbCriteria();
@@ -21,8 +21,8 @@ class Part extends CApplicationComponent {
         $parts = Yii::app()->db->getCommandBuilder()->createFindCommand('part', $c2)->queryAll();
         $asinList = array();
         foreach($parts as $part){
-            $asin = $partList[$part['Id']];
-            $asinList[$asin][$part['Type']] = $part;
+            foreach ($partList[$part['Id']] as $asin)
+                $asinList[$asin][$part['Type']] = $part;
         }
         
         return $asinList;

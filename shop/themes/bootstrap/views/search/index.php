@@ -60,15 +60,15 @@ foreach ($items as $n => $item) {
             </h5> 
                 <div class="row">
                     <?php
-                    if (isset($parts[$asin]['cpu']) || isset($parts[$asin]['vga'])) {
+                    if (isset($parts[$asin]['cpu'])) {
                         $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu')/10), 2);
                         $percent = ceil($mark * 10);
                         echo '<div class="span5">';
                         echo '<h4>Performance Benchmark</h4>';
                         echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
                         echo '<div class = "progress progress-success">
-                        <div class = "bar" style = "width: ' . $percent . '%"></div>
-                        </div>';
+                                <div class = "bar" style = "width: ' . $percent . '%"></div>
+                              </div>';
 
                         echo '</div>';
                     }
@@ -88,7 +88,7 @@ foreach ($items as $n => $item) {
             if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
                 $partList = Yii::app()->part->getByAsin($asin);
                 if (isset($partList['cpu'])) {
-                    echo CHtml::dropDownList('cpu-' . $asin, isset($item['CPU']) ? $item['CPU'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
+                    echo CHtml::dropDownList('cpu-' . $asin, isset($parts[$asin]['cpu']['Id']) ? $parts[$asin]['cpu']['Id'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
                 }
             }
             /*

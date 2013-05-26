@@ -241,20 +241,13 @@ class SearchController extends Controller {
         
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
-        $parts = array();
         foreach ($rows as $row) {
-            $data = unserialize($row['Data']);
-            $data['CPU'] = $row['CPU'];
-            $data['VGA'] = $row['VGA'];
-            $list[] = $data;
-            $parts[] = $row['CPU'];
-            $parts[] = $row['VGA'];
+            $list[] = unserialize($row['Data']);
         }
 
-        $partList = Yii::app()->part->getByIds($parts);
         $pages = new CPagination($count);
         $pages->pageSize = $size;
-        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages, 'parts' => $partList));
+        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages));
     }
 
 }
