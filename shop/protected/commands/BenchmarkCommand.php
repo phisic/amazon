@@ -111,7 +111,7 @@ class BenchmarkCommand extends CConsoleCommand {
                 return $image;
         }
         if(strpos($model, 'amd')!==false){
-                if(strpos($model, 'A10')!==false)
+                if(strpos($model, 'a10')!==false)
                    $image = 'amd-a10.gif';
                 if(strpos($model, 'a9')!==false)
                    $image = 'amd-a.gif';
