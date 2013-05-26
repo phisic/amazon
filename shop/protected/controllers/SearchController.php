@@ -228,7 +228,6 @@ class SearchController extends Controller {
         $size = 10;
         $c = new CDbCriteria(array(
             'order' => 'SalesRank',
-            'distinct' => true,
             'select'=>'ASIN'
         ));
 
@@ -237,7 +236,6 @@ class SearchController extends Controller {
         $c->limit = $size;
         $c->offset = $size * ($page - 1);
         $c->select = '*';
-        $c->group = 'ASIN';
         
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
@@ -248,6 +246,21 @@ class SearchController extends Controller {
         $pages = new CPagination($count);
         $pages->pageSize = $size;
         $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages));
+    }
+    
+    public function actionTest(){
+        $searchCriteria = new stdClass();
+        $pages = new CPagination();
+        $pages->pageSize = 10000;
+        $searchCriteria->select = 'id';
+        $searchCriteria->query = 'i73610QM';
+        //$searchCriteria->filters = array('id' => 3921);
+        $searchCriteria->paginator = $pages;
+        $searchCriteria->from = 'listingdata_index';
+        Yii::App()->search->setMatchMode(SPH_MATCH_BOOLEAN);
+        $resArray = Yii::App()->search->searchRaw($searchCriteria); // array result
+        echo 'all='.count($resArray['matches']);print_r($resArray);exit;
+
     }
 
 }

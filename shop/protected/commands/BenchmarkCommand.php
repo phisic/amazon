@@ -55,7 +55,7 @@ class BenchmarkCommand extends CConsoleCommand {
             $table = substr($table, $pos2 + 5);
             if (!empty($row)) {
                 $data = $this->fetch($row);
-                if (!empty($data['Model']) && strpos($contentLaptop, $data['Model'])) {
+                if (!empty($data['Model']) && !empty($data['Score']) && strpos($contentLaptop, $data['Model'])) {
                     $c = new CDbCriteria(array('select' => 'Id,Image'));
                     $c->addColumnCondition(array('type' => $type, 'Model' => $data['Model']));
                     $r = Yii::app()->db->getCommandBuilder()->createFindCommand('part', $c)->queryRow();
@@ -148,10 +148,10 @@ class BenchmarkCommand extends CConsoleCommand {
             $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
             foreach ($rows as $row) {
                 $exist = Yii::app()->db->getCommandBuilder()->createFindCommand('listingdata', new CDbCriteria(array('select'=>'ASIN','condition'=>'ASIN="'.$row['ASIN'].'"')))->queryRow();
-                if($exist)
-                    continue;
+                $d = @unserialize($row['Data']);
+                //if($exist)
+                    //continue;
                 
-                echo 'ASIN=' . $row['ASIN'] . "\n";
                 $d = @unserialize($row['Data']);
                 if (empty($d))
                     continue;
@@ -164,7 +164,7 @@ class BenchmarkCommand extends CConsoleCommand {
                         $s .= join(' ', $d['ItemAttributes']['Feature']);
                     }
                     else
-                        $s.=strip_tags ($d['ItemAttributes']['Feature']);
+                        $s.=' ' . strip_tags ($d['ItemAttributes']['Feature']);
                 }
                 $s .= ' ' . strip_tags($d['ItemAttributes']['Title']);
                 if (isset($d['EditorialReviews']['EditorialReview'])) {
@@ -179,7 +179,12 @@ class BenchmarkCommand extends CConsoleCommand {
                         $s.= ' ' . strip_tags($d['EditorialReviews']['EditorialReview']);
                     }
                 }
-                Yii::app()->db->getCommandBuilder()->createInsertCommand('listingdata', array('ASIN' => $row['ASIN'], 'Data' => $s))->execute();
+                $s = str_replace('-','',$s);
+                if($exist)
+                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listingdata', array('Data' => $s), new CDbCriteria(array('condition'=>'ASIN="'.$row['ASIN'].'"')))->execute();
+                else
+                    Yii::app()->db->getCommandBuilder()->createInsertCommand('listingdata', array('ASIN' => $row['ASIN'], 'Data' => $s))->execute();
+                
             }
             $page++;
         }
@@ -189,7 +194,8 @@ class BenchmarkCommand extends CConsoleCommand {
         $rows = true;
         $size = 100;
         $page = 0;
-        Yii::app()->db->getCommandBuilder()->createSqlCommand('truncate partmatch;')->execute();
+        if($mode=='exact')
+            Yii::app()->db->getCommandBuilder()->createSqlCommand('truncate partmatch;')->execute();
         $searchCriteria = new stdClass();
         $pages = new CPagination();
         $pages->pageSize = 10000;
@@ -204,17 +210,22 @@ class BenchmarkCommand extends CConsoleCommand {
             $c->offset = $size * $page;
             $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('part', $c)->queryAll();
             foreach ($rows as $row) {
-                $row['Model'] = strtr($row['Model'],array('/'=>'',' APU'=>'', 'AMD'=>'','Intel'=>''));
+                $row['Model'] = strtr($row['Model'],array('/'=>'',' APU'=>'', 'AMD'=>'','Intel'=>'','Core'=>'','Dual'=>''));
                 $p = strpos($row['Model'], '@');
                 if($p!==false)
                     $row['Model'] = substr($row['Model'], 0, $p);
-                $row['Model'] = trim($row['Model']);
+                
                 if(empty($row['Model']))
                     continue;
                 $rankMultiplier = 1;
-                if($mode=='similar')
-                    $row['Model'] = strtr($row['Model'], array(' '=>'|'));
-                    
+                if($mode=='similar'){
+                    $row['Model'] = strtr($row['Model'], array(' '=>'|','-'=>'|'));
+                }else{
+                    $row['Model'] = strtr($row['Model'], array('-'=>''));
+                }
+                $row['Model'] = trim($row['Model']);
+                $row['Model'] = strtr($row['Model'], array('||'=>'|','|||'=>'|'));
+                $row['Model'] = trim($row['Model'], '|');
                  if($mode == 'exact')
                      $rankMultiplier = 10;
                 echo $row['Model']."\n";
@@ -233,7 +244,8 @@ class BenchmarkCommand extends CConsoleCommand {
                     }
                     
                     $sql = 'insert into partmatch (ASIN,Type,PartId,Relevance) values '.$sql;
-                    Yii::app()->db->getCommandBuilder()->createSqlCommand($sql)->execute();
+                    $r = Yii::app()->db->getCommandBuilder()->createSqlCommand($sql)->execute();
+                    echo 'res='.$r."\n";
                 }
             }
             $page++;
@@ -248,11 +260,14 @@ class BenchmarkCommand extends CConsoleCommand {
         $c->compare('Type', 'cpu');
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c)->queryAll();
         foreach ($rows as $row) {
-            $c2 = new CDbCriteria(array('select' => 'PartId'));
+            $c2 = new CDbCriteria(array('select' => 'PartId,Relevance'));
             $c2->addColumnCondition(array('ASIN' => $row['ASIN'], 'Type' => 'cpu'));
             $c2->order = 'Relevance desc';
             $c2->limit = 1;
             $match = Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c2)->queryRow();
+            if($match['Relevance']<10)
+                continue;
+            
             $c3 = new CDbCriteria();
             $c3->compare('ASIN', $row['ASIN']);
             Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('CPU' => $match['PartId']), $c3)->execute();
