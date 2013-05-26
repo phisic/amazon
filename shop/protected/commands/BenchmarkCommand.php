@@ -56,16 +56,20 @@ class BenchmarkCommand extends CConsoleCommand {
             if (!empty($row)) {
                 $data = $this->fetch($row);
                 if (!empty($data['Model']) && strpos($contentLaptop, $data['Model'])) {
-                    $c = new CDbCriteria(array('select' => 'Id'));
+                    $c = new CDbCriteria(array('select' => 'Id,Image'));
                     $c->addColumnCondition(array('type' => $type, 'Model' => $data['Model']));
                     $r = Yii::app()->db->getCommandBuilder()->createFindCommand('part', $c)->queryRow();
+                    
+                    if($type=='cpu'){
+                       $data['Image'] = $this->findCpuImage($data['Model']);
+                       echo 'M='.$data['Model'].' I='.$data['Image']."\n";
+                    }
+                    
                     if (empty($r)) {
                         $data['Type'] = $type;
                         Yii::app()->db->getCommandBuilder()->createInsertCommand('part', $data)->execute();
-                    }else{
-                        if($data['Type']=='cpu'){
-                            
-                        }
+                    }elseif(empty($r['Image']) && !empty($data['Image'])){
+                        Yii::app()->db->getCommandBuilder()->createUpdateCommand('part', array('Image'=>$data['Image']), new CDbCriteria(array('condition'=>'Id='.$r['Id'])))->execute();
                     }
                 }
             }
@@ -88,7 +92,8 @@ class BenchmarkCommand extends CConsoleCommand {
     }
     
     protected function findCpuImage($model){
-        if(strpos($model, 'Intel')!==false){
+        $model = strtolower($model);
+        if(strpos($model, 'intel')!==false){
                 if(strpos($model, 'i3-')!==false)
                    $image = 'intel-i3.gif';
                 if(strpos($model, 'i5-')!==false)
@@ -105,8 +110,28 @@ class BenchmarkCommand extends CConsoleCommand {
                     $image = 'intel-default.gif';
                 return $image;
         }
-        if(strpos($model, 'AMD')!==false){
-                
+        if(strpos($model, 'amd')!==false){
+                if(strpos($model, 'A10')!==false)
+                   $image = 'amd-a10.gif';
+                if(strpos($model, 'a9')!==false)
+                   $image = 'amd-a.gif';
+               if(strpos($model, 'a8')!==false)
+                   $image = 'amd-a8.gif';
+               if(strpos($model, 'a6')!==false)
+                   $image = 'amd-a6.gif';
+               if(strpos($model, 'a4')!==false)
+                   $image = 'amd-a4.gif';
+               if(strpos($model, 'e1-')!==false)
+                   $image = 'amd-e1.gif';
+               if(strpos($model, 'e2-')!==false)
+                   $image = 'amd-e2.gif';
+               if(strpos($model, 'e-')!==false)
+                   $image = 'amd-e.gif';
+               if(strpos($model, 'c-')!==false)
+                   $image = 'amd-с.gif';
+               if(empty($image))
+                   $image = 'amd-default.gif';
+               return $image;
         }
     }
     

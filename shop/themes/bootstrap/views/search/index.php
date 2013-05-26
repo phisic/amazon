@@ -1,21 +1,38 @@
 <h3 style="border-bottom: 1px solid;"><?= $title; ?></h3>
 <?php
 $count = count($items) - 1;
-$asins = array();
-foreach($items as $item){
+$asins = $parts = array();
+foreach ($items as $item) {
     $asins[] = $item['ASIN'];
 }
 $inwatch = Yii::app()->stat->inWatch($asins);
+$parts = Yii::app()->part->getByAsins($asins);
 
 foreach ($items as $n => $item) {
+    $asin = $item['ASIN'];
     ?>
     <div class="row" <?php if ($count > $n) echo 'style="border-bottom: 1px dashed #ccc;margin-bottom: 10px;padding-bottom: 10px;"'; ?>>
         <div class="span2">
-            <img class="img-rounded" alt="image <?=htmlspecialchars($item['ItemAttributes']['Title'])?>" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?=htmlspecialchars($item['ItemAttributes']['Title'])?>">
+            <img class="img-rounded" alt="image <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" src="<?= isset($item['MediumImage']['URL']) ? str_replace("._SL160_.", "._AA160_.", $item['MediumImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>">
+
             <?php if (isset($item['SalesRank'])) echo '<h5>Sales Rank #' . $item['SalesRank'] . '</h5>'; ?>
+            <div class="parts-inside">
+                <?php
+                if (isset($parts[$asin]['cpu'])) {
+                    $cpu = $parts[$asin]['cpu'];
+                    if (!empty($cpu['Image']))
+                        echo '<img width="80" alt="' . $cpu['Model'] . '" title="Processor: ' . $cpu['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/cpu/' . $cpu['Image'] . '">';
+                }
+                if (isset($parts[$asin]['vga'])) {
+                    $vga = $parts[$asin]['vga'];
+                    if (!empty($cpu['Image']))
+                        echo '<img width="80" alt="' . $vga['Model'] . '" title="Video Adapter: ' . $vga['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/cpu/' . $vga['Image'] . '">';
+                }
+                ?>
+            </div>
         </div>
         <div class="span10">
-            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($item);
@@ -28,46 +45,63 @@ foreach ($items as $n => $item) {
                     echo ' <span style="font-size:16px;"> & </span> ';
                 if ($usedPrice)
                     echo ' <a title="' . $item['ItemLinks']['ItemLink'][6]['Description'] . ' at amazon.com" target="_blank" href="' . $item['ItemLinks']['ItemLink'][6]['URL'] . '" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
-                if (isset($priceDrops[$item['ASIN']]))
-                    echo ' <span>&nbsp;/&nbsp;Price drop today: <span class="text-success" style="font-size:26px;">' . Yii::app()->amazon->formatUSD($priceDrops[$item['ASIN']]) . '</span></span>';
+                if (isset($priceDrops[$asin]))
+                    echo ' <span>&nbsp;/&nbsp;Price drop today: <span class="text-success" style="font-size:26px;">' . Yii::app()->amazon->formatUSD($priceDrops[$asin]) . '</span></span>';
                 ?>
             </h5>
             <h5>
-                <a href="<?= Yii::app()->createUrl('search/detail/' . $item['ASIN']) ?>#history">See price history</a> 
+                <a href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>#history">See price history</a> 
                 <?php
                 if ($newPrice)
-                    echo ' / '. (isset($inwatch[$item['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>': '<a id="'.$item['ASIN'].'-new-'.$newPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
+                    echo ' / ' . (isset($inwatch[$asin]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>' : '<a id="' . $asin . '-new-' . $newPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
                 if ($usedPrice)
-                    echo ' / '. (isset($inwatch[$item['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$item['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
+                    echo ' / ' . (isset($inwatch[$asin]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>' : '<a id="' . $asin . '-used-' . $usedPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
                 ?>
             </h5> 
-            <h6><ul>
+                <div class="row">
                     <?php
-                    if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
-                        foreach ($item['ItemAttributes']['Feature'] as $attr) {
-                            echo '<li>' . $attr . '</li>';
-                        }
+                    if (isset($parts[$asin]['cpu']) || isset($parts[$asin]['vga'])) {
+                        $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu')/10), 2);
+                        $percent = ceil($mark * 10);
+                        echo '<div class="span5">';
+                        echo '<h4>Performance Benchmark</h4>';
+                        echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div class = "progress progress-success">
+                        <div class = "bar" style = "width: ' . $percent . '%"></div>
+                        </div>';
+
+                        echo '</div>';
+                    }
                     ?>
-                </ul>
-            </h6>
+                    <div class="span5">
+                        <ul>
+                            <?php
+                            if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
+                                foreach ($item['ItemAttributes']['Feature'] as $attr) {
+                                    echo '<li>' . $attr . '</li>';
+                                }
+                            ?>
+                        </ul>
+                    </div>
+                </div>    
             <?php
-            if(!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()){
-                $parts = Yii::app()->part->getByAsin($item['ASIN']);
-                if(isset($parts['cpu'])){
-                    echo CHtml::dropDownList('cpu-'.$item['ASIN'], isset($item['CPU']) ? $item['CPU'] : 0, array('------') + $parts['cpu'],array('class'=>'match-cpu'));
+            if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
+                $partList = Yii::app()->part->getByAsin($asin);
+                if (isset($partList['cpu'])) {
+                    echo CHtml::dropDownList('cpu-' . $asin, isset($item['CPU']) ? $item['CPU'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
                 }
             }
             /*
-            if(isset($item['CPU']) && isset($parts[$item['CPU']]))
-                echo '<h6>CPU: '.$parts[$item['CPU']]['Model'].' / '.$parts[$item['CPU']]['Score'].'/ '.$item['ASIN'].'</h6>';
+              if(isset($item['CPU']) && isset($parts[$item['CPU']]))
+              echo '<h6>CPU: '.$parts[$item['CPU']]['Model'].' / '.$parts[$item['CPU']]['Score'].'/ '.$asin.'</h6>';
              */
             ?>
         </div>
     </div>
 <?php } ?>
 <?
-if(!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()){
-    echo '<script type="text/javascript">var matchUrl = "'.Yii::app()->createUrl('watch/match').'"</script>';
+if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
+    echo '<script type="text/javascript">var matchUrl = "' . Yii::app()->createUrl('watch/match') . '"</script>';
 }
 if (isset($pages))
     $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions' => array('class' => 'pager'), 'pages' => $pages));

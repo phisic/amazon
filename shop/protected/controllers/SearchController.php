@@ -134,7 +134,7 @@ class SearchController extends Controller {
             }
         }
         $r['Items']['Item']['EditorialReviews']['EditorialReview'] = $description;
-        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history));
+        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history,'parts'=>$parts = Yii::app()->part->getByAsins(array($asin))));
     }
 
     public function actionBestsellers() {
@@ -245,8 +245,10 @@ class SearchController extends Controller {
         foreach ($rows as $row) {
             $data = unserialize($row['Data']);
             $data['CPU'] = $row['CPU'];
+            $data['VGA'] = $row['VGA'];
             $list[] = $data;
             $parts[] = $row['CPU'];
+            $parts[] = $row['VGA'];
         }
 
         $partList = Yii::app()->part->getByIds($parts);

@@ -1,3 +1,4 @@
+<?php $asin = $i['ASIN'];?>
 <div class="row">
     <div class="span4"><img title="image <?=htmlspecialchars($i['ItemAttributes']['Title'])?>" alt="image <?=htmlspecialchars($i['ItemAttributes']['Title'])?>" src="<?= isset($i['LargeImage']['URL']) ? $i['LargeImage']['URL'] : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>"></div>
     <div class="span8">
@@ -29,16 +30,33 @@
                     echo (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
                 ?>
             </h5> 
-            <h6><ul>
-                    <?php
-                    if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature']))
-                        foreach ($i['ItemAttributes']['Feature'] as $attr) {
-                            echo '<li>' . htmlspecialchars_decode($attr) . '</li>';
-                        }
-                    ?>
-                </ul>
-            </h6>
             <h6><a target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
+            <div class="row">
+                    <?php
+                    if (isset($parts[$asin]['cpu'])) {
+                        $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu')/10), 2);
+                        $percent = ceil($mark * 10);
+                        echo '<div class="span4">';
+                        echo '<h4>Performance Benchmark</h4>';
+                        echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div class = "progress progress-success">
+                        <div class = "bar" style = "width: ' . $percent . '%"></div>
+                        </div>';
+
+                        echo '</div>';
+                    }
+                    ?>
+                    <div class="span4">
+                        <ul>
+                            <?php
+                            if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature']))
+                                foreach ($i['ItemAttributes']['Feature'] as $attr) {
+                                    echo '<li>' . $attr . '</li>';
+                                }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
