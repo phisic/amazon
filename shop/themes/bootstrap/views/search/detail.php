@@ -68,7 +68,7 @@ if (empty($history))
 else 
     echo '<div id="chart1"></div>';
 ?>
-<div itemscope itemtype="http://data-vocabulary.org/Product">
+<div class="hide" itemscope itemtype="http://data-vocabulary.org/Product">
   <span itemprop="brand"><?=isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] : '';?></span> 
   <span itemprop="name"><?=$i['ItemAttributes']['Title']?></span>
   <?php
@@ -85,7 +85,7 @@ else
   Category: <span itemprop="category" content="Laptops,Notebooks,Ultrabooks">Laptops,Notebooks,Ultrabooks</span>
   Product #: <span itemprop="identifier" content="asin:<?=$i['ASIN']?>"><?=$i['ASIN']?></span>
   <span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-    <span itemprop="rating"><?=$mark?></span> CPU performance benchmark
+    <span itemprop="rating"><?=isset($mark)?$mark:''?></span> CPU performance benchmark
   </span>
 
   <span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
