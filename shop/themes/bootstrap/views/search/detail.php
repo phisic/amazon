@@ -68,7 +68,38 @@ if (empty($history))
 else 
     echo '<div id="chart1"></div>';
 ?>
+<div itemscope itemtype="http://data-vocabulary.org/Product">
+  <span itemprop="brand"><?=isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] : '';?></span> 
+  <span itemprop="name"><?=$i['ItemAttributes']['Title']?></span>
+  <?php
+    if(isset($i['LargeImage']['URL']))
+        echo '<img itemprop="image" src="'.$i['LargeImage']['URL'].'" />';
+  ?>
+  <span itemprop="description">
+      <?php
+      if(isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])){
+          echo join('<br>',$i['ItemAttributes']['Feature']);
+      }
+      ?>
+  </span>
+  Category: <span itemprop="category" content="Laptops,Notebooks,Ultrabooks">Laptops,Notebooks,Ultrabooks</span>
+  Product #: <span itemprop="identifier" content="asin:<?=$i['ASIN']?>"><?=$i['ASIN']?></span>
+  <span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
+    <span itemprop="rating"><?=$mark?></span> CPU performance benchmark
+  </span>
 
+  <span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+    Regular price: $<? Yii::app()->amazon->formatUSD($newPrice)?>
+    <meta itemprop="currency" content="USD" />
+    $<span itemprop="price">119.99</span>
+    (Sale ends <time itemprop="priceValidUntil" datetime="2020-11-05">
+      5 November!</time>)
+    Available from: <span itemprop="seller">Executive Objects</span>
+    Condition: <span itemprop="condition" content="used">Previously owned, 
+      in excellent condition</span>
+    <span itemprop="availability" content="in_stock">In stock! Order now!</span>
+  </span>
+</div>
 <div id="productDescription">
     <?php
     if (!empty($i['EditorialReviews']['EditorialReview'])) {
