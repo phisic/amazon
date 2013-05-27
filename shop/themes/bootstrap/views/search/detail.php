@@ -68,12 +68,14 @@ if (empty($history))
 else 
     echo '<div id="chart1"></div>';
 ?>
+
+
 <div class="hide" itemscope itemtype="http://data-vocabulary.org/Product">
   <span itemprop="brand"><?=isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] : '';?></span> 
   <span itemprop="name"><?=$i['ItemAttributes']['Title']?></span>
   <?php
-    if(isset($i['LargeImage']['URL']))
-        echo '<img itemprop="image" src="'.$i['LargeImage']['URL'].'" />';
+    if(isset($i['SmallImage']['URL']))
+        echo '<img itemprop="image" src="'.$i['SmallImage']['URL'].'" />';
   ?>
   <span itemprop="description">
       <?php
@@ -84,22 +86,27 @@ else
   </span>
   Category: <span itemprop="category" content="Laptops,Notebooks,Ultrabooks">Laptops,Notebooks,Ultrabooks</span>
   Product #: <span itemprop="identifier" content="asin:<?=$i['ASIN']?>"><?=$i['ASIN']?></span>
+  <?php if(isset($mark)){ ?>
   <span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-    <span itemprop="rating"><?=isset($mark)?$mark:''?></span> CPU performance benchmark
+    <span itemprop="rating"><?=$mark?></span> CPU performance benchmark out of 
+         <span itemprop="best">10</span> 
   </span>
-
+  <?php } ?>
+  <?php if($newPrice || $usedPrice){?>
   <span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
-    Regular price: $<? Yii::app()->amazon->formatUSD($newPrice)?>
+    Regular price: $<?=Yii::app()->amazon->formatUSD($newPrice)?>
     <meta itemprop="currency" content="USD" />
-    $<span itemprop="price">119.99</span>
-    (Sale ends <time itemprop="priceValidUntil" datetime="2020-11-05">
-      5 November!</time>)
-    Available from: <span itemprop="seller">Executive Objects</span>
-    Condition: <span itemprop="condition" content="used">Previously owned, 
-      in excellent condition</span>
+    $<span itemprop="price"><?= $newPrice ? Yii::app()->amazon->formatUSD($newPrice) : Yii::app()->amazon->formatUSD($usedPrice) ?></span>
+    <?php if(!$newPrice && $usedPrice){?>
+    Condition: <span itemprop="condition" content="used">Previously owned, in excellent condition</span>
+    <?php } ?>
     <span itemprop="availability" content="in_stock">In stock! Order now!</span>
   </span>
+  <?php } ?>
 </div>
+
+
+
 <div id="productDescription">
     <?php
     if (!empty($i['EditorialReviews']['EditorialReview'])) {
