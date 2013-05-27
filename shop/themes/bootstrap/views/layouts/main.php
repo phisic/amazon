@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
         <meta name="google-site-verification" content="GjaBXg6aq5ugFamlMsoWTIIczknXIx_VplwgVQ2pJIU" />
+	<meta name="msvalidate.01" content="09C5B7A3686439EE646E6F1976900AB2" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css" />
 
