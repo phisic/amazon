@@ -38,7 +38,7 @@ foreach ($items as $i) {
             $feature = Yii::app()->stat->wrapText($feature, 100);
     }    
     else 
-        $i['ItemAttributes']['Feature'][] = Yii::app()->stat->wrapText($i['ItemAttributes']['Feature'], 100);
+        $i['ItemAttributes']['Feature'] = array(Yii::app()->stat->wrapText($i['ItemAttributes']['Feature'], 100));
     
     $list[] = array(
         'text' => '
