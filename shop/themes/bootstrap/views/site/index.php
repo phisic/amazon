@@ -12,6 +12,8 @@ foreach($items as $item){
 $inwatch = Yii::app()->stat->inWatch($asins);
 
 foreach ($items as $i) {
+    if(!isset($i['ItemAttributes']['Feature'])|| !isset($i['LargeImage']['URL']))
+        continue;
     $newPrice = Yii::app()->amazon->getNewPrice($i);
     $usedPrice = Yii::app()->amazon->getUsedPrice($i);
     $p = '';
@@ -31,6 +33,7 @@ foreach ($items as $i) {
     if ($usedPrice)
        $ph .= ' / '. (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
     $ph .= '</h5>';
+    
     foreach ($i['ItemAttributes']['Feature'] as &$feature){
         $feature = Yii::app()->stat->wrapText($feature, 100);
     }
