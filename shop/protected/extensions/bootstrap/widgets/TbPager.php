@@ -134,6 +134,6 @@ class TbPager extends CLinkPager
 		if ($hidden || $selected)
 			$class .= ' '.($hidden ? 'disabled' : 'active');
 
-		return CHtml::tag('li', array('class'=>$class), CHtml::link($label, $this->createPageUrl($page)));
+		return CHtml::tag('li', array('class'=>$class), CHtml::link($label, $this->createPageUrl($page),array('rel'=>'nofollow')));
 	}
 }
