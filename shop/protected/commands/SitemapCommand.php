@@ -19,7 +19,7 @@ class SitemapCommand extends CConsoleCommand {
         $c = new CDbCriteria(array(
             'order' => 'SalesRank',
             'distinct' => true,
-            'select' => 'ASIN'
+            'select' => 'ASIN, Title'
         ));
         $f = fopen(Yii::app()->basePath . '/../sitemap.xml', 'w+');
         fwrite($f, '<?xml version="1.0" encoding="UTF-8"?>' . "\n");
@@ -37,7 +37,7 @@ class SitemapCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    $this->writeUrl(array('u' => $d.'/search/detail/' . $r['ASIN'], 'p' => '0.8', 'f' => 'weekly'), $f);
+                    $this->writeUrl(array('u' => $d.'/'.Yii::app()->createSeoUrl('search/detail/' . $r['ASIN'], $r['Title']), 'p' => '0.8', 'f' => 'weekly'), $f);
                 }
             }
             $page++;
