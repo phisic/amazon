@@ -11,16 +11,11 @@ class WebApplication extends CWebApplication {
         Yii::$classMap += require(Yii::app()->basePath . '/config/classmap.php');
     }
 
-    public function getSeoUrl() 
+    public function getSeoUrl($text) 
     {
         //Unwanted:  {UPPERCASE} ; / ? : @ & = + $ , . ! ~ * ' ( )
-        $string = strtolower($string);
-        //Strip any unwanted characters
-        $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
-        //Clean multiple dashes or whitespaces
-        $string = preg_replace("/[\s-]+/", " ", $string);
-        //Convert whitespaces and underscore to dash
-        $string = preg_replace("/[\s_]/", "-", $string);
+        $text = strtolower($text);
+        $text = strtr($text, array(';'=>'','/'=>'',':'=>'','@'=>'','&'=>'','='=>'','+'=>'','$'=>'',','=>'','.'=>'','!'=>'','~'=>'','*'=>'','"'=>'',"'"=>'',')'=>'','('=>''));
         return $string;
     }
 
