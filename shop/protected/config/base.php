@@ -41,7 +41,6 @@ return array(
 
 	// application components
 	'components'=>array(
-        'urlManager'=>array('class'=>'urlManager'),
         'stat'=>array('class'=>  'Statistics'),
         'part'=>array('class'=>  'Part'),
         'search' => array(
