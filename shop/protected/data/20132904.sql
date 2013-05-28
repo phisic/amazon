@@ -1,1 +1,0 @@
-ALTER TABLE `users`  ADD COLUMN `realname` VARCHAR(200) NOT NULL DEFAULT '' AFTER `email`;
