@@ -33,11 +33,12 @@ foreach ($items as $i) {
     if ($usedPrice)
        $ph .= ' / '. (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>': '<a id="'.$i['ASIN'].'-used-'.$usedPrice.'" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
     $ph .= '</h5>';
-    if(is_array($i['ItemAttributes']['Feature']))
-    foreach ($i['ItemAttributes']['Feature'] as &$feature){
-        $feature = Yii::app()->stat->wrapText($feature, 100);
-    }  else 
-        $feature = Yii::app()->stat->wrapText($i['ItemAttributes']['Feature'], 100);
+    if(is_array($i['ItemAttributes']['Feature'])){
+        foreach ($i['ItemAttributes']['Feature'] as &$feature)
+            $feature = Yii::app()->stat->wrapText($feature, 100);
+    }    
+    else 
+        $i['ItemAttributes']['Feature'][] = Yii::app()->stat->wrapText($i['ItemAttributes']['Feature'], 100);
     
     $list[] = array(
         'text' => '
