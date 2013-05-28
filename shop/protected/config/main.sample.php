@@ -30,8 +30,6 @@ return CMap::mergeArray(require(dirname(__FILE__) . '/base.php'), array(
                     'loginUrl' => array('/user/login'),
                 ),
                 'urlManager' => array(
-                    'urlFormat' => 'path',
-                    'showScriptName' => 0,
                     'rules' => array(
                         '<controller:\w+>/<id:\d+>' => '<controller>/view',
                         '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',

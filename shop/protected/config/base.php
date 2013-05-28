@@ -43,6 +43,7 @@ return array(
 	'components'=>array(
         'urlManager' => array(
                     'urlFormat' => 'path',
+                    'showScriptName' => 0,
             ),
         'stat'=>array('class'=>  'Statistics'),
         'part'=>array('class'=>  'Part'),
