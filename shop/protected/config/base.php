@@ -41,6 +41,9 @@ return array(
 
 	// application components
 	'components'=>array(
+        'urlManager' => array(
+                    'urlFormat' => 'path',
+            ),
         'stat'=>array('class'=>  'Statistics'),
         'part'=>array('class'=>  'Part'),
         'search' => array(
