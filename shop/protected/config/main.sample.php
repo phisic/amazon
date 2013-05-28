@@ -1,7 +1,7 @@
 <?php
 
 return CMap::mergeArray(require(dirname(__FILE__) . '/base.php'), array(
-            'name' => 'Laptop Top7 &',
+            'name' => 'Laptop Top7',
             'theme' => 'bootstrap',
             // preloading 'log' component
             'preload' => array('log', 'bootstrap'),

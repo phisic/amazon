@@ -192,6 +192,32 @@ class SearchController extends Controller {
 
         $this->render('index', array('title' => 'Top Price Drops', 'items' => isset($r['Items']['Item']) ? $r['Items']['Item'] : array(), 'pages' => $pages, 'priceDrops' => $r['asins']));
     }
+    
+    public function actionTopPowerful() {
+        $this->pageTitle = 'Top powerful laptops';
+        $page = abs(Yii::app()->request->getParam('page', 1));
+        $size = 10;
+        $c = new CDbCriteria(array(
+            'join'=>'JOIN part p ON p.Type="cpu" and p.Id=t.CPU',
+            'select'=>'ASIN'
+        ));
+        
+        $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
+        $c->order = 'p.Score Desc';
+        $c->limit = $size;
+        $c->offset = $size * ($page - 1);
+        $c->select = '*';
+        
+        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+        $list = array();
+        foreach ($rows as $row) {
+            $list[] = unserialize($row['Data']);
+        }
+
+        $pages = new CPagination($count);
+        $pages->pageSize = $size;
+        $this->render('index', array('title' => 'Top powerful gaming laptops', 'items' => $list, 'pages' => $pages));
+    }
 
     public function actionTopReviewed() {
         $this->pageTitle = 'Top reviewed laptops';

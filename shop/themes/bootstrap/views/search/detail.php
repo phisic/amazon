@@ -36,9 +36,9 @@
                     if (isset($parts[$asin]['cpu'])) {
                         $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu')/10), 2);
                         $percent = ceil($mark * 10);
-                        echo '<div class="span4">';
+                        echo '<div class="span5">';
                         echo '<h4>Performance Benchmark</h4>';
-                        echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> out of 10</div>';
                         echo '<div class = "progress progress-success">
                         <div class = "bar" style = "width: ' . $percent . '%"></div>
                         </div>';
@@ -46,7 +46,7 @@
                         echo '</div>';
                     }
                     ?>
-                    <div class="span4">
+                    <div class="span3">
                         <ul>
                             <?php
                             if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature']))

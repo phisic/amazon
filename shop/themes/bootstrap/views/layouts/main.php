@@ -5,10 +5,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
         <meta name="google-site-verification" content="GjaBXg6aq5ugFamlMsoWTIIczknXIx_VplwgVQ2pJIU" />
-	<meta name="msvalidate.01" content="09C5B7A3686439EE646E6F1976900AB2" />
+        <meta name="msvalidate.01" content="09C5B7A3686439EE646E6F1976900AB2" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/styles.css" />
-
         <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 	    <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/main.js"></script>
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/<?=Yii::app()->user->getIsGuest() ? 'watchGuest.js' : 'watchUser.js'?>"></script>
@@ -32,6 +31,8 @@
             <div class="navbar-inner">
                 <div class="container">
                     <div class="row-fluid">
+                        <div class="span12">
+                            <div class="row-fluid">
                         <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>"><?= Yii::app()->name ?></a></div>
                         <div class="span8">
                             <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
@@ -63,19 +64,24 @@
 	                        <?= Yii::app()->user->name ?> <a href="<?=Yii::app()->createUrl('site/logout')?>" class="btn btn-primary" type="submit">Logout</a>
 	                        <? endif ?>
                         </div-->
-                    </div>
-                    <div class="row">
-                        <div class="span2"><a class="brand" href="<?= Yii::app()->homeUrl ?>">Amazon.com</a></div>
-                        <div class="span9">
-                            <div class="row">
-                                <div class="span7">
-                                    <h5><a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a> / <a href="<?= Yii::app()->createUrl('search/all') ?>">All Laptops</a></h5>
-                                </div>
-                                <div class="span2"><h5><a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a></h5></div>
-                            
+                            <div class="span2"></div>
                             </div>
-                        </div>
-                    </div>   
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <p class="text-center" style="font-weight: bold;">
+                                        <a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / 
+                                        <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / 
+                                        <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / 
+                                        <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a> / 
+                                        <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">Top Powerful and Gaming</a> /
+                                        <a href="<?= Yii::app()->createUrl('search/all') ?>">All Laptops</a> /
+                                        <a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a>
+                                    </p>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                       
                 </div>
             </div>
         </div>

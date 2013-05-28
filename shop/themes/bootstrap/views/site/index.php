@@ -39,13 +39,11 @@ foreach ($items as $i) {
             <div class="row">
                 <div class="span6"><img alt="image '.htmlspecialchars($i['ItemAttributes']['Title']).'" src="' . $img . '"></div>
                 <div class="span6">
-                 <h3><a title="View details of '.htmlspecialchars($i['ItemAttributes']['Title']).'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning"style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>
+                 <h3><a title="View details of '.htmlspecialchars($i['ItemAttributes']['Title']).'" href="'.Yii::app()->createUrl('search/detail/'.$i['ASIN']).'">' . $i['ItemAttributes']['Title'] . '</a> <span class="text-warning" style="font-size:12px;">by ' . $i['ItemAttributes']['Brand'] . '</span></h3>
                  '.$ph.'
-                 <h4>
-                    <ul>
+                    <ul class="carousel-h4">
                         <li>' . join('</li><li>', $i['ItemAttributes']['Feature']) . '</li>
                     </ul>
-                 </h4>
                  <h3>' . $p . '</h3>
                 </div>
            </div>');
