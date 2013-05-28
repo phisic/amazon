@@ -56,13 +56,11 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <p class="text-center" style="font-weight: bold;">
-                                        <a href="<?= Yii::app()->createUrl('search/toppricedrops') ?>">Top Price Drops Today</a> / 
-                                        <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / 
-                                        <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / 
-                                        <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a> / 
-                                        <a href="<?= Yii::app()->createUrl('search/toppowerful') ?>">Top Powerful and Gaming</a> /
-                                        <a href="<?= Yii::app()->createUrl('search/all') ?>">All Laptops</a> /
-                                        <a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a>
+                                        <?php 
+                                            foreach (Yii::app()->params['menu'] as $route=>$title)
+                                                $menu[] = '<a href="'.Yii::app()->createUrl($route).'">'.$title.'</a>';
+                                            echo join(' / ',$menu);
+                                        ?>
                                     </p>
                                 </div>
                             </div>

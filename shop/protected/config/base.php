@@ -115,6 +115,15 @@ return array(
                         })();
 
                       </script>",
+        'menu'=> array(
+                        'search/toppricedrops'=>'Top Price Drops Today',
+                        'search/bestsellers'=>'Best Sellers',
+                        'search/topreviewed'=>'Top Reviewed',
+                        'search/newreleases'=>'New Releases',
+                        'search/toppowerful'=>'Top Powerful and Gaming',
+                        'search/all'=>'All Laptops',
+                        'site/contact'=>'Contact us',
+                    )
 	),
     
 );
