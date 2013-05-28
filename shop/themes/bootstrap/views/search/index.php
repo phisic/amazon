@@ -32,7 +32,7 @@ foreach ($items as $n => $item) {
             </div>
         </div>
         <div class="span10">
-            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin,$item['ItemAttributes']['Title']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($item);
@@ -50,7 +50,7 @@ foreach ($items as $n => $item) {
                 ?>
             </h5>
             <h5>
-                <a href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>#history">See price history</a> 
+                <a href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin,$item['ItemAttributes']['Title']) ?>#history">See price history</a> 
                 <?php
                 if ($newPrice)
                     echo ' / ' . (isset($inwatch[$asin]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>' : '<a id="' . $asin . '-new-' . $newPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');

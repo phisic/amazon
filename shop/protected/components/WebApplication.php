@@ -11,12 +11,12 @@ class WebApplication extends CWebApplication {
         Yii::$classMap += require(Yii::app()->basePath . '/config/classmap.php');
     }
 
-    public function getSeoUrl($text) 
+    public function createSeoUrl($route,$string) 
     {
-        //Unwanted:  {UPPERCASE} ; / ? : @ & = + $ , . ! ~ * ' ( )
-        $text = strtolower($text);
-        $text = strtr($text, array(';'=>'','/'=>'',':'=>'','@'=>'','&'=>'','='=>'','+'=>'','$'=>'',','=>'','.'=>'','!'=>'','~'=>'','*'=>'','"'=>'',"'"=>'',')'=>'','('=>''));
-        return $string;
+        $string = preg_replace("/[^a-zA-Z0-9 -]/", "", $string);
+        $string = strtolower($string);
+        $string = str_replace(" ", '-', $string);
+        return $this->createUrl($route.'-'.$string);
     }
 
 }
