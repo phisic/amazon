@@ -1,5 +1,5 @@
 <div class="hero-unit">
-    <h3> <?=Yii::app()->stat->getLaptopCount() .' '.Yii::app()->params['category']?> s in the database</h3>
+    <h3> <?=Yii::app()->stat->getLaptopCount() .' '.Yii::app()->params['category']?>s in the database</h3>
 </div>
 <?php
 $list = array();

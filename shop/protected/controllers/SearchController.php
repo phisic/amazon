@@ -271,7 +271,7 @@ class SearchController extends Controller {
 
         $pages = new CPagination($count);
         $pages->pageSize = $size;
-        $this->render('index', array('title' => 'All '.Yii::app()->params['category'].'s', 'items' => $list, 'pages' => $pages, 'parts' => $partList));
+        $this->render('index', array('title' => 'All '.Yii::app()->params['category'].'s', 'items' => $list, 'pages' => $pages));
     }
     
     public function actionTest(){
