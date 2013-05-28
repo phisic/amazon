@@ -4,7 +4,7 @@
     <div class="span8">
 
         <div class="span8">
-            <h1><?= $i['ItemAttributes']['Title'] ?> <span class='text-warning'style='font-size:12px;'><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
+            <h1><?= $i['ItemAttributes']['Title'] ?> <span class="text-warning" style="font-size:12px;"><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($i);

@@ -32,7 +32,7 @@ foreach ($items as $n => $item) {
             </div>
         </div>
         <div class="span10">
-            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class='text-warning'style='font-size:12px;'><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createUrl('search/detail/' . $asin) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($item);
