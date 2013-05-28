@@ -73,7 +73,7 @@
                                         <a href="<?= Yii::app()->createUrl('search/bestsellers') ?>">Best Sellers</a> / 
                                         <a href="<?= Yii::app()->createUrl('search/topreviewed') ?>">Top Reviewed</a> / 
                                         <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">New Releases</a> / 
-                                        <a href="<?= Yii::app()->createUrl('search/newreleases') ?>">Top Powerful and Gaming</a> /
+                                        <a href="<?= Yii::app()->createUrl('search/toppowerful') ?>">Top Powerful and Gaming</a> /
                                         <a href="<?= Yii::app()->createUrl('search/all') ?>">All Laptops</a> /
                                         <a href="<?=Yii::app()->createUrl('site/contact')?>">Contact us</a>
                                     </p>
