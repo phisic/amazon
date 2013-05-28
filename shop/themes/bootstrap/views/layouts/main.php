@@ -57,8 +57,10 @@
                                 <div class="span12">
                                     <p class="text-center" style="font-weight: bold;">
                                         <?php 
-                                            foreach (Yii::app()->params['menu'] as $route=>$title)
-                                                $menu[] = '<a href="'.Yii::app()->createUrl($route).'">'.$title.'</a>';
+                                            foreach (Yii::app()->params['menu'] as $route=>$title){
+                                                if(!empty($title))
+                                                    $menu[] = '<a href="'.Yii::app()->createUrl($route).'">'.$title.'</a>';
+                                            }    
                                             echo join(' / ',$menu);
                                         ?>
                                     </p>
