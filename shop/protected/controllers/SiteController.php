@@ -25,7 +25,7 @@ class SiteController extends Controller {
      * when an action is not explicitly requested by users.
      */
     public function actionIndex() {
-        $this->pageTitle = 'Laptop Top7, find your laptop';
+        $this->pageTitle = Yii::app()->name.', find your '.Yii::app()->params['category'];
         $s = Yii::app()->stat;
 
         //Top price drops

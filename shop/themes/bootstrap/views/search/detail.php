@@ -64,7 +64,7 @@
 <?php
 
 if (empty($history))
-    echo '<p>Price history not available for this laptop</p>';
+    echo '<p>Price history not available for this '.Yii::app()->params['category'].'</p>';
 else 
     echo '<div id="chart1"></div>';
 ?>

@@ -4,12 +4,13 @@ class SitemapCommand extends CConsoleCommand {
     protected $urls = 0;
     
     public function run($args) {
+        $d = Yii::app()->params['domain'];
         $urls = array(
-            array('u' => 'laptoptop7.com', 'p' => 0.9, 'f' => 'daily'),
-            array('u' => 'laptoptop7.com/search/bestsellers', 'p' => 0.8, 'f' => 'weekly'),
-            array('u' => 'laptoptop7.com/search/toppricedrops', 'p' => 0.9, 'f' => 'daily'),
-            array('u' => 'laptoptop7.com/search/newreleases', 'p' => 0.7, 'f' => 'weekly'),
-            array('u' => 'laptoptop7.com/search/topreviewed', 'p' => 0.6, 'f' => 'monthly'),
+            array('u' => $d, 'p' => 0.9, 'f' => 'daily'),
+            array('u' => $d.'/search/bestsellers', 'p' => 0.8, 'f' => 'weekly'),
+            array('u' => $d.'/search/toppricedrops', 'p' => 0.9, 'f' => 'daily'),
+            array('u' => $d.'/search/newreleases', 'p' => 0.7, 'f' => 'weekly'),
+            array('u' => $d.'/search/topreviewed', 'p' => 0.6, 'f' => 'monthly'),
                 //array('u'=>'laptoptop7.com/all','p'=>0.8,'f'=>'daily'),
         );
 
@@ -36,7 +37,7 @@ class SitemapCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    $this->writeUrl(array('u' => 'laptoptop7.com/search/detail/' . $r['ASIN'], 'p' => '0.8', 'f' => 'weekly'), $f);
+                    $this->writeUrl(array('u' => $d.'/search/detail/' . $r['ASIN'], 'p' => '0.8', 'f' => 'weekly'), $f);
                 }
             }
             $page++;

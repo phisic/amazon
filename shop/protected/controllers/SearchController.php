@@ -64,7 +64,7 @@ class SearchController extends Controller {
             $this->ajaxsearch();
         }
 
-        $this->pageTitle = 'Search laptop ' . Yii::app()->request->getParam('search', '');
+        $this->pageTitle = 'Search '.Yii::app()->params['category']. ' ' . Yii::app()->request->getParam('search', '');
 
         $r = Yii::app()->amazon
                 ->returnType(AmazonECS::RETURN_TYPE_ARRAY)
@@ -138,7 +138,7 @@ class SearchController extends Controller {
     }
 
     public function actionBestsellers() {
-        $this->pageTitle = 'Bestseller laptops';
+        $this->pageTitle = 'Bestseller '.Yii::app()->params['category'].'s';
         $page = Yii::app()->request->getParam('page', 1);
         if (!$r = Yii::app()->cache->get('best-' . $page)) {
             $r = Yii::app()->amazon
@@ -161,7 +161,7 @@ class SearchController extends Controller {
     }
 
     public function actionTopPriceDrops() {
-        $this->pageTitle = 'Top price drop laptops';
+        $this->pageTitle = 'Top price drop '.Yii::app()->params['category'].'s';
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
         if (!$r = Yii::app()->cache->get('pdrop-' . $page)) {
@@ -220,7 +220,7 @@ class SearchController extends Controller {
     }
 
     public function actionTopReviewed() {
-        $this->pageTitle = 'Top reviewed laptops';
+        $this->pageTitle = 'Top reviewed '.Yii::app()->params['category'].'s';
 
         $page = abs(Yii::app()->request->getParam('page', 1));
         if (!$r = Yii::app()->cache->get('toprev-' . $page)) {
@@ -244,12 +244,12 @@ class SearchController extends Controller {
     }
 
     public function actionNewReleases() {
-        $this->pageTitle = 'New released laptops';
+        $this->pageTitle = 'New released '.Yii::app()->params['category'].'s';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
 
     public function actionAll() {
-        $this->pageTitle = 'All laptops';
+        $this->pageTitle = 'All '.Yii::app()->params['category'].'s';
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
         $c = new CDbCriteria(array(
@@ -271,7 +271,7 @@ class SearchController extends Controller {
 
         $pages = new CPagination($count);
         $pages->pageSize = $size;
-        $this->render('index', array('title' => 'All laptops', 'items' => $list, 'pages' => $pages));
+        $this->render('index', array('title' => 'All '.Yii::app()->params['category'].'s', 'items' => $list, 'pages' => $pages, 'parts' => $partList));
     }
     
     public function actionTest(){

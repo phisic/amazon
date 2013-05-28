@@ -92,11 +92,11 @@ class WatchCommand extends CConsoleCommand {
             $pricedDrop = Yii::app()->amazon->formatUSD($d['PriceDrop']);
             $oldPrice = Yii::app()->amazon->formatUSD($d['Price']);
             $newPrice = Yii::app()->amazon->formatUSD($d['Price'] - $d['PriceDrop']);
-            $removeUrl = 'http://laptoptop7.com/watch/remove/' . $d['ASIN'] . '-' . $d['NewUsed'] . '-' . Yii::app()->stat->getHash($d['ASIN'], $d['NewUsed'], $d['Id']) . '-' . $d['Id'];
+            $removeUrl = 'http://'.Yii::app()->params['domain'].'/watch/remove/' . $d['ASIN'] . '-' . $d['NewUsed'] . '-' . Yii::app()->stat->getHash($d['ASIN'], $d['NewUsed'], $d['Id']) . '-' . $d['Id'];
 
             $message = strtr($template, array(
                 '{$priceDrop}' => $pricedDrop,
-                '{$link}' => 'http://laptoptop7.com/search/detail/' . $d['ASIN'],
+                '{$link}' => 'http://'.Yii::app()->params['domain'].'/search/detail/' . $d['ASIN'],
                 '{$laptopTitle}' => $d['Title'],
                 '{$oldPrice}' => $oldPrice,
                 '{$newPrice}' => $newPrice,
@@ -105,7 +105,7 @@ class WatchCommand extends CConsoleCommand {
                 '{$newused}' => ucfirst($d['NewUsed']),
             ));
 
-            UserModule::sendMail($d['Email'], $pricedDrop. ' laptop price drop notification', $message);
+            UserModule::sendMail($d['Email'], $pricedDrop. ' '.Yii::app()->params['category'].' price drop notification', $message);
         }
     }
 

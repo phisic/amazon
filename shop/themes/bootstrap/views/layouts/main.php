@@ -13,20 +13,7 @@
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/<?=Yii::app()->user->getIsGuest() ? 'watchGuest.js' : 'watchUser.js'?>"></script>
     </head>
     <body>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-40874781-1']);
-  _gaq.push(['_setDomainName', 'laptoptop7.com']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+        <?php if(isset(Yii::app()->params['GACode'])) echo Yii::app()->params['GACode']; ?>        
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -37,7 +24,7 @@
                         <div class="span8">
                             <form id="searchbox-form" action="<?= Yii::app()->createUrl('search/index') ?>" class="navbar-form form-search">
                                 <div class="input-append input-block-level">
-                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="search for laptops, example: Macbook, Ultrabook" class="input-block-level" value="<?=  htmlspecialchars(Yii::app()->request->getParam('search', ''))?>">
+                                    <input id="searchbox" name="search" type="text" autocomplete="off" placeholder="<?=Yii::app()->params['searchPlace'];?>" class="input-block-level" value="<?=  htmlspecialchars(Yii::app()->request->getParam('search', ''))?>">
                                         <button class="btn" type="submit">GO</button>
                                 </div>
                             </form>

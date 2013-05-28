@@ -98,6 +98,23 @@ return array(
         //Laptops node Id
         'node'=>565108,
         'secret' => '99limon01962a7d10fd4a20156f8d02adea93d1',
+        'domain'=>'laptoptop7.com',
+        'category'=>'laptop',
+        'searchPlace'=>'search for laptops, example: Macbook, Ultrabook',
+        'GACode' => "<script type=\"text/javascript\">
+
+                        var _gaq = _gaq || [];
+                        _gaq.push(['_setAccount', 'UA-40874781-1']);
+                        _gaq.push(['_setDomainName', 'laptoptop7.com']);
+                        _gaq.push(['_trackPageview']);
+
+                        (function() {
+                          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                        })();
+
+                      </script>",
 	),
     
 );
