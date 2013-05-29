@@ -74,9 +74,9 @@ class UpdateCommand extends CConsoleCommand {
         do {
             $startPrice = $maxPrice;
 
-            $minPrice = Yii::app()->db->createCommand('select min(pricenew) as minprice from (select pricenew from price where pricenew < ' . $maxPrice . ' group by ASIN order by pricenew desc limit 90) s;')->queryScalar();
-            if (empty($minPrice))
-                $minPrice = $maxPrice - 1000;
+            //$minPrice = Yii::app()->db->createCommand('select min(pricenew) as minprice from (select pricenew from price where pricenew < ' . $maxPrice . ' group by ASIN order by pricenew desc limit 90) s;')->queryScalar();
+            //if (empty($minPrice))
+            $minPrice = $maxPrice - 100;
             echo 'MaxPrice = ' . $maxPrice . " MinPrice = " . $minPrice . " delta = " . ($maxPrice - $minPrice) . "\n";
             $delta = $maxPrice - $minPrice;
 
