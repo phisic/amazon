@@ -37,7 +37,7 @@ class SitemapCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    $this->writeUrl(array('u' => $d.substr(Yii::app()->createSeoUrl('search/detail/' . $r['ASIN'], $r['Title']), 1), 'p' => '0.8', 'f' => 'weekly'), $f);
+                    $this->writeUrl(array('u' => $d.Yii::app()->createSeoUrl('search/detail/' . $r['ASIN'], $r['Title']), 'p' => '0.8', 'f' => 'weekly'), $f);
                 }
             }
             $page++;
