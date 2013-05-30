@@ -19,7 +19,7 @@ class ConsoleApplication extends CConsoleApplication
         $pos = strrpos($route, '/');
         $param = substr($route, $pos + 1);
         $route = substr($route, 0, $pos + 1);
-        return $this->createUrl($route . $string . '-' . $param);
+        return '/'.$route . $string . '-' . $param;
     }
 
 }
