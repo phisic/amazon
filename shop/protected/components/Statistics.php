@@ -20,7 +20,7 @@ class Statistics extends CApplicationComponent {
 
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
             $r['asins'] = $asins;
-            Yii::app()->cache->add('price-drops-daily', $r, 1800);
+            Yii::app()->cache->add('price-drops-daily', $r, 3600*4);
         }
 
         if (empty($r['Items']['Item']))
@@ -36,7 +36,7 @@ class Statistics extends CApplicationComponent {
                     ->responseGroup('Medium')
                     ->optionalParameters(array('Sort' => 'salesrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
                     ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-            Yii::app()->cache->add('best-sellers', $bestSellers, 1800);
+            Yii::app()->cache->add('best-sellers', $bestSellers, 3600*4);
         }
         $list = array();
         for ($i = 0; $i < $limit; $i++) {
@@ -53,7 +53,7 @@ class Statistics extends CApplicationComponent {
                     ->responseGroup('Medium')
                     ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => Yii::app()->request->getParam('page', 1)))
                     ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-            Yii::app()->cache->add('top-reviews', $bestSellers, 1800);
+            Yii::app()->cache->add('top-reviews', $bestSellers, 3600*4);
         }
         $list = array();
         for ($i = 0; $i < $limit; $i++) {
@@ -65,7 +65,7 @@ class Statistics extends CApplicationComponent {
     public function getNewReleases() {
         if (!($r = Yii::app()->cache->get('new-releases'))) {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('NewReleases')->browseNodeLookup(Yii::app()->params['node']);
-            Yii::app()->cache->add('new-releases', $r, 1800);
+            Yii::app()->cache->add('new-releases', $r, 3600*4);
         }
 
         if (!empty($r['BrowseNodes']['BrowseNode']['NewReleases']['NewRelease'])) {
@@ -77,7 +77,7 @@ class Statistics extends CApplicationComponent {
                 if (!($r = Yii::app()->cache->get('new-releases-body'))) {
                     $asin = join(',', $asin);
                     $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup($asin);
-                    Yii::app()->cache->add('new-releases-body', $r, 1800);
+                    Yii::app()->cache->add('new-releases-body', $r, 3600*4);
                 }
             }
         }

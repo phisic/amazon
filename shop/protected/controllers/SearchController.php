@@ -113,7 +113,7 @@ class SearchController extends Controller {
         if (empty($row['Data'])) {
             if (!($r = Yii::app()->cache->get($asin))) {
                 $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-                Yii::app()->cache->add($asin, $r, 1800);
+                Yii::app()->cache->add($asin, $r, 3600*4);
             }
         } else {
             $r['Items']['Item'] = unserialize($row['Data']);
@@ -147,7 +147,7 @@ class SearchController extends Controller {
                     ->responseGroup('Medium')
                     ->optionalParameters(array('Sort' => 'salesrank', 'ItemPage' => $page))
                     ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-            Yii::app()->cache->set('best-' . $page, $r, 1800);
+            Yii::app()->cache->set('best-' . $page, $r, 3600*4);
         }
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
@@ -185,7 +185,7 @@ class SearchController extends Controller {
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
             $r['asins'] = $asins;
             $r['count'] = $count;
-            Yii::app()->cache->set('pdrop-' . $page, $r, 1800);
+            Yii::app()->cache->set('pdrop-' . $page, $r, 3600*4);
         }
         $pages = new CPagination($r['count']);
         $pages->pageSize = $size;
@@ -230,7 +230,7 @@ class SearchController extends Controller {
                     ->responseGroup('Medium')
                     ->optionalParameters(array('Sort' => 'reviewrank', 'ItemPage' => $page))
                     ->search(Yii::app()->request->getParam('search', ''), Yii::app()->params['node']);
-            Yii::app()->cache->set('toprev-' . $page, $r, 1800);
+            Yii::app()->cache->set('toprev-' . $page, $r, 3600*4);
         }
         if (!empty($r['Items']['TotalResults'])) {
             if ($r['Items']['TotalPages'] > 10)
