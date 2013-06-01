@@ -198,10 +198,10 @@ class SearchController extends Controller {
         $page = abs(Yii::app()->request->getParam('page', 1));
         $size = 10;
         $c = new CDbCriteria(array(
-            'join'=>'JOIN part p ON p.Type="cpu" and p.Id=t.CPU',
+            'join'=>'JOIN part p ON p.Type="vga" and p.Id=t.VGA',
             'select'=>'ASIN'
         ));
-        
+        $c->compare('CPU', '> 0');
         $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
         $c->order = 'p.Score Desc';
         $c->limit = $size;
