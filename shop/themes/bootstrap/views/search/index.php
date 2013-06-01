@@ -21,18 +21,19 @@ foreach ($items as $n => $item) {
                 if (isset($parts[$asin]['cpu'])) {
                     $cpu = $parts[$asin]['cpu'];
                     if (!empty($cpu['Image']))
-                        echo '<img width="80" alt="' . $cpu['Model'] . '" title="Processor: ' . $cpu['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/cpu/' . $cpu['Image'] . '">';
+                        echo '<img style="width:75px;height:70px;" alt="' . $cpu['Model'] . '" title="Processor: ' . $cpu['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/cpu/' . $cpu['Image'] . '">';
                 }
                 if (isset($parts[$asin]['vga'])) {
                     $vga = $parts[$asin]['vga'];
-                    if (!empty($cpu['Image']))
-                        echo '<img width="80" alt="' . $vga['Model'] . '" title="Video Adapter: ' . $vga['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/cpu/' . $vga['Image'] . '">';
+                    if (!empty($vga['Image'])){
+                        echo '<img style="padding-left:5px;width:75px;height:70px;" alt="' . $vga['Model'] . '" title="Video Adapter: ' . $vga['Model'] . '" src="' . Yii::app()->theme->getBaseUrl() . '/images/vga/' . $vga['Image'] . '">';
+                    }
                 }
                 ?>
             </div>
         </div>
         <div class="span10">
-            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin,$item['ItemAttributes']['Title']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+            <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin, $item['ItemAttributes']['Title']) ?>"><?= $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($item);
@@ -50,7 +51,7 @@ foreach ($items as $n => $item) {
                 ?>
             </h5>
             <h5>
-                <a href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin,$item['ItemAttributes']['Title']) ?>#history">See price history</a> 
+                <a href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin, $item['ItemAttributes']['Title']) ?>#history">See price history</a> 
                 <?php
                 if ($newPrice)
                     echo ' / ' . (isset($inwatch[$asin]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>' : '<a id="' . $asin . '-new-' . $newPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
@@ -58,37 +59,51 @@ foreach ($items as $n => $item) {
                     echo ' / ' . (isset($inwatch[$asin]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>' : '<a id="' . $asin . '-used-' . $usedPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
                 ?>
             </h5> 
-                <div class="row">
-                    <?php
+            <div class="row">
+                <?php
+                if (isset($parts[$asin])) {
+                    echo '<div class="span5">';
+                    echo '<h4>Performance Benchmark</h4>';
                     if (isset($parts[$asin]['cpu'])) {
-                        $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu')/10), 2);
+                        $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu') / 10), 2);
                         $percent = ceil($mark * 10);
-                        echo '<div class="span5">';
-                        echo '<h4>Performance Benchmark</h4>';
                         echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
                         echo '<div class = "progress progress-success">
                                 <div class = "bar" style = "width: ' . $percent . '%"></div>
                               </div>';
-
-                        echo '</div>';
                     }
-                    ?>
-                    <div class="span5">
-                        <ul>
-                            <?php
-                            if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
-                                foreach ($item['ItemAttributes']['Feature'] as $attr) {
-                                    echo '<li>' . $attr . '</li>';
-                                }
-                            ?>
-                        </ul>
-                    </div>
-                </div>    
+                    
+                    if (isset($parts[$asin]['vga'])) {
+                        $mark = round($parts[$asin]['vga']['Score'] / (Yii::app()->part->getMaxScore('vga') / 10), 2);
+                        $percent = ceil($mark * 10);
+                        echo '<div>VGA: <span class="text-warning">' . $parts[$asin]['vga']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div class = "progress progress-warning">
+                                <div class = "bar" style = "width: ' . $percent . '%"></div>
+                              </div>';
+                    }
+                    echo '</div>';
+                }
+                ?>
+                <div class="span5">
+                    <ul>
+                        <?php
+                        if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
+                            foreach ($item['ItemAttributes']['Feature'] as $attr) {
+                                echo '<li>' . $attr . '</li>';
+                            }
+                        ?>
+                    </ul>
+                </div>
+            </div>    
             <?php
             if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
                 $partList = Yii::app()->part->getByAsin($asin);
                 if (isset($partList['cpu'])) {
                     echo CHtml::dropDownList('cpu-' . $asin, isset($parts[$asin]['cpu']['Id']) ? $parts[$asin]['cpu']['Id'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
+                }
+
+                if (isset($partList['vga'])) {
+                    echo CHtml::dropDownList('vga-' . $asin, isset($parts[$asin]['vga']['Id']) ? $parts[$asin]['vga']['Id'] : 0, array('------') + $partList['vga'], array('class' => 'match-cpu'));
                 }
             }
             /*

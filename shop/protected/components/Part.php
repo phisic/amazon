@@ -49,9 +49,11 @@ class Part extends CApplicationComponent {
     }
     
     public function getByAsin($asin){
-        $c2 = new CDbCriteria(array('select'=>'p.Id,t.Type,p.Model,p.Image'));
+        $c2 = new CDbCriteria(array('select'=>'p.Id,t.Type,sum(t.Relevance) as Relevance,concat(p.Model,"[",sum(t.Relevance),"]") as Model,p.Image'));
         $c2->join = 'JOIN part p on t.partId=p.id';
         $c2->compare('ASIN', $asin);
+        $c2->group = 'p.Id';
+        $c2->order = 'Relevance desc';
         
         return CHtml::listData(Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c2)->queryAll(), 'Id', 'Model', 'Type');
     }

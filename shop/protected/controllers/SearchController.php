@@ -279,14 +279,12 @@ class SearchController extends Controller {
         $pages = new CPagination();
         $pages->pageSize = 10000;
         $searchCriteria->select = 'id';
-        $searchCriteria->query = 'i73610QM';
+        $searchCriteria->query = '675m';
         //$searchCriteria->filters = array('id' => 3921);
         $searchCriteria->paginator = $pages;
         $searchCriteria->from = 'listingdata_index';
-        Yii::App()->search->setMatchMode(SPH_MATCH_BOOLEAN);
+        Yii::App()->search->setMatchMode(SPH_MATCH_EXTENDED);
         $resArray = Yii::App()->search->searchRaw($searchCriteria); // array result
-        echo 'all='.count($resArray['matches']);print_r($resArray);exit;
-
     }
 
 }
