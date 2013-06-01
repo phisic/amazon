@@ -334,7 +334,7 @@ class BenchmarkCommand extends CConsoleCommand {
                 if (in_array($row['Model'], array('Intel HD Family', 'GeForce GT 120','Mobile Intel HD', 'GeForce GT 220')))
                     continue;
                 $row['Model'] = strtolower($row['Model']);
-                $row['Model'] = strtr($row['Model'], array('/' => ' ', '+' => ' ', 'express' => '', 'Intel Media Accelerator HD'=>'Intel GMA HD Graphics'));
+                $row['Model'] = strtr($row['Model'], array('/' => ' ', '+' => ' ', 'express' => '', 'Intel Media Accelerator HD'=>'Intel GMA HD'));
                 if ($mode == 'similar')
                     $row['Model'] = strtr($row['Model'], array('intel' => '', 'geforce' => '', 'radeon' => ''));
                 else
