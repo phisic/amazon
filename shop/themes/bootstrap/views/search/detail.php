@@ -9,7 +9,7 @@ $asin = $i['ASIN'];
             <img class="image-large" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $src; ?>">
         </div>
 
-        <?php foreach ($i['ImageSets']['ImageSet'] as $key => $value): ?>
+        <?php if(isset($i['ImageSets']['ImageSet'])) foreach ($i['ImageSets']['ImageSet'] as $key => $value): ?>
             <?php if (isset($value['TinyImage']['URL'])): ?>
                 <?php $srcThumb = str_replace('._SL75_', '._SX38_SY50_CR,0,0,68,80_', $value['SmallImage']['URL']); ?>
                 <div class="image-border">
