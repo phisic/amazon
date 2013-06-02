@@ -98,6 +98,8 @@ class SearchController extends Controller {
 
         $cs->registerCssFile($tp . '/js/plot/jquery.jqplot.min.css');
         $cs->registerCssFile($tp . '/css/details.css');
+        $cs->registerCssFile($tp . '/css/detail_image.css');
+        $cs->registerScriptFile($tp . '/js/detail_image.js', CClientScript::POS_END);
 
         $c = new CDbCriteria();
         $c->addColumnCondition(array('ASIN' => $asin));

@@ -19,36 +19,7 @@ $asin = $i['ASIN'];
         <?php endforeach; ?>
 
     </div>
-    <style>
-        .image-thumb {
-            width: 60px;
-            height: 50px;
-            border: 1px solid #999999;
-            border-radius: 5px 5px 5px 5px;
-        }
-        .image-thumb-active {            
-            border: 1px solid #44B3F0;            
-        }
-        .image-border {
-            cursor: pointer;           
-            list-style: none outside none;
-            display: inline-block;
-            padding: 3px;
-        }                   
-    </style>
-    <script>
-        $(document).ready(function() {
-            $('.image-thumb').hover(function() {
-                var src = $(this).attr('src');
-                src = src.replace('._SX38_SY50_CR,0,0,68,80_', '._AA500_');
-                $('.image-large').attr('src', src);
-                $('.image-thumb').removeClass('image-thumb-active');
-                $(this).addClass('image-thumb-active');
-            });
-        });
-    </script>
-
-    <div class="span8">
+      <div class="span8">
 
         <div class="span8">
             <h1><?= $i['ItemAttributes']['Title'] ?> <span class="text-warning" style="font-size:12px;"><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
