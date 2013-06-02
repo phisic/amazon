@@ -116,7 +116,8 @@ class Statistics extends CApplicationComponent {
     
     public function wrapText($str, $length){
         $code = '@@@';
-        return array_shift(explode($code, wordwrap($str, $length, $code)));
+        $a = explode($code, wordwrap($str, $length, $code));
+        return array_shift($a);
     }
 
 }

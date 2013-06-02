@@ -1,6 +1,53 @@
-<?php $asin = $i['ASIN']; ?>
+<?php
+//echo '<pre>'; print_r($i['ImageSets']); exit;
+$asin = $i['ASIN'];
+?>
 <div class="row">
-    <div class="span4"><img title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= isset($i['LargeImage']['URL']) ? $i['LargeImage']['URL'] : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>"></div>
+    <div class="span4">
+        <div style="padding-bottom: 5px;">
+            <?php $src = isset($i['LargeImage']['URL']) ? str_replace('.jpg', '._AA500_.jpg', $i['LargeImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg'; ?>
+            <img class="image-large" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $src; ?>">
+        </div>
+
+        <?php foreach ($i['ImageSets']['ImageSet'] as $key => $value): ?>
+            <?php if (isset($value['TinyImage']['URL'])): ?>
+                <?php $srcThumb = str_replace('._SL75_', '._SX38_SY50_CR,0,0,68,80_', $value['SmallImage']['URL']); ?>
+                <div class="image-border">
+                    <img class="image-thumb" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $srcThumb; ?>">
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+    </div>
+    <style>
+        .image-thumb {
+            width: 60px;
+            height: 50px;
+            border: 1px solid #999999;
+            border-radius: 5px 5px 5px 5px;
+        }
+        .image-thumb-active {            
+            border: 1px solid #44B3F0;            
+        }
+        .image-border {
+            cursor: pointer;           
+            list-style: none outside none;
+            display: inline-block;
+            padding: 3px;
+        }                   
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.image-thumb').hover(function() {
+                var src = $(this).attr('src');
+                src = src.replace('._SX38_SY50_CR,0,0,68,80_', '._AA500_');
+                $('.image-large').attr('src', src);
+                $('.image-thumb').removeClass('image-thumb-active');
+                $(this).addClass('image-thumb-active');
+            });
+        });
+    </script>
+
     <div class="span8">
 
         <div class="span8">
@@ -53,6 +100,7 @@
                                 <div class = "bar" style = "width: ' . $percent . '%"></div>
                               </div>';
                     }
+
                     echo '</div>';
                 }
                 ?>
