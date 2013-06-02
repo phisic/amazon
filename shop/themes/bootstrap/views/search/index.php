@@ -6,7 +6,7 @@ foreach ($items as $item) {
     $asins[] = $item['ASIN'];
 }
 $inwatch = Yii::app()->stat->inWatch($asins);
-$parts = Yii::app()->part->getByAsins($asins);
+$parts = Yii::app()->part->getByAsins($asins); 
 
 foreach ($items as $n => $item) {
     $asin = $item['ASIN'];
@@ -67,7 +67,7 @@ foreach ($items as $n => $item) {
                     if (isset($parts[$asin]['cpu'])) {
                         $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu') / 10), 2);
                         $percent = ceil($mark * 10);
-                        echo '<div>CPU: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div>Processor: <span class="text-success">' . $parts[$asin]['cpu']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
                         echo '<div class = "progress progress-success">
                                 <div class = "bar" style = "width: ' . $percent . '%"></div>
                               </div>';
@@ -76,7 +76,7 @@ foreach ($items as $n => $item) {
                     if (isset($parts[$asin]['vga'])) {
                         $mark = round($parts[$asin]['vga']['Score'] / (Yii::app()->part->getMaxScore('vga') / 10), 2);
                         $percent = ceil($mark * 10);
-                        echo '<div>VGA: <span class="text-warning">' . $parts[$asin]['vga']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
+                        echo '<div>Graphics: <span class="text-warning">' . $parts[$asin]['vga']['Model'] . '</span>  Mark: <span class="text-success">' . $mark . '</span> / 10</div>';
                         echo '<div class = "progress progress-warning">
                                 <div class = "bar" style = "width: ' . $percent . '%"></div>
                               </div>';
