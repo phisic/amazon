@@ -286,7 +286,7 @@ class BenchmarkCommand extends CConsoleCommand {
             $page++;
         }
         if ($mode == 'exact')
-            $this->matchLaptops('similar');
+            $this->matchLaptopsCPU('similar');
     }
 
     protected function assignMatch() {
