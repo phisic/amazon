@@ -96,8 +96,8 @@ foreach ($items as $n => $item) {
                 </div>
             </div>    
             <?php
+            Yii::app()->clientScript->registerScriptFile(Yii::app()->getTheme()->getBaseUrl() . '/js/jquery.search.min.js', CClientScript::POS_END);
             if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
-                Yii::app()->clientScript->registerScriptFile(Yii::app()->getTheme()->getBaseUrl() . '/js/jquery.search.min.js', CClientScript::POS_END);
                 $partList = Yii::app()->part->getByAsin($asin);
                 if (isset($partList['cpu'])) {
                     echo CHtml::dropDownList('cpu-' . $asin, isset($parts[$asin]['cpu']['Id']) ? $parts[$asin]['cpu']['Id'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
