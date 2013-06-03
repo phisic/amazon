@@ -85,5 +85,8 @@ $(function() {
         }
 
     });
+    
+   
+    $("select").searchable();
 
 });

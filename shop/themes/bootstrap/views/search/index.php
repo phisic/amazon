@@ -97,6 +97,7 @@ foreach ($items as $n => $item) {
             </div>    
             <?php
             if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
+                Yii::app()->clientScript->registerScriptFile(Yii::app()->getTheme()->getBaseUrl() . '/js/jquery.search.min.js', CClientScript::POS_END);
                 $partList = Yii::app()->part->getByAsin($asin);
                 if (isset($partList['cpu'])) {
                     echo CHtml::dropDownList('cpu-' . $asin, isset($parts[$asin]['cpu']['Id']) ? $parts[$asin]['cpu']['Id'] : 0, array('------') + $partList['cpu'], array('class' => 'match-cpu'));
@@ -105,11 +106,9 @@ foreach ($items as $n => $item) {
                 if (isset($partList['vga'])) {
                     echo CHtml::dropDownList('vga-' . $asin, isset($parts[$asin]['vga']['Id']) ? $parts[$asin]['vga']['Id'] : 0, array('------') + $partList['vga'], array('class' => 'match-cpu'));
                 }
+                
             }
-            /*
-              if(isset($item['CPU']) && isset($parts[$item['CPU']]))
-              echo '<h6>CPU: '.$parts[$item['CPU']]['Model'].' / '.$parts[$item['CPU']]['Score'].'/ '.$asin.'</h6>';
-             */
+            
             ?>
         </div>
     </div>

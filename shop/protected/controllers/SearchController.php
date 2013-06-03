@@ -95,7 +95,7 @@ class SearchController extends Controller {
         $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasTextRenderer.min.js', CClientScript::POS_END);
         $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.canvasAxisLabelRenderer.min.js', CClientScript::POS_END);
         $cs->registerScriptFile($tp . '/js/plot/plugins/jqplot.dateAxisRenderer.min.js', CClientScript::POS_END);
-
+        
         $cs->registerCssFile($tp . '/js/plot/jquery.jqplot.min.css');
         $cs->registerCssFile($tp . '/css/details.css');
         $cs->registerCssFile($tp . '/css/detail_image.css');
@@ -275,18 +275,4 @@ class SearchController extends Controller {
         $pages->pageSize = $size;
         $this->render('index', array('title' => 'All '.Yii::app()->params['category'].'s', 'items' => $list, 'pages' => $pages));
     }
-    
-    public function actionTest(){
-        $searchCriteria = new stdClass();
-        $pages = new CPagination();
-        $pages->pageSize = 10000;
-        $searchCriteria->select = 'id';
-        $searchCriteria->query = '675m';
-        //$searchCriteria->filters = array('id' => 3921);
-        $searchCriteria->paginator = $pages;
-        $searchCriteria->from = 'listingdata_index';
-        Yii::App()->search->setMatchMode(SPH_MATCH_EXTENDED);
-        $resArray = Yii::App()->search->searchRaw($searchCriteria); // array result
-    }
-
 }

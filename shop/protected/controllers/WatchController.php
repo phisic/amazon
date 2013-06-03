@@ -34,9 +34,9 @@ class WatchController extends Controller {
 
     public function actionRemove($asin) {
         $parts = explode('-', $asin);
-        if (count($parts) != 4){
+        if (count($parts) != 4) {
             throw new CHttpException('404');
-        }    
+        }
 
         $newUsed = $parts[1];
         $hash = $parts[2];
@@ -47,21 +47,54 @@ class WatchController extends Controller {
             $wf = new WatchForm;
             $wf->remove($id);
             $this->render('remove');
-        }  else {
-           echo $hash.'!='.Yii::app()->stat->getHash($asin, $newUsed, $id);
+        } else {
+            echo $hash . '!=' . Yii::app()->stat->getHash($asin, $newUsed, $id);
             //throw new CHttpException('404');
         }
     }
-    
-    public function actionMatch(){
-        if(Yii::app()->request->isAjaxRequest && isset($_POST['ASIN']) && isset($_POST['part'])){
+
+    public function actionMatch() {
+        if (Yii::app()->request->isAjaxRequest && isset($_POST['ASIN']) && isset($_POST['part'])) {
             header('Content-Type: application/json');
-            list($type,$asin) = explode('-', $_POST['ASIN']);
-            $part = (int)$_POST['part'];
+            list($type, $asin) = explode('-', $_POST['ASIN']);
+            $part = (int) $_POST['part'];
             $c = new CDbCriteria();
             $c->compare('ASIN', $asin);
-            Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(strtoupper($type)=>$part), $c)->execute();
+            Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(strtoupper($type) => $part), $c)->execute();
             echo '{"ok":true}';
+            Yii::app()->end();
+        }
+    }
+
+    public function actionPart() {
+        if (Yii::app()->request->isAjaxRequest) {
+            header('Content-Type: application/json');
+            $keyword = Yii::app()->request->getParam('search', '');
+            $type = Yii::app()->request->getParam('type', 'cpu');
+            $keywords = explode(' ', $keyword);
+            
+            foreach ($keywords as $k => $word) {
+                if (empty($word))
+                    continue;
+                $where[] = 'Model like "%'.$word.'%"';
+                
+            }
+            
+            $where = $where ? ' WHERE type="'.$type.'" and ' . join(' AND ', $where) : '';
+            
+            $sql = 'SELECT Id, Model FROM part ' . $where . ' LIMIT 20';
+            $r = Yii::app()->db->getCommandBuilder()->createSqlCommand($sql)->queryAll();
+
+            $data = array();
+            if (!empty($r)) {
+                foreach ($r as $i) {
+                    $data[] = array('id'=>$i['Id'],'name'=>$i['Model']);
+                }
+                echo CJSON::encode($data);
+            } else {
+                echo '[]';
+            }
+
             Yii::app()->end();
         }
     }

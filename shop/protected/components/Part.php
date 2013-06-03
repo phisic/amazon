@@ -1,6 +1,7 @@
 <?php
 
 class Part extends CApplicationComponent {
+    protected $_parts = array();
     
     public function getByAsins($asins){
         $c = new CDbCriteria();
@@ -49,13 +50,15 @@ class Part extends CApplicationComponent {
     }
     
     public function getByAsin($asin){
-        $c2 = new CDbCriteria(array('select'=>'p.Id,t.Type,sum(t.Relevance) as Relevance,concat(p.Model,"[",sum(t.Relevance),"]") as Model,p.Image'));
-        $c2->join = 'JOIN part p on t.partId=p.id';
+        $c2 = new CDbCriteria(array('select'=>'t.Id,p.Type,sum(p.Relevance) as Relevance, t.Model,t.Image'));
+        $c2->join = 'Left JOIN partmatch p on p.partId=t.id';
         $c2->compare('ASIN', $asin);
-        $c2->group = 'p.Id';
+        $c2->group = 't.Id';
         $c2->order = 'Relevance desc';
+        if(empty($this->_parts))
+            $this->_parts = Yii::app()->db->getCommandBuilder()->createFindCommand('part', new CDbCriteria())->queryAll();
         
-        return CHtml::listData(Yii::app()->db->getCommandBuilder()->createFindCommand('partmatch', $c2)->queryAll(), 'Id', 'Model', 'Type');
+        return CHtml::listData(array_merge(Yii::app()->db->getCommandBuilder()->createFindCommand('part', $c2)->queryAll(), $this->_parts), 'Id', 'Model', 'Type');
     }
     
 }
