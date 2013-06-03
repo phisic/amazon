@@ -115,7 +115,7 @@ foreach ($items as $n => $item) {
 <?php } ?>
 <?
 if (!Yii::app()->user->getIsGuest() && Yii::app()->user->isAdmin()) {
-    echo '<script type="text/javascript">var matchUrl = "' . Yii::app()->createUrl('watch/match') . '"</script>';
+    echo '<script type="text/javascript"> $(document).ready(function(){$("select").searchable();}); var matchUrl = "' . Yii::app()->createUrl('watch/match') . '"</script>';
 }
 if (isset($pages))
     $this->widget('ext.bootstrap.widgets.TbPager', array('htmlOptions' => array('class' => 'pager'), 'pages' => $pages));
