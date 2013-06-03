@@ -305,6 +305,7 @@ class BenchmarkCommand extends CConsoleCommand {
 
             $c3 = new CDbCriteria();
             $c3->compare('ASIN', $row['ASIN']);
+            $c3->addCondition(strtoupper($row['Type']) . ' = 0');
             Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array(strtoupper($row['Type']) => $match['PartId']), $c3)->execute();
         }
     }
