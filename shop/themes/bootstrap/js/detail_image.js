@@ -6,4 +6,16 @@ $(document).ready(function() {
         $('.image-thumb').removeClass('image-thumb-active');
         $(this).addClass('image-thumb-active');
     });
+
+    $('.description-click').live('click', function() {
+        var el = $(this);
+        $.ajax({
+            type: "GET",
+            url: el.attr('href'),
+        }).done(function(r) {
+            $('#productDescription').append(r);
+            el.parent().html(el.text());
+        });
+        return false;
+    });
 });

@@ -1,6 +1,6 @@
 <?php
-//echo '<pre>'; print_r($i['ImageSets']); exit;
 $asin = $i['ASIN'];
+$model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'].' ' : '') . (isset($i['ItemAttributes']['Model']) ? $i['ItemAttributes']['Model'].' ' :'');
 ?>
 <div class="row">
     <div class="span4">
@@ -41,11 +41,11 @@ $asin = $i['ASIN'];
                 <?php
                 $inwatch = Yii::app()->stat->inWatch((array) $i['ASIN']);
                 if ($newPrice)
-                    echo (isset($inwatch[$i['ASIN']]['new']) ? '<a class="in-watch" href="#">New price in Watch</a>' : '<a id="' . $i['ASIN'] . '-new-' . $newPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch new price</a>');
+                    echo (isset($inwatch[$i['ASIN']]['new']) ? '<a rel="nofollow" class="in-watch" href="#">New price in Watch</a>' : '<a id="' . $i['ASIN'] . '-new-' . $newPrice . '" class="watch-click" href="#" title="Watch amazon price drop" rel="nofollow">Watch new price</a>');
                 if ($newPrice && $usedPrice)
                     echo ' / ';
                 if ($usedPrice)
-                    echo (isset($inwatch[$i['ASIN']]['used']) ? '<a class="in-watch" href="#">Used price in Watch</a>' : '<a id="' . $i['ASIN'] . '-used-' . $usedPrice . '" class="watch-click" href="#" title="Watch amazon price drop">Watch used price</a>');
+                    echo (isset($inwatch[$i['ASIN']]['used']) ? '<a rel="nofollow" class="in-watch" href="#">Used price in Watch</a>' : '<a id="' . $i['ASIN'] . '-used-' . $usedPrice . '" class="watch-click" href="#" title="Watch amazon price drop" rel="nofollow">Watch used price</a>');
                 ?>
             </h5> 
             <h6><a target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
@@ -75,11 +75,12 @@ $asin = $i['ASIN'];
                     echo '</div>';
                 }
                 ?>
-                <div class="span3">
+                <div class="<?=isset($parts[$asin]) ? 'span3':'span8'?>">
                     <ul>
                         <?php
-                        if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature']))
-                            foreach ($i['ItemAttributes']['Feature'] as $attr) {
+                        if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])){
+                            $i['ItemAttributes']['Feature'] = array_reverse($i['ItemAttributes']['Feature']);
+                            foreach ($i['ItemAttributes']['Feature'] as $attr) 
                                 echo '<li>' . $attr . '</li>';
                             }
                         ?>
@@ -89,7 +90,7 @@ $asin = $i['ASIN'];
         </div>
     </div>
 </div>
-<a name="history"></a><h3>Price history from amazon.com</h3>
+<a rel="nofollow" name="history"></a><h3><?=$model?>Price History From amazon.com</h3>
 <?php
 if (empty($history))
     echo '<p>Price history not available for this ' . Yii::app()->params['category'] . '</p>';
@@ -98,50 +99,10 @@ else
 ?>
 
 
-<div class="hide" itemscope itemtype="http://data-vocabulary.org/Product">
-    <span itemprop="brand"><?= isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] : ''; ?></span> 
-    <span itemprop="name"><?= $i['ItemAttributes']['Title'] ?></span>
-    <?php
-    if (isset($i['SmallImage']['URL']))
-        echo '<img itemprop="image" src="' . $i['SmallImage']['URL'] . '" />';
-    ?>
-    <span itemprop="description">
-        <?php
-        if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])) {
-            echo join('<br>', $i['ItemAttributes']['Feature']);
-        }
-        ?>
-    </span>
-    Category: <span itemprop="category" content="Laptops,Notebooks,Ultrabooks">Laptops,Notebooks,Ultrabooks</span>
-    Product #: <span itemprop="identifier" content="asin:<?= $i['ASIN'] ?>"><?= $i['ASIN'] ?></span>
-    <?php if (isset($mark)) { ?>
-        <span itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
-            <span itemprop="rating"><?= $mark ?></span> CPU performance benchmark out of 
-            <span itemprop="best">10</span> 
-        </span>
-    <?php } ?>
-    <?php if ($newPrice || $usedPrice) { ?>
-        <span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
-            Regular price: $<?= Yii::app()->amazon->formatUSD($newPrice) ?>
-            <meta itemprop="currency" content="USD" />
-            $<span itemprop="price"><?= $newPrice ? Yii::app()->amazon->formatUSD($newPrice) : Yii::app()->amazon->formatUSD($usedPrice) ?></span>
-            <?php if (!$newPrice && $usedPrice) { ?>
-                Condition: <span itemprop="condition" content="used">Previously owned, in excellent condition</span>
-            <?php } ?>
-            <span itemprop="availability" content="in_stock">In stock! Order now!</span>
-        </span>
-    <?php } ?>
-</div>
-
-
-
 <div id="productDescription">
     <?php
     if (!empty($i['EditorialReviews']['EditorialReview'])) {
-        echo '<h3>Product description</h3>';
-        foreach ($i['EditorialReviews']['EditorialReview'] as $d) {
-            echo htmlspecialchars_decode($d);
-        }
+        echo '<h3><a class="description-click" rel="nofollow" href="'.Yii::app()->createUrl('search/description', array('asin'=>$asin)).'" title="'.$model.'">Read '.$model.' Description</a></h3>';
     }
     ?>
 </div>

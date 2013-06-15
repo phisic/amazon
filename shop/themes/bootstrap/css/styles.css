@@ -14,6 +14,10 @@
     color: #006600;
 }
 
+.description-click, a.description-click, a.description-click:hover {
+    border-bottom: 1px dashed #0088CC;
+    text-decoration: none;
+}
 .services {
 	float: right;
 }
