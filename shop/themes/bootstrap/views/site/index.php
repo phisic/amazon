@@ -1,4 +1,4 @@
-uiui<?php
+<?php
 $list = array();
 
 $asins = array();
