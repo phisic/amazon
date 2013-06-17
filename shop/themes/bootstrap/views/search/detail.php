@@ -1,6 +1,6 @@
 <?php
 $asin = $i['ASIN'];
-$model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'].' ' : '') . (isset($i['ItemAttributes']['Model']) ? $i['ItemAttributes']['Model'].' ' :'');
+$model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] . ' ' : '') . (isset($i['ItemAttributes']['Model']) ? $i['ItemAttributes']['Model'] . ' ' : '');
 ?>
 <div class="row">
     <div class="span4">
@@ -9,17 +9,17 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'].'
             <img class="image-large" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $src; ?>">
         </div>
 
-        <?php if(isset($i['ImageSets']['ImageSet'])) foreach ($i['ImageSets']['ImageSet'] as $key => $value): ?>
-            <?php if (isset($value['TinyImage']['URL'])): ?>
-                <?php $srcThumb = str_replace('._SL75_', '._SX38_SY50_CR,0,0,68,80_', $value['SmallImage']['URL']); ?>
-                <div class="image-border">
-                    <img class="image-thumb" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $srcThumb; ?>">
-                </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        <?php if (isset($i['ImageSets']['ImageSet'])) foreach ($i['ImageSets']['ImageSet'] as $key => $value): ?>
+                <?php if (isset($value['TinyImage']['URL'])): ?>
+                    <?php $srcThumb = str_replace('._SL75_', '._SX38_SY50_CR,0,0,68,80_', $value['SmallImage']['URL']); ?>
+                    <div class="image-border">
+                        <img class="image-thumb" title="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" alt="image <?= htmlspecialchars($i['ItemAttributes']['Title']) ?>" src="<?= $srcThumb; ?>">
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
 
     </div>
-      <div class="span8">
+    <div class="span8">
 
         <div class="span8">
             <h1><?= $i['ItemAttributes']['Title'] ?> <span class="text-warning" style="font-size:12px;"><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
@@ -75,14 +75,14 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'].'
                     echo '</div>';
                 }
                 ?>
-                <div class="<?=isset($parts[$asin]) ? 'span3':'span8'?>">
+                <div class="<?= isset($parts[$asin]) ? 'span3' : 'span8' ?>">
                     <ul>
                         <?php
-                        if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])){
+                        if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])) {
                             $i['ItemAttributes']['Feature'] = array_reverse($i['ItemAttributes']['Feature']);
-                            foreach ($i['ItemAttributes']['Feature'] as $attr) 
+                            foreach ($i['ItemAttributes']['Feature'] as $attr)
                                 echo '<li>' . $attr . '</li>';
-                            }
+                        }
                         ?>
                     </ul>
                 </div>
@@ -90,7 +90,7 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'].'
         </div>
     </div>
 </div>
-<a rel="nofollow" name="history"></a><h3><?=$model?>Price History From amazon.com</h3>
+<a rel="nofollow" name="history"></a><h3><?= $model ?>Price History From amazon.com</h3>
 <?php
 if (empty($history))
     echo '<p>Price history not available for this ' . Yii::app()->params['category'] . '</p>';
@@ -102,7 +102,7 @@ else
 <div id="productDescription">
     <?php
     if (!empty($i['EditorialReviews']['EditorialReview'])) {
-        echo '<h3><a class="description-click" rel="nofollow" href="'.Yii::app()->createUrl('search/description', array('asin'=>$asin)).'" title="'.$model.'">Read '.$model.' Description</a></h3>';
+        echo '<h3><a class="description-click" rel="nofollow" href="' . Yii::app()->createUrl('search/description', array('asin' => $asin)) . '" title="' . $model . '">Read ' . $model . ' Description</a></h3>';
     }
     ?>
 </div>
@@ -167,3 +167,48 @@ if (!empty($history)) {
         </script>
     <?php } ?>
 <?php } ?>
+
+<?php
+if (isset($parts[$asin])) {
+    if (isset($parts[$asin]['cpu'])) {
+        echo '<h3>Laptops with identical ' . $parts[$asin]['cpu']['Model'] . ' processor ';
+//        if ($this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) > 20) {
+//            echo '<a href="#">View All(' . $this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) . ')</a>';
+//        }
+        echo '</h3>';
+    }
+}
+if (isset($parts[$asin])) {
+    if (isset($parts[$asin]['cpu']))
+        foreach ($this->getSimilar($parts[$asin]['cpu']['Id']) as $n => $item) :
+            ?>
+            <div class="row">
+                <div class="span2">
+                    <img class="img-rounded" title="image <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" src="<?= isset($item['SmallImage']['URL']) ? $item['SmallImage']['URL'] : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>">
+
+                    <?php if (isset($item['SalesRank'])) echo '<h5>Sales Rank #' . $item['SalesRank'] . '</h5>'; ?>
+
+                </div>
+                <div class="span10">
+                    <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createSeoUrl('search/detail/' . $asin, $item['ItemAttributes']['Title']) ?>"><?= strlen($item['ItemAttributes']['Title'])>=70 ? mb_substr($item['ItemAttributes']['Title'], 0, 70, "UTF-8").'...' : $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
+                    <h5>
+                        <?php
+                        $newPrice = Yii::app()->amazon->getNewPrice($item);
+                        $usedPrice = Yii::app()->amazon->getUsedPrice($item);
+                        if (isset($item['ItemAttributes']['ListPrice']['Amount']) && $item['ItemAttributes']['ListPrice']['Amount'] != $newPrice)
+                            echo '<s class="muted" style="font-size:12px;">' . Yii::app()->amazon->formatUSD($item['ItemAttributes']['ListPrice']['Amount']) . '</s>';
+                        if ($newPrice)
+                            echo ' <a title="' . $item['ItemLinks']['ItemLink'][6]['Description'] . ' at amazon.com" target="_blank" href="' . $item['ItemLinks']['ItemLink'][6]['URL'] . '" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
+                        if ($newPrice && $usedPrice)
+                            echo ' <span style="font-size:16px;"> & </span> ';
+                        if ($usedPrice)
+                            echo ' <a title="' . $item['ItemLinks']['ItemLink'][6]['Description'] . ' at amazon.com" target="_blank" href="' . $item['ItemLinks']['ItemLink'][6]['URL'] . '" class="text-error" style="font-size:20px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
+                        if (isset($priceDrops[$asin]))
+                            echo ' <span>&nbsp;/&nbsp;Price drop today: <span class="text-success" style="font-size:26px;">' . Yii::app()->amazon->formatUSD($priceDrops[$asin]) . '</span></span>';
+                        ?>
+                    </h5>
+                </div>
+            </div>
+            <?php
+        endforeach;
+}?>

@@ -278,6 +278,8 @@ class SearchController extends Controller {
         $this->pageTitle = 'New released ' . Yii::app()->params['category'] . 's';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
+    
+    
 
     public function actionAll() {
         $this->pageTitle = 'All ' . Yii::app()->params['category'] . 's';
