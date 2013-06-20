@@ -23,23 +23,4 @@ class Controller extends CController {
      * for more details on how to specify this property.
      */
     public $breadcrumbs = array();
-
-    public function getSimilar($processorID) {
-        $c = new CDbCriteria();
-        $c->compare('CPU', $processorID, true);
-        $c->limit = 10;
-        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
-        $list = array();
-        foreach ($rows as $row) {
-            $list[] = unserialize($row['Data']);
-        }
-        return $list;
-    }
-
-    public function getSimilarCPUCount($processorID){
-        $c = new CDbCriteria();
-        $c->compare('CPU', $processorID, true);
-        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();        
-        return count($rows); 
-    }
 }
