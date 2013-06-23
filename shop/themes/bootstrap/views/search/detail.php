@@ -189,4 +189,5 @@ if (isset($parts[$asin])) {
     }
     $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['vga']['Id'], 'VGA'), 'asin' => $asin));
 }
+
 ?>
