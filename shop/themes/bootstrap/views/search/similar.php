@@ -6,8 +6,6 @@ if (isset($models)) {
                 <div class="span2">
                     <img class="img-rounded" title="image <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" src="<?= isset($item['SmallImage']['URL']) ? $item['SmallImage']['URL'] : Yii::app()->theme->baseUrl . '/images/noimage.jpeg' ?>" alt="image of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>">
 
-                    <?php if (isset($item['SalesRank'])) echo '<h5>Sales Rank #' . $item['SalesRank'] . '</h5>'; ?>
-
                 </div>
                 <div class="span10">
                     <h4><a title="View details of <?= htmlspecialchars($item['ItemAttributes']['Title']) ?>" href="<?= Yii::app()->createSeoUrl('search/detail/' . $item['ASIN'], $item['ItemAttributes']['Title']) ?>"><?= strlen($item['ItemAttributes']['Title']) >= 70 ? mb_substr($item['ItemAttributes']['Title'], 0, 70, "UTF-8") . '...' : $item['ItemAttributes']['Title'] ?></a> <span class="text-warning" style="font-size:12px;"><?= isset($item['ItemAttributes']['Brand']) ? 'by ' . $item['ItemAttributes']['Brand'] : ''; ?></span></h4>
