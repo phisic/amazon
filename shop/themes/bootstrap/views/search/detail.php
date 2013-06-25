@@ -171,23 +171,16 @@ if (!empty($history)) {
 <?php
 if (isset($parts[$asin])) {
     if (isset($parts[$asin]['cpu'])) {
-        echo '<h3>Laptops with identical "' . $parts[$asin]['cpu']['Model'] . '" processor.';
-//        if ($this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) > 20) {
-//            echo '<a href="#">View All(' . $this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) . ')</a>';
-//        }
-        echo '</h3>';
+        echo '<h3>Laptops with identical ' . $parts[$asin]['cpu']['Model'] . ' processor</h3>';
+        $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['cpu']['Id'], 'CPU'), 'asin' => $asin));
     }
-    $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['cpu']['Id'], 'CPU'), 'asin' => $asin));
+    
 }
 
-    if (isset($parts[$asin]['vga'])) {
-        echo '<h3>Laptops with identical "' . $parts[$asin]['vga']['Model'] . '" video card.';
-//        if ($this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) > 20) {
-//            echo '<a href="#">View All(' . $this->getSimilarCPUCount($parts[$asin]['cpu']['Id']) . ')</a>';
-//        }
-        echo '</h3>';
-    }
+if (isset($parts[$asin]['vga'])) {
+    echo '<h3>Laptops with identical ' . $parts[$asin]['vga']['Model'] . ' graphics</h3>';
     $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['vga']['Id'], 'VGA'), 'asin' => $asin));
 }
 
 ?>
+<p></p>
