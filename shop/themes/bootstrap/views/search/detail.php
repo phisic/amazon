@@ -49,6 +49,9 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
                 ?>
             </h5> 
             <h6><a target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
+            <?php
+                                    $this->widget('ext.WSocialButton', array('style'=>'box'));
+                                    ?>
             <div class="row">
                 <?php
                 if (isset($parts[$asin])) {
