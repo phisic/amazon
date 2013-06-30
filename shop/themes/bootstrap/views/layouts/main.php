@@ -56,9 +56,7 @@
                                     <? endif ?>
                                 </div-->
                                 <div class="span2">
-                                    <?php
-                                    $this->widget('ext.WSocialButton', array('style'=>'box'));
-                                    ?>
+                                    
                                 </div>
                             </div>
                             <div class="row-fluid">

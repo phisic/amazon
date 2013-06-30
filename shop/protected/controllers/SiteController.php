@@ -75,6 +75,26 @@ class SiteController extends Controller {
         }
         $this->render('contact', array('model' => $model));
     }
+    
+    public function actionGift() {
+        $model = new GiftForm;
+        if (isset($_POST['GiftForm'])) {
+            $model->attributes = $_POST['GiftForm'];
+            if ($model->validate()) {
+                $name = '=?UTF-8?B?' . base64_encode($model->name) . '?=';
+                $subject = '=?UTF-8?B?' . base64_encode($model->subject) . '?=';
+                $headers = "From: $name <{$model->email}>\r\n" .
+                        "Reply-To: {$model->email}\r\n" .
+                        "MIME-Version: 1.0\r\n" .
+                        "Content-type: text/plain; charset=UTF-8";
+
+                mail(Yii::app()->params['adminEmail'], $subject, $model->body, $headers);
+                Yii::app()->user->setFlash('contact', 'Thank you! We will send to your gift card after your orders is shipped.');
+                $this->refresh();
+            }
+        }
+        $this->render('gift', array('model' => $model));
+    }
 
 	public function actionAjaxLogin()
 	{

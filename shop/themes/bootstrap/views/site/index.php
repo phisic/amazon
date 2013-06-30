@@ -1,3 +1,14 @@
+<div class="hero-unit">
+    <h1>We have incredible offer for you!</h1>
+<p>
+Participate in our special offer and <span class='text-warning' style="font-size: 28px;">every 7th buyer</span> will receive <span class='text-warning' style="font-size: 28px;">$70 amazon gift card</span>.<br>
+Also, you can just choose to receive $10 amazon gift card for every laptop is ordered.<br>
+If you buy more than one laptop and you are 7th buyer you will receive $70 gift card + $10 for every laptop is ordered.<br>
+
+To receive gift card please <a href="<?=Yii::app()->createUrl('site/gift');?>">read details</a>.
+</p>
+
+</div>
 <?php
 $list = array();
 

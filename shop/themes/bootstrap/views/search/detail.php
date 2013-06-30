@@ -93,6 +93,8 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
         </div>
     </div>
 </div>
+<h3>We have incredible offer for you!</h3>
+<span style="font-size:20px;">Buy any laptop and <span class="text-error">receive $70 amazon gift card</span>.<br> To receive gift card please <a href="<?=Yii::app()->createUrl('site/gift');?>">read details</a>.</span>
 <a rel="nofollow" name="history"></a><h3><?= $model ?>Price History From amazon.com</h3>
 <?php
 if (empty($history))
