@@ -321,7 +321,7 @@ class SearchController extends Controller {
             'order' => 'SalesRank',
             'select' => 'ASIN'
         ));
-
+        $c->addColumnCondition(array('SubItem'=>0));
         $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
 
         $c->limit = $size;
