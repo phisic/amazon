@@ -113,9 +113,25 @@ class SearchController extends Controller {
                 )))->queryRow();
 
         if (empty($row['Data'])) {
-            if (!($r = Yii::app()->cache->get($asin))) {
-                $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-                Yii::app()->cache->add($asin, $r, 3600 * 4);
+            $c = new CDbCriteria();
+            $c->order = 'DateStart desc';
+            $c->limit = 1;
+            $c->select = 'Id';
+            $log = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', $c)->queryRow();
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
+            if (isset($i['Items']['Item'])) {
+                $i = $i['Items']['Item'];
+                $data = array(
+                    'LogId' => $log['Id'],
+                    'Data' => $this->serializeItem($i),
+                    'SalesRank' => isset($r['SalesRank']) ? $r['SalesRank'] : 1E6,
+                    'Title' => isset($r['ItemAttributes']['Title']) ? $r['ItemAttributes']['Title'] : '',
+                    'Brand' => isset($r['ItemAttributes']['Brand']) ? $r['ItemAttributes']['Brand'] : '',
+                    'Model' => isset($r['ItemAttributes']['Model']) ? $r['ItemAttributes']['Model'] : '',
+                    'ASIN' => $r['ASIN'],
+                );
+
+                Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
             }
         } else {
             $r['Items']['Item'] = unserialize($row['Data']);
@@ -126,6 +142,23 @@ class SearchController extends Controller {
 
         $r['Items']['Item']['EditorialReviews']['EditorialReview'] = $this->getDescription($r);
         $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history, 'parts' => $parts = Yii::app()->part->getByAsins(array($asin))));
+    }
+
+    protected function serializeItem($item) {
+        if (isset($item['Items']['Item']['EditorialReviews']['EditorialReview']['Content'])) {
+            $item['Items']['Item']['EditorialReviews']['EditorialReview']['Content'] = htmlspecialchars($item['Items']['Item']['EditorialReviews']['EditorialReview']['Content']);
+        } elseif (isset($r['Items']['Item']['EditorialReviews']['EditorialReview'])) {
+            foreach ($r['Items']['Item']['EditorialReviews']['EditorialReview'] as &$i) {
+                $i['Content'] = htmlspecialchars($i['Content']);
+            }
+        }
+
+        if (isset($item['ItemAttributes']['Feature']) && is_array($item['ItemAttributes']['Feature']))
+            foreach ($item['ItemAttributes']['Feature'] as &$attr) {
+                $attr = htmlspecialchars($attr);
+            }
+
+        return serialize($item);
     }
 
     protected function getDescription($r) {
@@ -157,14 +190,14 @@ class SearchController extends Controller {
                     )))->queryRow();
             if ($row) {
                 $i['Items']['Item'] = unserialize($row['Data']);
-                                
+
                 $description = $this->getDescription($i);
                 foreach ($description as $d) {
                     echo htmlspecialchars_decode($d);
                 }
             }
         }
-        
+
         Yii::app()->end();
     }
 
@@ -278,8 +311,6 @@ class SearchController extends Controller {
         $this->pageTitle = 'New released ' . Yii::app()->params['category'] . 's';
         $this->render('index', array('title' => 'New Releases', 'items' => Yii::app()->stat->getNewReleases()));
     }
-    
-    
 
     public function actionAll() {
         $this->pageTitle = 'All ' . Yii::app()->params['category'] . 's';
