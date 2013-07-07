@@ -3,6 +3,21 @@ $asin = $i['ASIN'];
 $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] . ' ' : '') . (isset($i['ItemAttributes']['Model']) ? $i['ItemAttributes']['Model'] . ' ' : '');
 ?>
 <div class="row">
+    <div class="span12">
+        <script type="text/javascript"><!--
+google_ad_client = "ca-pub-4931961606202010";
+/* details */
+google_ad_slot = "5859934881";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+    </div>
+</div>
+<div class="row">
     <div class="span4">
         <div style="padding-bottom: 5px;">
             <?php $src = isset($i['LargeImage']['URL']) ? str_replace('.jpg', '._AA500_.jpg', $i['LargeImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg'; ?>
