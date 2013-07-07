@@ -93,9 +93,10 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
         </div>
     </div>
 </div>
-<h3>We have incredible offer for you!</h3>
-<span style="font-size:20px;">Buy any laptop and <span class="text-error">receive $70 amazon gift card</span>.<br> To receive gift card please <a href="<?= Yii::app()->createUrl('site/gift'); ?>">read details</a>.</span>
 <?php
+//<h3>We have incredible offer for you!</h3>
+//<span style="font-size:20px;">Buy any laptop and <span class="text-error">receive $70 amazon gift card</span>.<br> To receive gift card please <a href="<?= Yii::app()->createUrl('site/gift'); ?>">read details</a>.</span>
+?><?php
 if (isset($i['SimilarProducts']['SimilarProduct']['ASIN'])) {
     $similar[] = $i['SimilarProducts']['SimilarProduct'];
 } elseif (isset($i['SimilarProducts']['SimilarProduct'])) {

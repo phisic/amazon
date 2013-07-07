@@ -1,4 +1,6 @@
-<div class="hero-unit">
+<?php
+
+/*<div class="hero-unit">
     <h1>We have incredible offer for you!</h1>
 <p>
 Participate in our special offer and <span class='text-warning' style="font-size: 28px;">every 7th buyer</span> will receive <span class='text-warning' style="font-size: 28px;">$70 amazon gift card</span>.<br>
@@ -9,6 +11,7 @@ To receive gift card please <a href="<?=Yii::app()->createUrl('site/gift');?>">r
 </p>
 
 </div>
+ */ ?>
 <?php
 $list = array();
 
