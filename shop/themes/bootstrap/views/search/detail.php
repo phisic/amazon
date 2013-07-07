@@ -6,15 +6,15 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
     <div class="span12">
         <script type="text/javascript"><!--
 google_ad_client = "ca-pub-4931961606202010";
-/* details */
-google_ad_slot = "5859934881";
-google_ad_width = 728;
-google_ad_height = 90;
+            /* details */
+            google_ad_slot = "5859934881";
+            google_ad_width = 728;
+            google_ad_height = 90;
 //-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+        </script>
+        <script type="text/javascript"
+                src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>
     </div>
 </div>
 <div class="row">
@@ -116,12 +116,31 @@ if (isset($i['SimilarProducts']['SimilarProduct']['ASIN'])) {
         $similar[] = $s;
     }
 }
-if (!empty($similar)) {
+    echo '<div class="row">
+         <div class="span10">';
     echo '<h3>Frequently bought together</h3>';
+    if(!empty($similar))
     foreach ($similar as $s) {
-        echo '<div class="row"><div class="span12"><a href="' . Yii::app()->createUrl('search/detail/' . $s['ASIN']) . '">' . $s['Title'] . '</a></div></div>';
+        echo '<div class="row">
+            <div class="span10"><a href="' . Yii::app()->createUrl('search/detail/' . $s['ASIN']) . '">' . $s['Title'] . '</a></div>
+            
+            </div>';
     }
-}
+    echo '</div>
+<div class="span2">
+            <script type="text/javascript"><!--
+google_ad_client = "ca-pub-4931961606202010";
+/* details frequently bought */
+google_ad_slot = "5720334085";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+            </div>        
+</div>';
 ?>
 <a rel="nofollow" name="history"></a><h3><?= $model ?>Price History From amazon.com</h3>
 <?php
@@ -213,6 +232,5 @@ if (isset($parts[$asin]['vga'])) {
     echo '<h3>Laptops with identical ' . $parts[$asin]['vga']['Model'] . ' graphics</h3>';
     $this->renderPartial('similar', array('models' => Yii::app()->stat->getIdenticalLaptops($parts[$asin]['vga']['Id'], 'VGA'), 'asin' => $asin));
 }
-
 ?>
 <p></p>
