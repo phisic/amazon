@@ -120,6 +120,7 @@ class SearchController extends Controller {
             $log = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', $c)->queryRow();
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
             if (isset($r['Items']['Item'])) {
+                $r = $r['Items']['Item'];
                 $data = array(
                     'LogId' => $log['Id'],
                     'Data' => $this->serializeItem($r),
