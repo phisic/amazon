@@ -119,16 +119,15 @@ class SearchController extends Controller {
             $c->select = 'Id';
             $log = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', $c)->queryRow();
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-            if (isset($i['Items']['Item'])) {
-                $i = $i['Items']['Item'];
+            if (isset($r['Items']['Item'])) {
                 $data = array(
                     'LogId' => $log['Id'],
-                    'Data' => $this->serializeItem($i),
+                    'Data' => $this->serializeItem($r),
                     'SalesRank' => isset($r['SalesRank']) ? $r['SalesRank'] : 1E6,
                     'Title' => isset($r['ItemAttributes']['Title']) ? $r['ItemAttributes']['Title'] : '',
                     'Brand' => isset($r['ItemAttributes']['Brand']) ? $r['ItemAttributes']['Brand'] : '',
                     'Model' => isset($r['ItemAttributes']['Model']) ? $r['ItemAttributes']['Model'] : '',
-                    'ASIN' => $r['ASIN'],
+                    'ASIN' => $r['Items']['Item']['ASIN'],
                 );
 
                 Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
