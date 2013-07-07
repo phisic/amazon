@@ -129,6 +129,7 @@ class SearchController extends Controller {
                     'Brand' => isset($r['ItemAttributes']['Brand']) ? $r['ItemAttributes']['Brand'] : '',
                     'Model' => isset($r['ItemAttributes']['Model']) ? $r['ItemAttributes']['Model'] : '',
                     'ASIN' => $r['ASIN'],
+                    'SubItem' => 1,
                 );
 
                 Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
