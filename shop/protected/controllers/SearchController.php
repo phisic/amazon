@@ -132,6 +132,7 @@ class SearchController extends Controller {
                 );
 
                 Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
+                $r['Items']['Item'] = $r;
             }
         } else {
             $r['Items']['Item'] = unserialize($row['Data']);
