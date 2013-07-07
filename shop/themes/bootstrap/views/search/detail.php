@@ -50,8 +50,8 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
             </h5> 
             <h6><a target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
             <?php
-                                    $this->widget('ext.WSocialButton', array('style'=>'box'));
-                                    ?>
+            $this->widget('ext.WSocialButton', array('style' => 'box'));
+            ?>
             <div class="row">
                 <?php
                 if (isset($parts[$asin])) {
@@ -94,11 +94,26 @@ $model = (isset($i['ItemAttributes']['Brand']) ? $i['ItemAttributes']['Brand'] .
     </div>
 </div>
 <h3>We have incredible offer for you!</h3>
-<span style="font-size:20px;">Buy any laptop and <span class="text-error">receive $70 amazon gift card</span>.<br> To receive gift card please <a href="<?=Yii::app()->createUrl('site/gift');?>">read details</a>.</span>
+<span style="font-size:20px;">Buy any laptop and <span class="text-error">receive $70 amazon gift card</span>.<br> To receive gift card please <a href="<?= Yii::app()->createUrl('site/gift'); ?>">read details</a>.</span>
+<?php
+if (isset($i['SimilarProducts']['SimilarProduct']['ASIN'])) {
+    $similar[] = $i['SimilarProducts']['SimilarProduct'];
+} elseif (isset($i['SimilarProducts']['SimilarProduct'])) {
+    foreach ($i['SimilarProducts']['SimilarProduct'] as $s) {
+        $similar[] = $s;
+    }
+}
+if (!empty($similar)) {
+    echo '<h3>Frequently bought together</h3>';
+    foreach ($similar as $s) {
+        echo '<div class="row"><div class="span12"><a href="' . Yii::app()->createUrl('search/detail/' . $s['ASIN']) . '">' . $s['Title'] . '</a></div></div>';
+    }
+}
+?>
 <a rel="nofollow" name="history"></a><h3><?= $model ?>Price History From amazon.com</h3>
 <?php
 if (empty($history))
-    echo '<p>Price history not available for this ' . Yii::app()->params['category'] . '</p>';
+    echo '<p>Price history not available for this item</p>';
 else
     echo '<div id="chart1"></div>';
 ?>
@@ -177,14 +192,13 @@ if (!empty($history)) {
 if (isset($parts[$asin])) {
     if (isset($parts[$asin]['cpu'])) {
         echo '<h3>Laptops with identical ' . $parts[$asin]['cpu']['Model'] . ' processor</h3>';
-        $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['cpu']['Id'], 'CPU'), 'asin' => $asin));
+        $this->renderPartial('similar', array('models' => Yii::app()->stat->getIdenticalLaptops($parts[$asin]['cpu']['Id'], 'CPU'), 'asin' => $asin));
     }
-    
 }
 
 if (isset($parts[$asin]['vga'])) {
     echo '<h3>Laptops with identical ' . $parts[$asin]['vga']['Model'] . ' graphics</h3>';
-    $this->renderPartial('similar', array('models' => Yii::app()->stat->getSimilarLaptops($parts[$asin]['vga']['Id'], 'VGA'), 'asin' => $asin));
+    $this->renderPartial('similar', array('models' => Yii::app()->stat->getIdenticalLaptops($parts[$asin]['vga']['Id'], 'VGA'), 'asin' => $asin));
 }
 
 ?>

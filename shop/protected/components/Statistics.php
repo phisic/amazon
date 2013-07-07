@@ -120,10 +120,21 @@ class Statistics extends CApplicationComponent {
         return array_shift($a);
     }
 
-    public function getSimilarLaptops($id, $atribute = 'CPU') {
+    public function getIdenticalLaptops($id, $atribute = 'CPU') {
         $c = new CDbCriteria();
         $c->compare($atribute, $id, true);
         $c->limit = 10;
+        $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+        $list = array();
+        foreach ($rows as $row) {
+            $list[] = unserialize($row['Data']);
+        }
+        return $list;
+    }
+    
+    public function getSimilarLaptops($asins){
+        $c = new CDbCriteria();
+        $c->addInCondition('ASIN', $asins);
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
         foreach ($rows as $row) {
