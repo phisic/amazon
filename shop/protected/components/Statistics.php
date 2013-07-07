@@ -19,6 +19,9 @@ class Statistics extends CApplicationComponent {
             }
 
             $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Medium')->lookup(join(',', array_keys($asins)));
+            if(isset($r['Items']['Item']['ASIN'])){
+                $r['Items']['Item'] = array($r['Items']['Item']);
+            }
             $r['asins'] = $asins;
             Yii::app()->cache->add('price-drops-daily', $r, 3600 * 4);
         }
