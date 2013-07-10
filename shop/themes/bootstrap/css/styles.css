@@ -3,7 +3,13 @@
 }
 #page .hero-unit{padding:20px;}
 #content{min-height: 500px;}
-
+#footer {
+     background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 50px;
+    padding: 10px 0;
+    text-align: center;
+}
 .watch-click, a.watch-click, a.watch-click:hover {
     border-bottom: 1px dashed #0088CC;
     text-decoration: none;

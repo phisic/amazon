@@ -369,9 +369,17 @@ class SearchController extends Controller {
             $c->select = 'ASIN,Title';
             $c->addInCondition('ASIN', $asin);
             $p = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+            
+            $this->pageTitle = $q['Title'].' - '.join(' ', array_slice(explode(' ',$p[0]['Title']), 0, 4));
+            
+            $c = new CDbCriteria();
+            $c->select = 't.Title,t.Id';
+            $c->join = 'JOIN listing2question lq ON lq.QId = t.QId';
+            $c->addInCondition('lq.ASIN',$asin);
+            $related = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
         }
-
-        $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p));
+        
+        $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p, 'related'=>$related));
     }
 
 }

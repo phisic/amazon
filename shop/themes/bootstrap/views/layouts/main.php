@@ -93,6 +93,7 @@
             <div class="clear"></div>
 
             <div id="footer">
+                <br/>
                 Copyright &copy; <?php echo date('Y'); ?> by Laptop Top7<br/>
                 All Rights Reserved.<br/>
             </div><!-- footer -->
