@@ -61,7 +61,7 @@ class AnswerCommand extends CConsoleCommand {
     }
 
     protected function search($keyword, $page) {
-        $result = $this->grabContent('http://answers.yahoo.com/search/search_result;_ylt=AuOe0yp47F5CBiV_Utt4b09s7hR.;_ylv=3?type=2button&p=' . $keyword . '&page=' . $page);
+        $result = $this->grabContent('http://answers.yahoo.com/search/search_result?type=2button&p=' . $keyword . '&page=' . $page);
         preg_match_all('@\?qid\=[0-9a-zA-Z]+@', $result, $matches);
         if (empty($matches[0]))
             return array();
