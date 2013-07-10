@@ -19,7 +19,7 @@ else {
             <h3>Linked products</h3>
             <?php
             foreach ($p as $n => $pr) {
-                echo '<div><a href="' . Yii::app()->createSeoUrl('search/detail/' . $pr['ASIN'], $pr['Title']) . '">' . $pr['Title'] . '</a></div>';
+                echo '<h4><a href="' . Yii::app()->createSeoUrl('search/detail/' . $pr['ASIN'], $pr['Title']) . '">' . $pr['Title'] . '</a></h4>';
             }
             ?>
         <? } ?>
@@ -35,6 +35,7 @@ else {
                     echo '<h5><a href="'.Yii::app()->createUrl('search/question/'.$r['Id']).'">'.$r['Title'].'</a></h5>';
             }
             ?>
+            <h5>Source: answers.yahoo.com</h5>
         </div>
     <?php } ?>
 </div>
