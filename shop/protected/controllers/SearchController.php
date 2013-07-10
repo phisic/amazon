@@ -138,12 +138,24 @@ class SearchController extends Controller {
         } else {
             $r['Items']['Item'] = unserialize($row['Data']);
         }
-
+        $c = new CDbCriteria();
+        $c->select = 'QId';
+        $c->addColumnCondition(array('ASIN' => $asin));
+        $c->limit = 100;
+        $qid = Yii::app()->db->getCommandBuilder()->createFindCommand('listing2question', $c)->queryColumn();
+        if (empty($qid))
+            $questions = array();
+        else {
+            $c = new CDbCriteria();
+            $c->select = 'Id,Title';
+            $c->addInCondition('QId', $qid);
+            $questions = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
+        }
         $this->pageTitle = $r['Items']['Item']['ItemAttributes']['Title'];
 
 
         $r['Items']['Item']['EditorialReviews']['EditorialReview'] = $this->getDescription($r);
-        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history, 'parts' => $parts = Yii::app()->part->getByAsins(array($asin))));
+        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history, 'parts' => Yii::app()->part->getByAsins(array($asin)),'questions'=>$questions));
     }
 
     protected function serializeItem($item) {
@@ -322,7 +334,7 @@ class SearchController extends Controller {
             'order' => 'SalesRank',
             'select' => 'ASIN'
         ));
-        $c->addColumnCondition(array('SubItem'=>0));
+        $c->addColumnCondition(array('SubItem' => 0));
         $count = Yii::app()->db->getCommandBuilder()->createCountCommand('listing', $c)->queryScalar();
 
         $c->limit = $size;
@@ -338,6 +350,28 @@ class SearchController extends Controller {
         $pages = new CPagination($count);
         $pages->pageSize = $size;
         $this->render('index', array('title' => 'All ' . Yii::app()->params['category'] . 's', 'items' => $list, 'pages' => $pages));
+    }
+
+    public function actionQuestion($id) {
+        $id = (int) $id;
+        $c = new CDbCriteria();
+        $c->addColumnCondition(array('Id' => $id));
+        $q = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryRow();
+        if (empty($q))
+            $a = array();
+        else {
+            $c = new CDbCriteria();
+            $c->addColumnCondition(array('QId' => $q['QId']));
+            $a = Yii::app()->db->getCommandBuilder()->createFindCommand('answer', $c)->queryAll();
+            $c->select = 'ASIN';
+            $asin = Yii::app()->db->getCommandBuilder()->createFindCommand('listing2question', $c)->queryColumn();
+            $c = new CDbCriteria();
+            $c->select = 'ASIN,Title';
+            $c->addInCondition('ASIN', $asin);
+            $p = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
+        }
+
+        $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p));
     }
 
 }

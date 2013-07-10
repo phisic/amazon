@@ -35,9 +35,10 @@ google_ad_client = "ca-pub-4931961606202010";
 
     </div>
     <div class="span8">
-
-        <div class="span8">
-            <h1><?= $i['ItemAttributes']['Title'] ?> <span class="text-warning" style="font-size:12px;"><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
+        <h1><?= $i['ItemAttributes']['Title'] ?> <span class="text-warning" style="font-size:12px;"><?= isset($i['ItemAttributes']['Brand']) ? 'by ' . $i['ItemAttributes']['Brand'] : ''; ?></span></h1>
+        <div class="row">
+        <div class="span5">
+            
             <h5>
                 <?php
                 $newPrice = Yii::app()->amazon->getNewPrice($i);
@@ -67,10 +68,9 @@ google_ad_client = "ca-pub-4931961606202010";
             <?php
             $this->widget('ext.WSocialButton', array('style' => 'box'));
             ?>
-            <div class="row">
+            
                 <?php
                 if (isset($parts[$asin])) {
-                    echo '<div class="span5">';
                     echo '<h4>Performance Benchmark</h4>';
                     if (isset($parts[$asin]['cpu'])) {
                         $mark = round($parts[$asin]['cpu']['Score'] / (Yii::app()->part->getMaxScore('cpu') / 10), 2);
@@ -90,10 +90,11 @@ google_ad_client = "ca-pub-4931961606202010";
                               </div>';
                     }
 
-                    echo '</div>';
                 }
                 ?>
-                <div class="<?= isset($parts[$asin]) ? 'span3' : 'span8' ?>">
+                
+            </div>
+            <div class="span3">
                     <ul>
                         <?php
                         if (isset($i['ItemAttributes']['Feature']) && is_array($i['ItemAttributes']['Feature'])) {
@@ -104,7 +105,6 @@ google_ad_client = "ca-pub-4931961606202010";
                         ?>
                     </ul>
                 </div>
-            </div>
         </div>
     </div>
 </div>
@@ -116,17 +116,24 @@ if (isset($i['SimilarProducts']['SimilarProduct']['ASIN'])) {
         $similar[] = $s;
     }
 }
-    echo '<div class="row">
+echo '<div class="row">
          <div class="span10">';
+if (!empty($similar)) {
     echo '<h3>Frequently bought together</h3>';
-    if(!empty($similar))
     foreach ($similar as $s) {
         echo '<div class="row">
             <div class="span10"><a href="' . Yii::app()->createUrl('search/detail/' . $s['ASIN']) . '">' . $s['Title'] . '</a></div>
             
             </div>';
     }
-    echo '</div>
+}
+if(!empty($questions)){
+    echo '<h3>Question/Answers</h3>';
+    foreach($questions as $q){
+        echo '<div><a href="'.Yii::app()->createUrl('search/question/'.$q['Id']).'">'.$q['Title'].'</a></div>';
+    }
+}
+echo '</div>
 <div class="span2">
             <script type="text/javascript"><!--
 google_ad_client = "ca-pub-4931961606202010";

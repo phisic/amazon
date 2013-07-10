@@ -36,6 +36,7 @@ return CMap::mergeArray(require(dirname(__FILE__) . '/base.php'), array(
                         '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                         '<controller:search>/<action:detail>/<txt:[\w\-]+>-<asin:[\w]+>' => '<controller>/<action>',
                         '<controller:search>/<action:detail>/<asin:[\w]+>' => '<controller>/<action>',
+                        '<controller:search>/<action:question>/<id:[\w]+>' => '<controller>/<action>',
                         '<controller:watch>/<action:remove>/<asin:[\w\-]+>' => '<controller>/<action>',
                     ),
                 ),
