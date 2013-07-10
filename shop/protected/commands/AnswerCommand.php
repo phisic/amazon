@@ -22,25 +22,26 @@ class AnswerCommand extends CConsoleCommand {
                     $r['Title'] = strtr($r['Title'], array(',' => '', '(' => '', ')' => ''));
                     $keywords = explode(' ', $r['Title']);
                     $result = array();
-                    $resCount = 0; $wordsCount = 4; $page=1;
-                    while($resCount==0 && $wordsCount > 0)
-                    {
+                    $resCount = 0;
+                    $wordsCount = 4;
+                    $page = 1;
+                    while ($resCount == 0 && $wordsCount > 0) {
                         $resCount = 10;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
-                        while($resCount == 10){
-                            echo 'Page='.$page."\n";
-                            $res = $this->search($keyword,$page);
+                        while ($resCount == 10) {
+                            echo 'Page=' . $page . "\n";
+                            $res = $this->search($keyword, $page);
                             $resCount = count($res);
-                            if($resCount)
+                            if ($resCount)
                                 $result = array_merge($result, $res);
                             $page++;
                         }
                         $wordsCount--;
                     }
-                    echo 'Key='.$keyword.' count='.$resCount."\n";
-                    
+                    echo 'Key=' . $keyword . ' count=' . $resCount . "\n";
+
                     foreach ($result as $qid => $q) {
-                        echo $qid."\n";
+                        echo $qid . "\n";
                         $exist = Yii::app()->db->getCommandBuilder()->createFindCommand('question', new CDbCriteria(array('select' => 'QId', 'condition' => 'qid=:qid', 'params' => array(':qid' => $qid))))->queryRow();
                         if (empty($exist)) {
                             Yii::app()->db->getCommandBuilder()->createInsertCommand('question', array('QId' => $qid, 'Title' => $q['Title'], 'Text' => array_shift($q['Answers']), 'Date' => date('Y-m-d H:i')))->execute();
@@ -59,14 +60,14 @@ class AnswerCommand extends CConsoleCommand {
         }
     }
 
-    protected function search($keyword,$page) {
-        $result = file_get_contents('http://answers.yahoo.com/search/search_result?p=' . $keyword.'&page='.$page);
+    protected function search($keyword, $page) {
+        $result = $this->grabContent('http://answers.yahoo.com/search/search_result;_ylt=AuOe0yp47F5CBiV_Utt4b09s7hR.;_ylv=3?type=2button&p=' . $keyword . '&page=' . $page);
         preg_match_all('@\?qid\=[0-9a-zA-Z]+@', $result, $matches);
         if (empty($matches[0]))
             return array();
         $qe = array();
         foreach ($matches[0] as $m) {
-            $q = file_get_contents('http://answers.yahoo.com/question/index' . $m);
+            $q = $this->grabContent('http://answers.yahoo.com/question/index' . $m);
             $qid = substr($m, 5);
             $t1 = strpos($q, '<h1 class="subject">');
             if ($t1 == false)
@@ -86,6 +87,32 @@ class AnswerCommand extends CConsoleCommand {
         }
 
         return $qe;
+    }
+
+    public function grabContent($url) {
+        $curl = curl_init();
+        $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
+        $header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+        $header[] = "Cache-Control: max-age=0";
+        $header[] = "Connection: keep-alive";
+        $header[] = "Keep-Alive: 300";
+        $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+        $header[] = "Accept-Language: en-us,en;q=0.5";
+        $header[] = "Pragma: ";
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Googlebot/2.1 (+http://www.google.com/bot.html)');
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_REFERER, 'http://www.google.com');
+        curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate');
+        curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+        $html = curl_exec($curl);
+        curl_close($curl);
+
+        return $html;
     }
 
 }
