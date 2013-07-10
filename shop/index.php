@@ -1,5 +1,5 @@
 <?php
-if(strpos($_SERVER['REQUEST_URI'], '/var/www/laptoptop7/shop/protected/commands/shell')){
+if(strpos($_SERVER['REQUEST_URI'], '/var/www/laptoptop7/shop/protected/commands/shell')!== false){
         $_SERVER['REQUEST_URI'] = str_replace('/var/www/laptoptop7/shop/protected/commands/shell','',$_SERVER['REQUEST_URI']);
         header('location: '.$_SERVER['REQUEST_URI']);
         exit;
