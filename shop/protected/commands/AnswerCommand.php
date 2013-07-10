@@ -28,8 +28,9 @@ class AnswerCommand extends CConsoleCommand {
                     while ($resCount == 0 && $wordsCount > 0) {
                         $resCount = 10;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
+                        echo 'Key=' . $keyword ."\n";
                         while ($resCount == 10) {
-                            echo 'Page=' . $page . "\n";
+                            echo 'Page=' . $page . ' count=' . $resCount . "\n";
                             $res = $this->search($keyword, $page);
                             $resCount = count($res);
                             if ($resCount)
@@ -37,11 +38,11 @@ class AnswerCommand extends CConsoleCommand {
                             $page++;
                         }
                         $wordsCount--;
+                        
                     }
-                    echo 'Key=' . $keyword . ' count=' . $resCount . "\n";
+                    
 
                     foreach ($result as $qid => $q) {
-                        echo $qid . "\n";
                         $exist = Yii::app()->db->getCommandBuilder()->createFindCommand('question', new CDbCriteria(array('select' => 'QId', 'condition' => 'qid=:qid', 'params' => array(':qid' => $qid))))->queryRow();
                         if (empty($exist)) {
                             Yii::app()->db->getCommandBuilder()->createInsertCommand('question', array('QId' => $qid, 'Title' => $q['Title'], 'Text' => array_shift($q['Answers']), 'Date' => date('Y-m-d H:i')))->execute();
