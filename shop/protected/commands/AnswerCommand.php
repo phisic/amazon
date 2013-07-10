@@ -24,9 +24,10 @@ class AnswerCommand extends CConsoleCommand {
                     $result = array();
                     $resCount = 0;
                     $wordsCount = 4;
-                    $page = 1;
+                    
                     while ($resCount == 0 && $wordsCount > 0) {
                         $resCount = 10;
+                        $page = 1;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
                         echo 'Key=' . $keyword ."\n";
                         while ($resCount == 10) {
