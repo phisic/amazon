@@ -10,7 +10,7 @@ class AnswerCommand extends CConsoleCommand {
             'distinct' => true,
             'select' => 'ASIN, Title'
         ));
-        $c->addCondition('Answer=0');
+        $c->addCondition('Answer=0 and SubItem=0');
         $fetch = true;
         while ($fetch) {
             $c->limit = $size;
@@ -30,7 +30,7 @@ class AnswerCommand extends CConsoleCommand {
                         $page = 1;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
                         echo 'Key=' . $keyword ."\n";
-                        while ($resCount == 10) {
+                        while ($resCount == 10 && $page < 15) {
                             $res = $this->search($keyword, $page);
                             $resCount = count($res);
                             echo 'Page=' . $page . ' count=' . $resCount . "\n";
