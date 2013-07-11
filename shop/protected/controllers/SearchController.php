@@ -162,6 +162,7 @@ class SearchController extends Controller {
             $c = new CDbCriteria();
             $c->select = 'Id,Title';
             $c->addInCondition('QId', $qid);
+            $c->order = 'Id';
             $questions = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
         }
         $this->pageTitle = $r['Items']['Item']['ItemAttributes']['Title'];
