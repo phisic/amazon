@@ -412,6 +412,7 @@ class SearchController extends Controller {
 
             $c = new CDbCriteria();
             $c->select = 't.Title,t.Id';
+            $c->distinct = true;
             $c->join = 'JOIN listing2question lq ON lq.QId = t.QId';
             $c->addInCondition('lq.ASIN', $asin);
             $related = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
