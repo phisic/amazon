@@ -19,7 +19,7 @@ class AnswerCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    $r['Title'] = strtr($r['Title'], array(',' => '', '(' => '', ')' => ''));
+                    $r['Title'] = strtr($r['Title'], array('-'=>' ',';'=>' ',',' => '', '(' => '', ')' => ''));
                     $keywords = explode(' ', $r['Title']);
                     $result = array();
                     $resCount = 0;
