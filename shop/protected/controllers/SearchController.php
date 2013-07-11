@@ -86,16 +86,29 @@ class SearchController extends Controller {
         }
     }
 
-    public function actionDetail($asin, $txt=false) {
-        if(empty($txt)){
+    public function actionDetail($asin, $txt = false) {
+        if (empty($txt)) {
             $row = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', new CDbCriteria(array(
-                    'select' => 'Title',
-                    'condition' => 'ASIN=:a',
-                    'params' => array(':a' => $asin)
-                )))->queryRow();
-            if(!empty($row))
-                $this->redirect (Yii::app ()->createSeoUrl ('search/detail/'.$asin, $row['Title']));
-            else {
+                        'select' => 'Title',
+                        'condition' => 'ASIN=:a',
+                        'params' => array(':a' => $asin)
+                    )))->queryRow();
+            if (!empty($row)) {
+                if (empty($row['Title'])) {
+                    $row = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', new CDbCriteria(array(
+                                'select' => 'Data',
+                                'condition' => 'ASIN=:a',
+                                'params' => array(':a' => $asin)
+                            )))->queryRow();
+                    $r = unserialize($row['Data']);
+                    if(isset($r['Items']['Item']))
+                        $row['Title'] = $r['Items']['Item']['ItemAttributes']['Title'];
+                    else
+                        $row['Title'] = $r['ItemAttributes']['Title'];
+                }
+
+                $this->redirect(Yii::app()->createSeoUrl('search/detail/' . $asin, $row['Title']));
+            } else {
                 throw new CHttpException(404);
             }
         }
@@ -148,7 +161,7 @@ class SearchController extends Controller {
             }
         } else {
             $r = unserialize($row['Data']);
-            if(!isset($r['Items']['Item']))
+            if (!isset($r['Items']['Item']))
                 $r['Items']['Item'] = $r;
         }
         $c = new CDbCriteria();
@@ -169,7 +182,7 @@ class SearchController extends Controller {
 
 
         $r['Items']['Item']['EditorialReviews']['EditorialReview'] = $this->getDescription($r);
-        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history, 'parts' => Yii::app()->part->getByAsins(array($asin)),'questions'=>$questions));
+        $this->render('detail', array('i' => $r['Items']['Item'], 'history' => $history, 'parts' => Yii::app()->part->getByAsins(array($asin)), 'questions' => $questions));
     }
 
     protected function serializeItem($item) {
@@ -383,17 +396,18 @@ class SearchController extends Controller {
             $c->select = 'ASIN,Title';
             $c->addInCondition('ASIN', $asin);
             $p = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
-            
-            $this->pageTitle = $q['Title'].' - '.join(' ', array_slice(explode(' ',$p[0]['Title']), 0, 4));
-            
+
+            $this->pageTitle = $q['Title'] . ' - ' . join(' ', array_slice(explode(' ', $p[0]['Title']), 0, 4));
+
             $c = new CDbCriteria();
             $c->select = 't.Title,t.Id';
             $c->join = 'JOIN listing2question lq ON lq.QId = t.QId';
-            $c->addInCondition('lq.ASIN',$asin);
+            $c->addInCondition('lq.ASIN', $asin);
             $related = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
         }
-        
-        $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p, 'related'=>$related));
+
+        $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p, 'related' => $related));
     }
 
-} 
+}
+
