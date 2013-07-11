@@ -85,7 +85,34 @@ class SearchController extends Controller {
             $this->render('empty_list', array('keyword' => Yii::app()->request->getParam('search', '')));
         }
     }
+    
+    protected function createProduct($asin){
+        $c = new CDbCriteria();
+            $c->order = 'DateStart desc';
+            $c->limit = 1;
+            $c->select = 'Id';
+            $log = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', $c)->queryRow();
+            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
+            if (isset($r['Items']['Item'])) {
+                $r = $r['Items']['Item'];
+                $data = array(
+                    'LogId' => $log['Id'],
+                    'Data' => $this->serializeItem($r),
+                    'SalesRank' => isset($r['SalesRank']) ? $r['SalesRank'] : 1E6,
+                    'Title' => isset($r['ItemAttributes']['Title']) ? $r['ItemAttributes']['Title'] : '',
+                    'Brand' => isset($r['ItemAttributes']['Brand']) ? $r['ItemAttributes']['Brand'] : '',
+                    'Model' => isset($r['ItemAttributes']['Model']) ? $r['ItemAttributes']['Model'] : '',
+                    'ASIN' => $r['ASIN'],
+                    'SubItem' => 1,
+                );
 
+                Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
+                
+                $r['Items']['Item'] = $r;
+            }
+            
+            return $r;
+    }
     public function actionDetail($asin, $txt = false) {
         if (empty($txt)) {
             $row = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', new CDbCriteria(array(
@@ -107,10 +134,15 @@ class SearchController extends Controller {
                         $row['Title'] = $r['ItemAttributes']['Title'];
                 }
 
-                $this->redirect(Yii::app()->createSeoUrl('search/detail/' . $asin, $row['Title']));
+                
             } else {
-                throw new CHttpException(404);
+                $r = $this->createProduct($asin);
+                $row['Title'] = $r['Items']['Item']['ItemAttributes']['Title'];
             }
+            if(empty($row['Title']))
+                throw new CHttpException(404);
+            else
+                $this->redirect(Yii::app()->createSeoUrl('search/detail/' . $asin, $row['Title']));
         }
         $cs = Yii::app()->clientScript;
         $tp = Yii::app()->getTheme()->getBaseUrl();
@@ -137,28 +169,7 @@ class SearchController extends Controller {
                     'params' => array(':a' => $asin)
                 )))->queryRow();
         if (empty($row['Data'])) {
-            $c = new CDbCriteria();
-            $c->order = 'DateStart desc';
-            $c->limit = 1;
-            $c->select = 'Id';
-            $log = Yii::app()->db->getCommandBuilder()->createFindCommand('price_log', $c)->queryRow();
-            $r = Yii::app()->amazon->returnType(AmazonECS::RETURN_TYPE_ARRAY)->responseGroup('Large')->lookup($asin);
-            if (isset($r['Items']['Item'])) {
-                $r = $r['Items']['Item'];
-                $data = array(
-                    'LogId' => $log['Id'],
-                    'Data' => $this->serializeItem($r),
-                    'SalesRank' => isset($r['SalesRank']) ? $r['SalesRank'] : 1E6,
-                    'Title' => isset($r['ItemAttributes']['Title']) ? $r['ItemAttributes']['Title'] : '',
-                    'Brand' => isset($r['ItemAttributes']['Brand']) ? $r['ItemAttributes']['Brand'] : '',
-                    'Model' => isset($r['ItemAttributes']['Model']) ? $r['ItemAttributes']['Model'] : '',
-                    'ASIN' => $r['ASIN'],
-                    'SubItem' => 1,
-                );
-
-                Yii::app()->db->getCommandBuilder()->createInsertCommand('listing', $data)->execute();
-                $r['Items']['Item'] = $r;
-            }
+            $r = $this->createProduct($asin);
         } else {
             $r = unserialize($row['Data']);
             if (!isset($r['Items']['Item']))
