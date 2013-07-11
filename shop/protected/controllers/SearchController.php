@@ -111,7 +111,6 @@ class SearchController extends Controller {
                     'condition' => 'ASIN=:a',
                     'params' => array(':a' => $asin)
                 )))->queryRow();
-        $row['Data'] = file_get_contents('index-test.php');
         if (empty($row['Data'])) {
             $c = new CDbCriteria();
             $c->order = 'DateStart desc';
