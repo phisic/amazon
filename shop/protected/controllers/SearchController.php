@@ -86,7 +86,19 @@ class SearchController extends Controller {
         }
     }
 
-    public function actionDetail($asin) {
+    public function actionDetail($asin, $txt=false) {
+        if(empty($txt)){
+            $row = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', new CDbCriteria(array(
+                    'select' => 'Title',
+                    'condition' => 'ASIN=:a',
+                    'params' => array(':a' => $asin)
+                )))->queryRow();
+            if(!empty($row))
+                $this->redirect (Yii::app ()->createSeoUrl ('search/detail/'.$asin, $row['Title']));
+            else {
+                throw new CHttpException(404);
+            }
+        }
         $cs = Yii::app()->clientScript;
         $tp = Yii::app()->getTheme()->getBaseUrl();
         $cs->registerScript('excanvas', '<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->', CClientScript::POS_END);
