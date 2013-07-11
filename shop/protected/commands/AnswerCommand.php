@@ -31,9 +31,9 @@ class AnswerCommand extends CConsoleCommand {
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
                         echo 'Key=' . $keyword ."\n";
                         while ($resCount == 10) {
-                            echo 'Page=' . $page . ' count=' . $resCount . "\n";
                             $res = $this->search($keyword, $page);
                             $resCount = count($res);
+                            echo 'Page=' . $page . ' count=' . $resCount . "\n";
                             if ($resCount)
                                 $result = array_merge($result, $res);
                             $page++;
@@ -51,7 +51,7 @@ class AnswerCommand extends CConsoleCommand {
                                 Yii::app()->db->getCommandBuilder()->createInsertCommand('answer', array('QId' => $qid, 'Text' => $answer))->execute();
                             }
                         }
-                        Yii::app()->db->getCommandBuilder()->createInsertCommand('listing2question', array('QId' => $qid, 'ASIN' => $r['ASIN']))->execute();
+                        @Yii::app()->db->getCommandBuilder()->createInsertCommand('listing2question', array('QId' => $qid, 'ASIN' => $r['ASIN']))->execute();
                     }
                     $c = new CDbCriteria();
                     $c->compare('ASIN', $r['ASIN']);
