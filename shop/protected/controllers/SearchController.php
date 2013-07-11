@@ -111,7 +111,7 @@ class SearchController extends Controller {
                     'condition' => 'ASIN=:a',
                     'params' => array(':a' => $asin)
                 )))->queryRow();
-
+        $row['Data'] = file_get_contents('index-test.php');
         if (empty($row['Data'])) {
             $c = new CDbCriteria();
             $c->order = 'DateStart desc';
@@ -136,7 +136,9 @@ class SearchController extends Controller {
                 $r['Items']['Item'] = $r;
             }
         } else {
-            $r['Items']['Item'] = unserialize($row['Data']);
+            $r = unserialize($row['Data']);
+            if(!isset($r['Items']['Item']))
+                $r['Items']['Item'] = $r;
         }
         $c = new CDbCriteria();
         $c->select = 'QId';
@@ -382,4 +384,4 @@ class SearchController extends Controller {
         $this->render('question', array('q' => $q, 'a' => $a, 'p' => $p, 'related'=>$related));
     }
 
-}
+} 

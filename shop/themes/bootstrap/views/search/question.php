@@ -4,8 +4,15 @@ if (empty($q))
 else {
     ?>
     <h1><?= $q['Title'] ?></h1>
+    
     <div class="row">
         <div class="<?= $related ? "span8" : "span12"; ?>">
+            <h4>Linked products</h4>
+            <?php
+            foreach ($p as $n => $pr) {
+                echo '<h4><a href="' . Yii::app()->createSeoUrl('search/detail/' . $pr['ASIN'], $pr['Title']) . '">' . $pr['Title'] . '</a></h4>';
+            }
+            ?>
             <p class="">
                 <?= $q['Text'] ?>
             </p>
@@ -17,12 +24,7 @@ else {
                 echo '<p class=""><b>' . ($n + 1) . '.</b>' . $text . '</p>';
             }
             ?>
-            <h3>Linked products</h3>
-            <?php
-            foreach ($p as $n => $pr) {
-                echo '<h4><a href="' . Yii::app()->createSeoUrl('search/detail/' . $pr['ASIN'], $pr['Title']) . '">' . $pr['Title'] . '</a></h4>';
-            }
-            ?>
+            
         <? } ?>
     </div>
     <?php if ($related) { ?>
