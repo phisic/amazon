@@ -24,16 +24,19 @@ class AnswerCommand extends CConsoleCommand {
                     $result = array();
                     $resCount = 0;
                     $wordsCount = 4;
+                    $totalCount = 0;
                     
-                    while ($resCount == 0 && $wordsCount > 0) {
+                    while ($totalCount < 50 && $wordsCount > 0) {
                         $resCount = 10;
+                        
                         $page = 1;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
                         echo 'Key=' . $keyword ."\n";
                         while ($resCount == 10 && $page < 15) {
                             $res = $this->search($keyword, $page);
                             $resCount = count($res);
-                            echo 'Page=' . $page . ' count=' . $resCount . "\n";
+                            $totalCount+=$resCount;
+                            echo 'Page=' . $page . ' count=' . $totalCount . "\n";
                             if ($resCount)
                                 $result = array_merge($result, $res);
                             $page++;
