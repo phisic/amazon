@@ -122,7 +122,7 @@ if (!empty($similar)) {
     echo '<h3>Frequently bought together</h3>';
     foreach ($similar as $s) {
         echo '<div class="row">
-            <div class="span10"><a href="' . Yii::app()->createUrl('search/detail/' . $s['ASIN']) . '">' . $s['Title'] . '</a></div>
+            <div class="span10"><a href="' . Yii::app()->createSeoUrl('search/detail/' . $s['ASIN'], $s['Title']) . '">' . $s['Title'] . '</a></div>
             
             </div>';
     }
