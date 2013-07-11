@@ -12,7 +12,8 @@ else {
             <h3>Answers</h3>
             <?php
             foreach ($a as $n => $ans) {
-                $text = preg_replace('@<span[^>]*?>.*?</span>@si', '', $ans['Text']);
+                $text = strip_tags($ans['Text'],'<br>,<i>,<b>,<p>,<ul>,<li>');
+                $text = strtr($text, 'Report Abuse', '');
                 echo '<p class=""><b>' . ($n + 1) . '.</b>' . $text . '</p>';
             }
             ?>
