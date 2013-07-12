@@ -142,7 +142,7 @@ class SearchController extends Controller {
             if(empty($row['Title']))
                 throw new CHttpException(404);
             else
-                $this->redirect(Yii::app()->createSeoUrl('search/detail/' . $asin, $row['Title']));
+                $this->redirect(Yii::app()->createSeoUrl('search/detail/' . $asin, $row['Title']), true, 301);
         }
         $cs = Yii::app()->clientScript;
         $tp = Yii::app()->getTheme()->getBaseUrl();
