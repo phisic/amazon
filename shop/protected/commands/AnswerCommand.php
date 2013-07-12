@@ -47,6 +47,8 @@ class AnswerCommand extends CConsoleCommand {
                     
 
                     foreach ($result as $qid => $q) {
+                        if(empty($q['Answers']))
+                            continue;
                         $exist = Yii::app()->db->getCommandBuilder()->createFindCommand('question', new CDbCriteria(array('select' => 'QId', 'condition' => 'qid=:qid', 'params' => array(':qid' => $qid))))->queryRow();
                         if (empty($exist)) {
                             Yii::app()->db->getCommandBuilder()->createInsertCommand('question', array('QId' => $qid, 'Title' => $q['Title'], 'Text' => array_shift($q['Answers']), 'Date' => date('Y-m-d H:i')))->execute();
