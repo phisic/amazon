@@ -38,10 +38,7 @@ class SitemapCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    if ($r['SubItem'])
-                        $url = $d . Yii::app()->createUrl('search/detail/' . $r['ASIN']);
-                    else
-                        $url = $d . Yii::app()->createSeoUrl('search/detail/' . $r['ASIN'], $r['Title']);
+                    $url = $d . Yii::app()->createSeoUrl('search/detail/' . $r['ASIN'], $r['Title']);
                     $this->writeUrl(array('u' => $url, 'p' => '0.8', 'f' => 'weekly'), $f);
                 }
             }
