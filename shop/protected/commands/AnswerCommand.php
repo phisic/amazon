@@ -32,7 +32,7 @@ class AnswerCommand extends CConsoleCommand {
                         $page = 1;
                         $keyword = join('+', array_slice($keywords, 0, $wordsCount));
                         echo 'Key=' . $keyword ."\n";
-                        while ($resCount == 10 && $totalCount < 150) {
+                        while ($resCount == 10 && $totalCount < 20) {
                             $res = $this->search($keyword, $page);
                             $resCount = count($res);
                             $totalCount+=$resCount;
