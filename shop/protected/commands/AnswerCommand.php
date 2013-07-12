@@ -56,9 +56,9 @@ class AnswerCommand extends CConsoleCommand {
                         }
                         Yii::app()->db->getCommandBuilder()->createSqlCommand('Replace into listing2question (QId,ASIN) Values(:qid,:asin)', array(':qid' => $qid, ':asin' => $r['ASIN']))->execute();
                     }
-                    $c = new CDbCriteria();
-                    $c->compare('ASIN', $r['ASIN']);
-                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Answer' => 1), $c)->execute();
+                    $c2 = new CDbCriteria();
+                    $c2->compare('ASIN', $r['ASIN']);
+                    Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Answer' => 1), $c2)->execute();
                 }
             }
             Yii::app()->db->getCommandBuilder()->createSqlCommand('Update listing l set Answer=(select count(*) from listing2question lq where l.ASIN=lq.ASIN limit 1)')->execute();
