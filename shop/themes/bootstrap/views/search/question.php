@@ -29,6 +29,8 @@ else {
             }
             
             ?>
+            <h5>Source: answers.yahoo.com</h5>
+            <h3>Similar products</h3>
             <p>
             <?php
             $p1 = array_slice($p, 3);
