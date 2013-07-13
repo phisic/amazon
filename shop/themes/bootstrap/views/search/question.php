@@ -30,16 +30,18 @@ else {
             
             ?>
             <i>Source: answers.yahoo.com</i>
+            <?php $p1 = array_slice($p, 3);?>
+            <?php if(!empty($p1)){ ?>
             <h4>Similar products</h4>
             <p>
             <?php
-            $p1 = array_slice($p, 3);
+            
             foreach ($p1 as $n => $pr) {
                 echo '<h5><a href="' . Yii::app()->createSeoUrl('search/detail/' . $pr['ASIN'], $pr['Title']) . '">' . $pr['Title'] . '</a></h5>';
             }
             ?>
             </p>
-            
+            <?php } ?>
         <? } ?>
     </div>
     <?php if ($related) { ?>
