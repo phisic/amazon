@@ -22,10 +22,11 @@ else {
             </p>
             <h3>Answers</h3>
             <?php
-            $answers[] = array_shift($ans);
-            if(!empty($ans))
-                $answers = array_merge($answers, array_reverse($ans));
-            foreach ($a as $n => $ans) {
+            $answers[] = array_shift($a);
+            if(!empty($a))
+                $answers = array_merge($answers, array_reverse($a));
+            
+            foreach ($answers as $n => $ans) {
                 $text = strip_tags($ans['Text'],'<br>,<i>,<b>,<p>,<ul>,<li>');
                 $text = str_replace('<p>Report Abuse</p>', '',$text);
                 echo '<p class=""><b>' . ($n + 1) . '.</b>' . $text . '</p>';
