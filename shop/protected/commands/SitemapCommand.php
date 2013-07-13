@@ -82,6 +82,7 @@ class SitemapCommand extends CConsoleCommand {
                 fwrite($f, '</urlset>');
                 fclose($f);
                 $page=0;
+                $index++;
             }
             $page++;
         }
