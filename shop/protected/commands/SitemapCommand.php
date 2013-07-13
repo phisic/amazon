@@ -73,7 +73,7 @@ class SitemapCommand extends CConsoleCommand {
             $fetch = !empty($rows);
             if ($fetch) {
                 foreach ($rows as $r) {
-                    $url = $d . 'search/question/' . $r['Id'];
+                    $url = $d . '/search/question/' . $r['Id'];
                     $this->writeUrl(array('u' => $url, 'p' => '1', 'f' => 'weekly'), $f);
                 }
             }
