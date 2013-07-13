@@ -63,8 +63,9 @@ class AnswerCommand extends CConsoleCommand {
                     Yii::app()->db->getCommandBuilder()->createUpdateCommand('listing', array('Answer' => 1), $c2)->execute();
                 }
             }
-            Yii::app()->db->getCommandBuilder()->createSqlCommand('Update listing l set Answer=(select count(*) from listing2question lq where l.ASIN=lq.ASIN limit 1)')->execute();
+            
         }
+        Yii::app()->db->getCommandBuilder()->createSqlCommand('Update listing l set Answer=(select count(*) from listing2question lq where l.ASIN=lq.ASIN limit 1)')->execute();
     }
 
     protected function search($keyword, $page) {
