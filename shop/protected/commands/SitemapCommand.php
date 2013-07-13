@@ -20,9 +20,11 @@ class SitemapCommand extends CConsoleCommand {
         $c = new CDbCriteria(array(
             'order' => 'SalesRank',
             'distinct' => true,
-            'select' => 'ASIN, Title, SubItem'
+            'select' => 'ASIN, Title'
         ));
-        $f = fopen(Yii::app()->basePath . '/../sitemap.xml', 'w+');
+        $sitemaps[] = 'sitemap-laptop.xml';
+
+        $f = fopen(Yii::app()->basePath . '/../sitemap-laptop.xml', 'w+');
         fwrite($f, '<?xml version="1.0" encoding="UTF-8"?>' . "\n");
         fwrite($f, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n");
         foreach ($urls as $url) {
@@ -46,7 +48,68 @@ class SitemapCommand extends CConsoleCommand {
         }
         fwrite($f, '</urlset>');
         fclose($f);
+
+
+
+
+        $page = 1;
+        $index = 0;
+        $c = new CDbCriteria(array(
+            'select' => 'Id'
+        ));
+        $fetch = true;
+        while ($fetch) {
+            if ($page == 1) {
+                $sitemaps[] = 'sitemap'.$index.'.xml';
+                $f = fopen(Yii::app()->basePath . '/../sitemap'.$index.'.xml', 'w+');
+                fwrite($f, '<?xml version="1.0" encoding="UTF-8"?>' . "\n");
+                fwrite($f, '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n");
+            }
+
+            $c->limit = $size;
+            $c->offset = $size * ($page - 1)+($index*500*$size);
+
+            $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('question', $c)->queryAll();
+            $fetch = !empty($rows);
+            if ($fetch) {
+                foreach ($rows as $r) {
+                    $url = $d . 'search/question/' . $r['Id'];
+                    $this->writeUrl(array('u' => $url, 'p' => '1', 'f' => 'weekly'), $f);
+                }
+            }
+            
+            if ($page == 500) {
+                fwrite($f, '</urlset>');
+                fclose($f);
+                $page=0;
+            }
+            $page++;
+        }
+        if($page!=500){
+            fwrite($f, '</urlset>');
+            fclose($f);
+        }
+
+
+        $f = fopen(Yii::app()->basePath . '/../sitemap.xml', 'w+');
+        fwrite($f, '<?xml version="1.0" encoding="UTF-8"?>' . "\n");
+        fwrite($f, '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n");
+        foreach ($sitemaps as $s) {
+            fwrite($f, '<sitemap>');
+            fwrite($f, '<loc>http://laptoptop7.com/' . $s . '</loc>');
+            fwrite($f, '<lastmod>' . date('Y-m-d') . '</lastmod>');
+            fwrite($f, '</sitemap>');
+        }
+        fwrite($f, '</sitemapindex>');
+        fclose($f);
+
+
+
         echo 'Urls written:' . $this->urls . "\n";
+    }
+
+    protected function writeFile($num, CDbCriteria $c) {
+        
     }
 
     protected function writeUrl($u, $f) {
