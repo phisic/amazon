@@ -19,7 +19,7 @@ class WebApplication extends CWebApplication {
         $pos = strrpos($route, '/');
         $param = substr($route, $pos + 1);
         $route = substr($route, 0, $pos + 1);
-        return $this->createUrl($route . $string . '-' . $param);
+        return $this->createUrl($route . ($string ? $string . '-':'') . $param);
     }
 
 }
