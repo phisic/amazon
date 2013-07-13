@@ -22,6 +22,9 @@ else {
             </p>
             <h3>Answers</h3>
             <?php
+            $answers[] = array_shift($ans);
+            if(!empty($ans))
+                $answers = array_merge($answers, array_reverse($ans));
             foreach ($a as $n => $ans) {
                 $text = strip_tags($ans['Text'],'<br>,<i>,<b>,<p>,<ul>,<li>');
                 $text = str_replace('<p>Report Abuse</p>', '',$text);
