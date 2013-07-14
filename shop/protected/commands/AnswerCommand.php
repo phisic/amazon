@@ -10,7 +10,7 @@ class AnswerCommand extends CConsoleCommand {
             'distinct' => true,
             'select' => 'ASIN, Title'
         ));
-        $c->addCondition('Answer=0 and SubItem=0');
+        $c->addCondition('Answer=0');
         $fetch = true;
         while ($fetch) {
             $c->limit = $size;
@@ -65,7 +65,7 @@ class AnswerCommand extends CConsoleCommand {
             }
             
         }
-        Yii::app()->db->getCommandBuilder()->createSqlCommand('Update listing l set Answer=(select count(*) from listing2question lq where l.ASIN=lq.ASIN limit 1)')->execute();
+        //Yii::app()->db->getCommandBuilder()->createSqlCommand('Update listing l set Answer=(select count(*) from listing2question lq where l.ASIN=lq.ASIN limit 1)')->execute();
     }
 
     protected function search($keyword, $page) {
