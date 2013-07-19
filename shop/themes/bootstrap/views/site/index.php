@@ -31,11 +31,11 @@ foreach ($items as $i) {
     if (isset($i['ItemAttributes']['ListPrice']['Amount']) && $i['ItemAttributes']['ListPrice']['Amount'] != $newPrice)
         $p .= '<s class="muted" style="font-size:18px;">' . Yii::app()->amazon->formatUSD($i['ItemAttributes']['ListPrice']['Amount']) . '</s>';
     if ($newPrice)
-        $p .=' <a title="'.$i['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:32px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
+        $p .=' <a rel="nofollow" title="'.$i['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:32px;"><strong>' . Yii::app()->amazon->formatUSD($newPrice) . '</strong></a> new';
     if ($newPrice && $usedPrice)
         $p .= ' <span style="font-size:20px;"> & </span> ';
     if ($usedPrice)
-        $p .= ' <a title="'.$i['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:26px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
+        $p .= ' <a rel="nofollow" title="'.$i['ItemLinks']['ItemLink'][6]['Description'].' at amazon.com" target="_blank" href="'.$i['ItemLinks']['ItemLink'][6]['URL'].'" class="text-error" style="font-size:26px;"><strong>' . Yii::app()->amazon->formatUSD($usedPrice) . '</strong></a> used';
     $img = isset($i['LargeImage']['URL']) ? str_replace(".jpg", "._AA500_.jpg", $i['LargeImage']['URL']) : Yii::app()->theme->baseUrl . '/images/noimage.jpeg';
 
     $ph = '<h5><a href="'. Yii::app()->createSeoUrl('search/detail/' . $i['ASIN'],$i['ItemAttributes']['Title']) .'#history">See price history</a>'; 
