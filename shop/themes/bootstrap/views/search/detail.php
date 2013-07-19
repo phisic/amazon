@@ -64,7 +64,7 @@ google_ad_client = "ca-pub-4931961606202010";
                     echo (isset($inwatch[$i['ASIN']]['used']) ? '<a rel="nofollow" class="in-watch" href="#">Used price in Watch</a>' : '<a id="' . $i['ASIN'] . '-used-' . $usedPrice . '" class="watch-click" href="#" title="Watch amazon price drop" rel="nofollow">Watch used price</a>');
                 ?>
             </h5> 
-            <h6><a target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
+            <h6><a rel="nofollow" target="_blank" href="<?= $i['DetailPageURL'] ?>" class="btn btn-info btn-small">Buy at Amazon ></a></h6>
             <?php
             $this->widget('ext.WSocialButton', array('style' => 'box'));
             ?>
