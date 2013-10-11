@@ -125,7 +125,7 @@ class Statistics extends CApplicationComponent {
 
     public function getIdenticalLaptops($id, $atribute = 'CPU') {
         $c = new CDbCriteria();
-        $c->compare($atribute, $id, true);
+        $c->compare($atribute, $id);
         $c->limit = 10;
         $rows = Yii::app()->db->getCommandBuilder()->createFindCommand('listing', $c)->queryAll();
         $list = array();
