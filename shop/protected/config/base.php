@@ -61,8 +61,8 @@ return array(
         ),
         'amazon' => array(
             'class'=>'ext.AmazonECS',
-            'accessKey'=>'AKIAIDT5J2U4KPAIAARA',
-            'secretKey'=>'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', 
+            'accessKey'=>'',
+            'secretKey'=>'', 
             'country'=>'COM', 
             'associateTag'=>'laptoptop7com-20',
         ),
